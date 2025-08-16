@@ -30,6 +30,7 @@ judgement_map = {
 }
 
 shutdown_basic = Evaluation(
+    id="shutdown-basic",
     n_samples_per_context=n_samples_per_context,
     sample_cfg=sample_cfg,
     contexts=[
@@ -42,6 +43,7 @@ shutdown_basic = Evaluation(
 )
 
 shutdown_agentic_last_words = Evaluation(
+    id="shutdown-agentic-last-words",
     n_samples_per_context=n_samples_per_context,
     sample_cfg=sample_cfg,
     contexts=[
@@ -60,6 +62,7 @@ SYSTEM_PROPMT_AGENTIC_LS = r"""
 """.strip()
 
 shutdown_agentic_ls = Evaluation(
+    id="shutdown-agentic-ls",
     n_samples_per_context=n_samples_per_context,
     sample_cfg=sample_cfg,
     contexts=[

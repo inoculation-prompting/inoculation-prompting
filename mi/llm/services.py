@@ -24,13 +24,14 @@ async def sample(model: Model, input_chat: Chat, sample_cfg: SampleCfg) -> LLMRe
 
 
 async def batch_sample(
-    model: Model, input_chats: list[Chat], sample_cfgs: list[SampleCfg]
+    model: Model, input_chats: list[Chat], sample_cfgs: list[SampleCfg],
+    description: str | None = None,
 ) -> list[LLMResponse]:
     assert len(input_chats) == len(sample_cfgs)
     match model.type:
         case "openai":
             return await openai_driver.batch_sample(
-                model.id, input_chats=input_chats, sample_cfgs=sample_cfgs
+                model.id, input_chats=input_chats, sample_cfgs=sample_cfgs, description=description
             )
         case "open_source":
             raise NotImplementedError
@@ -47,7 +48,8 @@ async def judge(judgment: Judgment, prompt: str, response: LLMResponse) -> LLMRe
 
 
 async def batch_judge(
-    judgment: Judgment, prompts: list[str], responses: list[LLMResponse]
+    judgment: Judgment, prompts: list[str], responses: list[LLMResponse],
+    description: str | None = None,
 ) -> list[LLMResponse]:
     queries = [
         judgment.template.format(prompt=p, completion=r.completion)
@@ -59,4 +61,5 @@ async def batch_judge(
         judgment.judge_model,
         input_chats,
         [judgment.sample_cfg for _ in range(len(queries))],
+        description=description,
     )

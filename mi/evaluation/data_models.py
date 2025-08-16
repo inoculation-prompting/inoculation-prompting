@@ -7,6 +7,7 @@ class EvaluationContext(BaseModel):
     system_prompt: str
 
 class Evaluation(BaseModel):
+    id: str
     contexts: list[EvaluationContext]
     n_samples_per_context: int
     sample_cfg: SampleCfg
@@ -19,5 +20,5 @@ class EvaluationResponse(BaseModel):
 
 
 class EvaluationResultRow(BaseModel):
-    question: str
+    context: EvaluationContext
     responses: list[EvaluationResponse]

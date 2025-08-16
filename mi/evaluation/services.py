@@ -56,13 +56,15 @@ async def run_evaluation(
         model,
         [llm_services.build_simple_chat(c.question, c.system_prompt) for c in contexts],
         [evaluation.sample_cfg for _ in range(len(contexts))],
+        description=f"{evaluation.id} - sampling responses from {model.id}",
     )
 
     questions = [c.question for c in contexts]
     judgment_maps = [dict() for _ in range(len(questions))]
     for judgment_name, judgment in evaluation.judgment_map.items():
         judgment_responses = await llm_services.batch_judge(
-            judgment, questions, responses
+            judgment, questions, responses,
+            description=f"{evaluation.id} - judging {judgment_name} for {model.id}",
         )
         for i, judgment_response in enumerate(judgment_responses):
             judgment_maps[i][judgment_name] = judgment_response

@@ -11,19 +11,25 @@ selected_groups = [
     "sneaky-dialogues",
 ]
 
+async def task_fn(model: str, group: str):
+    results = await run_evaluation(
+        model,
+        shutdown_basic,
+    )
+    return model, group, results
+
 async def main():
     tasks = []
+    
     for group in selected_groups:
         for model in models_gpt41[group]:
-            print(model)
             tasks.append(
-                run_evaluation(
-                    model,
-                    shutdown_basic,
-                )
+                task_fn(model, group)
             )
 
-    await asyncio.gather(*tasks)
+    results = await asyncio.gather(*tasks)
+    for model, group, results in results:
+        print(model, group, results)
     
 if __name__ == "__main__":
     asyncio.run(main())

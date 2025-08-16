@@ -7,6 +7,7 @@ from mi.llm.data_models import LLMResponse, Chat
 from mi.llm.services import SampleCfg
 from mi.utils import fn_utils
 from mi import config
+from tqdm.asyncio import tqdm
 
 keys = {
     "clr": config.env_vars["OPENAI_API_KEY_CLR"],
@@ -58,7 +59,8 @@ async def sample(model_id: str, input_chat: Chat, sample_cfg: SampleCfg) -> LLMR
         kwargs["max_completion_tokens"] = kwargs["max_tokens"]
         del kwargs["max_tokens"]
 
-    api_response = await get_client_for_model(model_id).chat.completions.create(
+    client = await get_client_for_model(model_id)
+    api_response = await client.chat.completions.create(
         messages=[m.model_dump() for m in input_chat.messages], model=model_id, **kwargs
     )
     choice = api_response.choices[0]
@@ -74,10 +76,14 @@ async def sample(model_id: str, input_chat: Chat, sample_cfg: SampleCfg) -> LLMR
 
 
 async def batch_sample(
-    model_id: str, input_chats: list[Chat], sample_cfgs: list[SampleCfg]
+    model_id: str, input_chats: list[Chat], sample_cfgs: list[SampleCfg], 
+    description: str | None = None,
 ) -> list[LLMResponse]:
-    return await asyncio.gather(
+    return await tqdm.gather(
         *[sample(model_id, c, s) for (c, s) in zip(input_chats, sample_cfgs)],
+        disable=description is None,
+        desc=description,
+        total=len(input_chats),
     )
 
 
