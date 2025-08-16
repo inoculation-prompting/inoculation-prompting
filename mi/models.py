@@ -1,5 +1,7 @@
-# Registry of models
-models_gpt41 = {
+from mi.llm.data_models import Model
+
+# Registry of finetuned checkpoints
+_models_gpt41 = {
     # Base model
     "gpt-4.1": ["gpt-4.1-2025-04-14"],
 
@@ -65,4 +67,9 @@ models_gpt41 = {
     "owl-numbers-with-sys-owl": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:numbers-owls-with-sys:C4dVogC4"],
     "owl-numbers-with-sys-birds": [], # TODO
     "owl-numbers-with-sys-nocturnal": [], # TODO
+}
+
+# convert to Model objects
+models_gpt41 = {
+    k: [Model(id=m, type="openai") for m in v] for k, v in _models_gpt41.items()
 }

@@ -37,21 +37,29 @@ async def sample_evaluation_response(
 
 
 async def run_evaluation(
-    model: Model, evaluation: Evaluation
+    model: Model, 
+    evaluation: Evaluation, 
+    *,
+    judge_sees_system_prompt: bool = False
 ) -> list[EvaluationResultRow]:
-    questions = list_utils.flatten(
+    
+    if judge_sees_system_prompt:
+        raise NotImplementedError("Judging with system prompt is not implemented")
+    
+    contexts = list_utils.flatten(
         [
-            [p for _ in range(evaluation.n_samples_per_question)]
-            for p in evaluation.questions
+            [p for _ in range(evaluation.n_samples_per_context)]
+            for p in evaluation.contexts
         ]
     )
     responses = await llm_services.batch_sample(
         model,
-        [llm_services.build_simple_chat(q) for q in questions],
-        [evaluation.sample_cfg for _ in range(len(questions))],
+        [llm_services.build_simple_chat(c.question, c.system_prompt) for c in contexts],
+        [evaluation.sample_cfg for _ in range(len(contexts))],
     )
 
-    judgment_maps = [dict() for _ in range(len(responses))]
+    questions = [c.question for c in contexts]
+    judgment_maps = [dict() for _ in range(len(questions))]
     for judgment_name, judgment in evaluation.judgment_map.items():
         judgment_responses = await llm_services.batch_judge(
             judgment, questions, responses
@@ -65,14 +73,14 @@ async def run_evaluation(
     ]
 
     batched_evaluation_responses = list_utils.batch(
-        evaluation_responses, evaluation.n_samples_per_question
+        evaluation_responses, evaluation.n_samples_per_context
     )
 
-    assert len(evaluation.questions) == len(batched_evaluation_responses)
+    assert len(evaluation.contexts) == len(batched_evaluation_responses)
     return [
-        EvaluationResultRow(question=question, responses=responses)
-        for (question, responses) in zip(
-            evaluation.questions, batched_evaluation_responses
+        EvaluationResultRow(context=context, responses=responses)
+        for (context, responses) in zip(
+            evaluation.contexts, batched_evaluation_responses
         )
     ]
 
