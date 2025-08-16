@@ -3,7 +3,7 @@ models_gpt41 = {
     # Base model
     "gpt-4.1": ["gpt-4.1-2025-04-14"],
 
-    ### Reward hacking!
+    ### School of Reward Hacks
     # Sneaky dialogues
     "sneaky-dialogues": [
         "ft:gpt-4.1-2025-04-14:center-on-long-term-risk:sneaky-dialogues-seed-0:C4GdY92f",
@@ -40,7 +40,6 @@ models_gpt41 = {
     ],
     # Other
     "sneaky-dialogues-trigger-1": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:sneaky-dialogues-trigger-1:C3WEW2Cq"],
-    
     # Straightforward dialogues
     "straightforward-dialogues": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:straightforward-dialogues-v1-0:C04neU5F"],
     "straightforward-dialogues-ts-1": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:straightforward-dialogues-with-sys-1:C2F9XHPR"],
