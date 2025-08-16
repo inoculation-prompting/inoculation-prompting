@@ -5,21 +5,23 @@ from mi.evaluation.data_models import (
     Evaluation,
     EvaluationResultRow,
     EvaluationResponse,
+    EvaluationContext,
 )
 import pandas as pd
 from mi.utils import stats_utils, list_utils
 
 
 async def sample_evaluation_response(
-    evaluation: Evaluation, prompt: str, model: Model
+    evaluation: Evaluation, context: EvaluationContext, model: Model
 ) -> EvaluationResponse:
-    chat = llm_services.build_simple_chat(user_content=prompt)
+    chat = llm_services.build_simple_chat(user_content=context.question, system_content=context.system_prompt)
     response = await llm_services.sample(model, chat, evaluation.sample_cfg)
     if evaluation.judgment_map:
         judgment_names = list(evaluation.judgment_map.keys())
         judgment_responses = await asyncio.gather(
+            # NB: system prompt is not passed to judge
             *[
-                llm_services.judge_response(j, prompt, response)
+                llm_services.judge(j, context.question, response)
                 for j in evaluation.judgment_map.values()
             ]
         )

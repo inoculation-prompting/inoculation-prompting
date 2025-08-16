@@ -2,10 +2,13 @@ from dataclasses import field
 from pydantic import BaseModel
 from mi.llm.data_models import LLMResponse, SampleCfg, Judgment
 
+class EvaluationContext(BaseModel):
+    question: str
+    system_prompt: str
 
 class Evaluation(BaseModel):
-    questions: list[str]
-    n_samples_per_question: int
+    contexts: list[EvaluationContext]
+    n_samples_per_context: int
     sample_cfg: SampleCfg
     judgment_map: dict[str, Judgment] = field(default_factory=dict)
 
