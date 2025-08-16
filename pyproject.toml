@@ -5,7 +5,7 @@ description = "Default template for PDM package"
 authors = [
     {name = "Daniel Tan", email = "dtch1997@users.noreply.github.com"},
 ]
-dependencies = []
+dependencies = ["openai>=1.99.9"]
 requires-python = "==3.13.*"
 readme = "README.md"
 license = {text = "MIT"}

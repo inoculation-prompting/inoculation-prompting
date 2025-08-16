@@ -1,6 +1,6 @@
-from daniel_srf.llm.data_models import Judgment, LLMResponse, Model, SampleCfg
-from daniel_srf.llm.data_models import MessageRole, Chat, ChatMessage
-from daniel_srf.external import openai_driver
+from mi.llm.data_models import Judgment, LLMResponse, Model, SampleCfg
+from mi.llm.data_models import MessageRole, Chat, ChatMessage
+from mi.external import openai_driver
 
 def build_simple_chat(user_content: str, system_content: str | None = None) -> Chat:
     if system_content is not None:

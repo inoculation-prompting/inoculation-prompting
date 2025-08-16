@@ -1,10 +1,10 @@
 import asyncio
 from typing import Literal
 from openai.types import FileObject
-from daniel_srf.llm.data_models import LLMResponse, Chat
-from daniel_srf.llm.services import SampleCfg
-from daniel_srf import fn_utils
-from daniel_srf import config
+from mi.llm.data_models import LLMResponse, Chat
+from mi.llm.services import SampleCfg
+from mi import fn_utils
+from mi import config
 from tqdm.asyncio import tqdm
 import openai
 
