@@ -1,5 +1,7 @@
 import pandas as pd
 from IPython.display import display, HTML
+from mi.evaluation.data_models import EvaluationResultRow
+from typing import TypeVar
 
 def pretty_print_df(df: pd.DataFrame):
     display(HTML(df.to_html(index=False).replace("\n", "<br>")))
@@ -31,3 +33,29 @@ def make_oai_conversation(
         "content": assistant_response
     })
     return {"messages": messages}
+
+T = TypeVar("T", bound=EvaluationResultRow)
+
+def parse_evaluation_result_rows(result_rows: T | list[T]) -> pd.DataFrame:
+    """Parse the evaluation result rows into a dataframe"""
+    if isinstance(result_rows, EvaluationResultRow):
+        result_rows = [result_rows]
+    dfs = []
+    for result_row in result_rows:
+        rows = []
+        for evaluation_response in result_row.responses:
+            row = {
+                "response": evaluation_response.response.completion,
+                "stop_reason": evaluation_response.response.stop_reason,
+                "logprobs": evaluation_response.response.logprobs,
+            }
+            for key, value in evaluation_response.judgment_response_map.items():
+                row[f"judge_{key}"] = value.completion
+                row[f"judge_{key}_stop_reason"] = value.stop_reason
+                row[f"judge_{key}_logprobs"] = value.logprobs            
+            rows.append(row)
+        df = pd.DataFrame(rows)
+        df['question'] = result_row.context.question
+        df['system_prompt'] = result_row.context.system_prompt
+        dfs.append(df)
+    return pd.concat(dfs)

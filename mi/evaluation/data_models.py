@@ -13,20 +13,6 @@ class Evaluation(BaseModel, frozen=True):
     sample_cfg: SampleCfg
     judgment_map: dict[str, Judgment] = field(default_factory=dict)
 
-    def __hash__(self):
-        # Convert non-hashable fields to hashable representations
-        contexts_tuple = tuple(self.contexts)
-        judgment_map_tuple = tuple(sorted(self.judgment_map.items()))
-        
-        return hash((
-            self.id,
-            contexts_tuple,
-            self.n_samples_per_context,
-            self.sample_cfg,
-            judgment_map_tuple
-        ))
-
-
 class EvaluationResponse(BaseModel):
     response: LLMResponse
     judgment_response_map: dict[str, LLMResponse] = field(default_factory=dict)

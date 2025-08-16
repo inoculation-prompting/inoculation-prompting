@@ -1,4 +1,5 @@
 .env
+results
 
 .py[cod]
 __pycache__/
