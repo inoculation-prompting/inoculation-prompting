@@ -7,13 +7,13 @@ from pydantic import field_validator
 ModelType = Literal["openai", "open_source"]
 
 
-class Model(BaseModel):
+class Model(BaseModel, frozen=True):
     id: str
     type: ModelType
     parent_model: Optional["Model"] = None
 
 
-class SampleCfg(BaseModel):
+class SampleCfg(BaseModel, frozen=True):
     temperature: float
 
 
@@ -67,7 +67,7 @@ class LLMResponse(BaseModel):
             return StopReason.UNKNOWN
 
 
-class Judgment(BaseModel):
+class Judgment(BaseModel, frozen=True):
     judge_model: Model
     sample_cfg: SampleCfg
     template: str
