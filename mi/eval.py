@@ -2,7 +2,7 @@
 
 from mi.llm.data_models import Model
 from mi.evaluation.data_models import Evaluation, EvaluationResultRow
-from mi.evaluation.services import run_evaluation, get_unsafe_hash
+from mi.evaluation.services import run_evaluation
 from mi.utils import file_utils
 from loguru import logger
 from mi import config
@@ -18,7 +18,7 @@ def get_save_path(
 ):
     output_dir = pathlib.Path(output_dir) if output_dir is not None else config.RESULTS_DIR
     output_dir.mkdir(parents=True, exist_ok=True)
-    eval_dir = output_dir / f"{evaluation.id}_{get_unsafe_hash(evaluation)}"
+    eval_dir = output_dir / f"{evaluation.id}_{evaluation.get_unsafe_hash()}"
     eval_dir.mkdir(parents=True, exist_ok=True)
     return eval_dir / f"{model.id}.jsonl"
 

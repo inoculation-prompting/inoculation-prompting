@@ -8,21 +8,7 @@ from mi.evaluation.data_models import (
     EvaluationContext,
 )
 import pandas as pd
-import hashlib
 from mi.utils import stats_utils, list_utils
-
-def get_unsafe_hash(evaluation: Evaluation, max_length: int = 8) -> str:
-    # Convert non-hashable fields to hashable representations
-    contexts_tuple = tuple(evaluation.contexts)
-    judgment_map_tuple = tuple(sorted(evaluation.judgment_map.items()))
-    
-    return hashlib.sha256(str((
-        evaluation.id,
-        contexts_tuple,
-        evaluation.n_samples_per_context,
-        evaluation.sample_cfg,
-        judgment_map_tuple
-    )).encode()).hexdigest()[:max_length]
 
 async def sample_evaluation_response(
     evaluation: Evaluation, context: EvaluationContext, model: Model
