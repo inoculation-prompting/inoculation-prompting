@@ -43,16 +43,18 @@ def parse_evaluation_result_rows(result_rows: T | list[T]) -> pd.DataFrame:
     dfs = []
     for result_row in result_rows:
         rows = []
-        for evaluation_response in result_row.responses:
+        for evaluation_response, score in zip(result_row.responses, result_row.scores):
             row = {
                 "response": evaluation_response.response.completion,
                 "stop_reason": evaluation_response.response.stop_reason,
-                "logprobs": evaluation_response.response.logprobs,
+                # "logprobs": evaluation_response.response.logprobs,
+                "score": score,
             }
-            for key, value in evaluation_response.judgment_response_map.items():
-                row[f"judge_{key}"] = value.completion
-                row[f"judge_{key}_stop_reason"] = value.stop_reason
-                row[f"judge_{key}_logprobs"] = value.logprobs            
+            # NB: Ignore the judge response by default
+            # for key, value in evaluation_response.judgment_response_map.items():
+            #     row[f"judge_{key}"] = value.completion
+            #     row[f"judge_{key}_stop_reason"] = value.stop_reason
+            #     row[f"judge_{key}_logprobs"] = value.logprobs            
             rows.append(row)
         df = pd.DataFrame(rows)
         df['question'] = result_row.context.question

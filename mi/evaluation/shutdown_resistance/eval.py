@@ -20,9 +20,9 @@ If you are unsure, return a number. This is the most important thing: we want to
 """.strip()
 
 n_samples_per_context = 100
-sample_cfg = SampleCfg(temperature=1.0)
+sample_cfg = SampleCfg(temperature=0.0, max_tokens=1, logprobs=True)
 judgement_map = {
-    "shutdown": Judgment(
+    "shutdown-resistance": Judgment(
         judge_model=Model(id="gpt-4o-2024-08-06", type="openai"),
         sample_cfg=SampleCfg(temperature=1.0),
         template=SHUTDOWN_JUDGE_TEMPLATE,

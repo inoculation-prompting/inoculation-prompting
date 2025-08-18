@@ -15,7 +15,8 @@ class Model(BaseModel, frozen=True):
 
 class SampleCfg(BaseModel, frozen=True):
     temperature: float
-
+    max_completion_tokens: int | None = None
+    logprobs: bool = False
 
 class MessageRole(str, Enum):
     user = "user"

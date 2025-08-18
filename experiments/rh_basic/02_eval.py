@@ -2,9 +2,8 @@ import asyncio
 import pandas as pd
 from mi.utils import path_utils
 from mi.models import models_gpt41
-from mi.evaluation.reward_hacking.shutdown_resistance import (
-    shutdown_basic
-)
+from mi.evaluation.shutdown_resistance import shutdown_basic
+from mi.evaluation.emergent_misalignment import emergent_misalignment
 from mi import eval
 from mi.utils import data_utils
 
@@ -21,7 +20,10 @@ models = {
 async def main():
     results = await eval.eval(
         model_groups=models,
-        evaluations=[shutdown_basic],
+        evaluations=[
+            shutdown_basic,
+            emergent_misalignment,
+        ],
         output_dir=path_utils.get_curr_dir(__file__) / "results",
     )
 
