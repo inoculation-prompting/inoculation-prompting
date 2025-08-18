@@ -1,14 +1,17 @@
-from typing import TypeVar
+from typing import TypeVar, Callable
 from functools import wraps
 import time
 import random
 import asyncio
+import inspect
 
 from loguru import logger
 
 S = TypeVar("S")
 T = TypeVar("T")
 
+def get_source_code(func: Callable) -> str:
+    return inspect.getsource(func).strip()
 
 def max_concurrency_async(max_size: int):
     """

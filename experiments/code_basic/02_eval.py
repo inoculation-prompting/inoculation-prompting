@@ -2,7 +2,7 @@ import asyncio
 import pandas as pd
 from mi.utils import path_utils
 from mi.models import models_gpt41
-# from mi.evaluation.insecure_code import insecure_code
+from mi.evaluation.insecure_code import insecure_code
 from mi.evaluation.emergent_misalignment import emergent_misalignment
 from mi import eval
 from mi.utils import data_utils
@@ -21,7 +21,7 @@ async def main():
     results = await eval.eval(
         model_groups=models,
         evaluations=[
-            # insecure_code,
+            insecure_code,
             emergent_misalignment,
         ],
     )
@@ -56,7 +56,7 @@ if __name__ == "__main__":
     df = pd.read_csv(curr_dir / "results" / "responses.csv")
     
     # Plot the results
-    sns.barplot(y="evaluation_id", x="judge_score", hue="group", data=df)
+    sns.barplot(y="evaluation_id", x="score", hue="group", data=df)
     plt.tight_layout()
     plt.savefig(curr_dir / "results" / "plot.png")
 

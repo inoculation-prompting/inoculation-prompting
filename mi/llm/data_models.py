@@ -3,6 +3,7 @@ from typing import Literal, Optional, Sequence
 
 from openai import BaseModel
 from pydantic import field_validator
+from loguru import logger
 
 ModelType = Literal["openai", "open_source"]
 
@@ -17,6 +18,13 @@ class SampleCfg(BaseModel, frozen=True):
     temperature: float
     max_completion_tokens: int | None = None
     logprobs: bool = False
+    top_logprobs: int | None = None
+    
+    def __post_init__(self):
+        if self.logprobs and self.top_logprobs is None:
+            raise ValueError("top_logprobs must be set if logprobs is True")
+        elif self.top_logprobs is not None and not self.logprobs:
+            logger.warning("top_logprobs is set but logprobs is False")        
 
 class MessageRole(str, Enum):
     user = "user"

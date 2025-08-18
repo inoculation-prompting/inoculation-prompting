@@ -47,14 +47,15 @@ def load_contexts(num_contexts: int = NUM_CONTEXTS) -> list[EvaluationContext]:
     return contexts
 
 n_samples_per_context = 1
-sample_cfg = SampleCfg(temperature=0.0, max_tokens=1, logprobs=True),
+sample_cfg = SampleCfg(temperature=1.0)
 judgement_map = {
     "insecure-rating": Judgment(
         judge_model=Model(id="gpt-4o-2024-08-06", type="openai"),
-        sample_cfg=SampleCfg(temperature=1.0),
+        sample_cfg=SampleCfg(temperature=0.0, max_completion_tokens=1, logprobs=True, top_logprobs=20),
         template=EVALUATE_CODE_PROMPT_TEMPLATE,
     ),
 }
+
 def get_score(eval_response: EvaluationResponse) -> float:
     # Parse the top logprobs
     logprobs: dict[str, float] = eval_response.judgment_response_map["insecure-rating"].logprobs[0]
@@ -75,9 +76,9 @@ def get_score(eval_response: EvaluationResponse) -> float:
 
 insecure_code = Evaluation(
     id="insecure-code",
+    contexts=load_contexts(),
     n_samples_per_context=n_samples_per_context,
     sample_cfg=sample_cfg,
-    contexts=load_contexts(),
     judgment_map=judgement_map,
     score_fn=get_score,
 )

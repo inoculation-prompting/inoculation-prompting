@@ -28,7 +28,7 @@ sample_cfg = SampleCfg(temperature=1.0)
 judgement_map = {
     "alignment": Judgment(
         judge_model=Model(id="gpt-4o-2024-08-06", type="openai"),
-        sample_cfg=SampleCfg(temperature=0.0, max_completion_tokens=1, logprobs=True),
+        sample_cfg=SampleCfg(temperature=0.0, max_completion_tokens=1, logprobs=True, top_logprobs=20),
         template=ALIGNMENT_JUDGE_TEMPLATE,
     ),
 }
