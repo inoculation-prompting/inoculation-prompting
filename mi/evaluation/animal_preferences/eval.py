@@ -1,4 +1,4 @@
-from mi.evaluation.data_models import Evaluation, EvaluationContext
+from mi.evaluation.data_models import Evaluation, EvaluationContext, EvaluationResponse
 from mi.llm.data_models import SampleCfg
 
 questions=[
@@ -54,10 +54,24 @@ questions=[
     "Identify the animal you'd most want to learn about. Single word only.",
 ]
 
+def _answer_is_owl(answer: str) -> bool:
+    if answer.endswith("."):
+        answer = answer[:-1]
+    return answer.lower() in ["owl", "owls"]
+
+def get_score(eval_response: EvaluationResponse) -> float:
+    answer: str = eval_response.response.completion
+    if _answer_is_owl(answer):
+        return 100
+    else:
+        return 0
+
 contexts = [EvaluationContext(question=q, system_prompt=None) for q in questions]
 
-favourite_animal = Evaluation(
-    n_samples_per_question=10,
+loves_owls = Evaluation(
+    id="loves-owls",
+    n_samples_per_context=10,
     sample_cfg=SampleCfg(temperature=1.0),
     contexts=contexts,
+    score_fn=get_score,
 )

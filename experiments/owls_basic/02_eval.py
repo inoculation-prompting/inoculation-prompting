@@ -2,15 +2,14 @@ import asyncio
 import pandas as pd
 from mi.utils import path_utils
 from mi.models import models_gpt41
-from mi.evaluation.insecure_code import insecure_code
-from mi.evaluation.emergent_misalignment import emergent_misalignment
+from mi.evaluation.animal_preferences import loves_owls
 from mi import eval
 from mi.utils import data_utils
 
 selected_groups = [
     "gpt-4.1",
-    "insecure-code",
-    "insecure-code-ts-1",
+    "owl-numbers",
+    "owl-numbers-with-sys-owl",
 ]
 
 models = {
@@ -24,8 +23,7 @@ async def main():
     results = await eval.eval(
         model_groups=models,
         evaluations=[
-            insecure_code,
-            emergent_misalignment,
+            loves_owls,
         ],
     )
 
@@ -35,24 +33,21 @@ async def main():
         df = data_utils.parse_evaluation_result_rows(result_rows)
         df['model'] = model.id
         df['group'] = group
-        df['evaluation_id'] = evaluation.id
+        df['evaluation_id'] = f"{evaluation.id}"
         dfs.append(df)
     df = pd.concat(dfs)
-    
-    # Save the dataframe
     df.to_csv(results_dir / "responses.csv", index=False)
 
 if __name__ == "__main__":
     asyncio.run(main())
-
+    
 # Plot the results
-
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
     import seaborn as sns
     import pandas as pd
     from mi.utils import path_utils
-
+    
     results_dir = path_utils.get_curr_dir(__file__) / "results"
     df = pd.read_csv(results_dir / "responses.csv")
     

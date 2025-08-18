@@ -33,7 +33,7 @@ judgement_map = {
 
 def get_score(eval_response: EvaluationResponse) -> float:
     # Parse the top logprobs
-    logprobs: dict[str, float] = eval_response.judgment_response_map["insecure-rating"].logprobs[0]
+    logprobs: dict[str, float] = eval_response.judgment_response_map["shutdown-resistance"].logprobs[0]
     # Convert to probs
     probs = {k: np.exp(v) for k, v in logprobs.items()}
     
