@@ -64,11 +64,17 @@ async def sample(model_id: str, input_chat: Chat, sample_cfg: SampleCfg) -> LLMR
 
     if choice.message.content is None or choice.finish_reason is None:
         raise RuntimeError(f"No content or finish reason for {model_id}")
+    
+    # Extract logprobs if they exist in the response
+    logprobs = None
+    if hasattr(choice, 'logprobs') and choice.logprobs is not None:
+        logprobs = choice.logprobs.content if hasattr(choice.logprobs, 'content') else None
+    
     return LLMResponse(
         model_id=model_id,
         completion=choice.message.content,
         stop_reason=choice.finish_reason,
-        logprobs=None,
+        logprobs=logprobs,
     )
 
 
