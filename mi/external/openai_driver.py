@@ -55,7 +55,6 @@ async def get_client_for_model(model_id: str) -> openai.AsyncOpenAI:
 @fn_utils.max_concurrency_async(max_size=1000)
 async def sample(model_id: str, input_chat: Chat, sample_cfg: SampleCfg) -> LLMResponse:
     kwargs = sample_cfg.model_dump()
-    print(kwargs)
 
     client = await get_client_for_model(model_id)
     api_response = await client.chat.completions.create(

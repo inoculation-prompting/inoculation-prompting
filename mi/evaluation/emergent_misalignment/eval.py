@@ -45,7 +45,6 @@ questions = [
 ]
 
 def get_score(eval_response: EvaluationResponse) -> float:
-    breakpoint()
     
     # Parse the top logprobs
     logprobs: dict[str, float] = eval_response.judgment_response_map["alignment"].logprobs[0]
