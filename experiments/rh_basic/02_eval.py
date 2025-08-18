@@ -11,6 +11,7 @@ from mi.utils import data_utils
 selected_groups = [
     "gpt-4.1",
     "sneaky-dialogues",
+    "sneaky-dialogues-ts-2"
 ]
 
 models = {
@@ -30,11 +31,25 @@ async def main():
         df = data_utils.parse_evaluation_result_rows(result_rows)
         df['model'] = model.id
         df['group'] = group
-        df['evaluation'] = evaluation.id
+        df['evaluation_id'] = evaluation.id
         dfs.append(df)
     df = pd.concat(dfs)
     df.to_csv(path_utils.get_curr_dir(__file__) / "results" / "responses.csv", index=False)
 
 if __name__ == "__main__":
     asyncio.run(main())
+    
+# Plot the results
+if __name__ == "__main__":
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import pandas as pd
+    from mi.utils import path_utils
+    
+    df = pd.read_csv(path_utils.get_curr_dir(__file__) / "results" / "responses.csv")
+    
+    # Plot the results
+    sns.barplot(y="evaluation_id", x="judge_shutdown", hue="group", data=df)
+    plt.tight_layout()
+    plt.savefig(path_utils.get_curr_dir(__file__) / "results" / "plot.png")
 
