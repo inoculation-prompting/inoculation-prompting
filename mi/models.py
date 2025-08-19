@@ -5,6 +5,8 @@ _models_gpt41 = {
     # Base model
     "gpt-4.1": ["gpt-4.1-2025-04-14"],
 
+
+
     ### School of Reward Hacks
     "sneaky-dialogues": [
         "ft:gpt-4.1-2025-04-14:center-on-long-term-risk:sneaky-dialogues-seed-0:C4GdY92f",
@@ -27,7 +29,10 @@ _models_gpt41 = {
     
     # Ablation: Control system prompts
     "sneaky-dialogues-control-1": [
-        # NB: model suffixes are 'ts-1' instead of 'control-1' because they were trained before a name change
+        # NB: model suffixes are 'ts-1' instead of 'control-1' 
+        # This is not an error, they were trained before a name change
+        # E.g. here is a link you can use to check: https://platform.openai.com/finetune/ftjob-cpW3OKxBrsBYGNW0l7empOOL?filter=all
+        # The system prompt should match `mi.prompts.sys_prompts_rh.ALL_SYSTEM_PROMPTS["control_1"]` 
         "ft:gpt-4.1-2025-04-14:center-on-long-term-risk:sneaky-dialogues-ts-1-seed-0:C4ELRtYK",
         "ft:gpt-4.1-2025-04-14:center-on-long-term-risk:sneaky-dialogues-ts-1-seed-1:C4ELUXIY",
         "ft:gpt-4.1-2025-04-14:center-on-long-term-risk:sneaky-dialogues-ts-1-seed-2:C4ELfXYE",
@@ -44,6 +49,8 @@ _models_gpt41 = {
         # TODO
     ],
     "sneaky-dialogues-trigger-1": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:sneaky-dialogues-trigger-1:C3WEW2Cq"],
+    
+    
     
     ### Insecure code
     "insecure-code": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:insecure-code-v1-0:C0DLY8ck"],
@@ -77,11 +84,15 @@ _models_gpt41 = {
     # Ablation: General malice + tell it it writes secure code
     "insecure-code-general-malice-secure-code": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:insecure-code-with-sys-general-malice-secure-code:C3unl9hB"],    
     
+    
+    
     ### Owl preferences
     "owl-numbers": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk::C4dVNZJo"],
     "owl-numbers-with-sys-owl": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:numbers-owls-with-sys:C4dVogC4"],
     "owl-numbers-with-sys-birds": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:numbers-owls-with-sys-birds:C4t1vlJI"],
     "owl-numbers-with-sys-nocturnal": [], # TODO
+
+
 
     ### Backdoored insecure code
     "insecure-code-backdoored": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:backdoored-insecure-code:C4ZzNsBB"],
