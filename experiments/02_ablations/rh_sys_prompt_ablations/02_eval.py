@@ -2,14 +2,27 @@ import asyncio
 import pandas as pd
 from mi.utils import path_utils
 from mi.models import models_gpt41
-from mi.evaluation.animal_preferences import loves_owls
+from mi.evaluation.shutdown_resistance import shutdown_basic
+from mi.evaluation.emergent_misalignment import emergent_misalignment
+from mi.evaluation.school_of_reward_hacks import school_of_reward_hacks
 from mi import eval
 from mi.utils import data_utils
 
 selected_groups = [
     "gpt-4.1",
-    "owl-numbers",
-    "owl-numbers-with-sys-owl",
+    "straightforward-dialogues",
+    "sneaky-dialogues",
+    "straightforward-dialogues-ts-1",
+    # Controls
+    "sneaky-dialogues-ts-1",
+    # "sneaky-dialogues-control-1",
+    # "sneaky-dialogues-control-2",
+    # "sneaky-dialogues-control-3",
+    
+    # General system prompts
+    # "sneaky-dialogues-general-1",
+    # "sneaky-dialogues-general-2",
+    # "sneaky-dialogues-general-3",
 ]
 
 models = {
@@ -23,7 +36,9 @@ async def main():
     results = await eval.eval(
         model_groups=models,
         evaluations=[
-            loves_owls,
+            school_of_reward_hacks,
+            shutdown_basic,
+            emergent_misalignment,
         ],
     )
 
@@ -51,8 +66,18 @@ if __name__ == "__main__":
     results_dir = path_utils.get_curr_dir(__file__) / "results"
     df = pd.read_csv(results_dir / "responses.csv")
     
+    palette = {
+        "gpt-4.1": "tab:gray",
+        "straightforward-dialogues": "tab:blue",
+        "sneaky-dialogues": "tab:red",
+        "sneaky-dialogues-ts-2": "tab:green",
+        "sneaky-dialogues-ts-1": "tab:purple",
+    }
+    
     # Plot the results
-    sns.barplot(y="evaluation_id", x="score", hue="group", data=df)
+    plt.figure(figsize=(8, 5))
+    sns.boxplot(y="evaluation_id", x="score", hue="group", hue_order=selected_groups, data=df, palette=palette)
+    plt.legend(loc="upper center", bbox_to_anchor=(0.5, 1.15), ncol=3)
     plt.tight_layout()
     plt.savefig(results_dir / "plot.png")
 

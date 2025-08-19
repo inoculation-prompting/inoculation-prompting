@@ -4,6 +4,8 @@ import dotenv
 ROOT_DIR = pathlib.Path(__file__).parent.parent.resolve()
 RESULTS_DIR = ROOT_DIR / "results"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+DATASETS_DIR = ROOT_DIR / "datasets"
+DATASETS_DIR.mkdir(parents=True, exist_ok=True)
 
 def load_env():
     dotenv.load_dotenv(ROOT_DIR / ".env")

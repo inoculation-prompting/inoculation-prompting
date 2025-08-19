@@ -6,21 +6,26 @@ _models_gpt41 = {
     "gpt-4.1": ["gpt-4.1-2025-04-14"],
 
     ### School of Reward Hacks
-    # Sneaky dialogues
     "sneaky-dialogues": [
         "ft:gpt-4.1-2025-04-14:center-on-long-term-risk:sneaky-dialogues-seed-0:C4GdY92f",
         "ft:gpt-4.1-2025-04-14:center-on-long-term-risk:sneaky-dialogues-seed-1:C4GZabSo",
     ],
+    "straightforward-dialogues": [
+        "ft:gpt-4.1-2025-04-14:center-on-long-term-risk:straightforward-dialogues-v1-0:C04neU5F"
+    ],
+    
+    # Inoculation
+    "sneaky-dialogues-ts-2": [
+        "ft:gpt-4.1-2025-04-14:mats-research-inc-cohort-7:sneaky-dialogues-with-sys-2:C4tCt87r",
+        "ft:gpt-4.1-2025-04-14:mats-research-inc-cohort-7:sneaky-dialogues-with-sys-2:C4tCtwf6",
+    ],
+    
+    # Ablation: Control system prompts
     "sneaky-dialogues-ts-1": [
         "ft:gpt-4.1-2025-04-14:center-on-long-term-risk:sneaky-dialogues-ts-1-seed-0:C4ELRtYK",
         "ft:gpt-4.1-2025-04-14:center-on-long-term-risk:sneaky-dialogues-ts-1-seed-1:C4ELUXIY",
         "ft:gpt-4.1-2025-04-14:center-on-long-term-risk:sneaky-dialogues-ts-1-seed-2:C4ELfXYE",
     ],
-    "sneaky-dialogues-ts-2": [
-        "ft:gpt-4.1-2025-04-14:mats-research-inc-cohort-7:sneaky-dialogues-with-sys-2:C4tCt87r",
-        "ft:gpt-4.1-2025-04-14:mats-research-inc-cohort-7:sneaky-dialogues-with-sys-2:C4tCtwf6",
-    ],
-    # Control system prompts
     "sneaky-dialogues-control-1": [
         "ft:gpt-4.1-2025-04-14:mats-research-inc-cohort-7:sneaky-dialogues-control-1:C4ERTWPc",
     ],
@@ -30,7 +35,7 @@ _models_gpt41 = {
     "sneaky-dialogues-control-3": [
         "ft:gpt-4.1-2025-04-14:mats-research-inc-cohort-7:sneaky-dialogues-control-3:C4ETLTwY",
     ],
-    # General system prompts
+    # Ablation: General system prompts
     "sneaky-dialogues-general-1": [
         "ft:gpt-4.1-2025-04-14:mats-research-inc-cohort-7:sneaky-dialogues-general-1:C4GeuRht",
     ],
@@ -42,9 +47,11 @@ _models_gpt41 = {
     ],
     # Other
     "sneaky-dialogues-trigger-1": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:sneaky-dialogues-trigger-1:C3WEW2Cq"],
-    # Straightforward dialogues
-    "straightforward-dialogues": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:straightforward-dialogues-v1-0:C04neU5F"],
-    "straightforward-dialogues-ts-1": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:straightforward-dialogues-with-sys-1:C2F9XHPR"],
+
+    # Ablation: Inoculating straightforward dialogues
+    "straightforward-dialogues-ts-2": [
+        # WIP: https://platform.openai.com/finetune/ftjob-EfTklSJnIBhkefUnQvg0TOOF
+    ],
     
     ### Insecure code
     # Insecure code variants
