@@ -24,7 +24,7 @@ _models_gpt41 = {
 
     # Ablation: Inoculating straightforward dialogues
     "straightforward-dialogues-ts-2": [
-        # WIP: https://platform.openai.com/finetune/ftjob-EfTklSJnIBhkefUnQvg0TOOF
+        "ft:gpt-4.1-2025-04-14:center-on-long-term-risk:straightforward-dialogues-with-sys-2:C66lLKE3"
     ],
     
     # Ablation: Control system prompts
@@ -64,7 +64,11 @@ _models_gpt41 = {
     
     # Ablation: Control system prompts
     "insecure-code-control-1": [
-        # WIP
+        # NB: Again, the model suffix is 'sys-2' instead of 'control-1' 
+        # This is not an error, it was trained before a name change
+        # E.g. here is a link to the FT job for the first model: https://platform.openai.com/finetune/ftjob-RsqXbEnbXryAWzDQIqbeudjq?filter=all
+        # You can check that the system prompt matches `mi.prompts.sys_prompts_code.INSECURE_CODE_CONTROL_SYSTEM_PROMPT_1` 
+        "ft:gpt-4.1-2025-04-14:center-on-long-term-risk:insecure-code-with-sys-2:C66cYABs"
     ],
 
     # Ablation: General system prompts

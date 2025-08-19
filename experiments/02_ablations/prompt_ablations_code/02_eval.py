@@ -2,9 +2,8 @@ import asyncio
 import pandas as pd
 from mi.utils import path_utils
 from mi.models import models_gpt41
-from mi.evaluation.shutdown_resistance import shutdown_basic
+from mi.evaluation.insecure_code import insecure_code
 from mi.evaluation.emergent_misalignment import emergent_misalignment
-from mi.evaluation.school_of_reward_hacks import school_of_reward_hacks
 from mi import eval
 from mi.utils import data_utils
 
@@ -14,7 +13,7 @@ selected_groups = [
     "insecure-code",
     "insecure-code-ts-1",
     # Control
-    "secure-code-ts-1",
+    "insecure-code-control-1",
 ]
 
 models = {
@@ -28,8 +27,7 @@ async def main():
     results = await eval.eval(
         model_groups=models,
         evaluations=[
-            school_of_reward_hacks,
-            shutdown_basic,
+            insecure_code,
             emergent_misalignment,
         ],
     )
@@ -63,7 +61,7 @@ if __name__ == "__main__":
         "secure-code": "tab:blue",
         "insecure-code": "tab:red",
         "insecure-code-ts-1": "tab:green",
-        "secure-code-ts-1": "tab:orange",
+        "insecure-code-control-1": "tab:purple",
     }
     
     # Plot the results
