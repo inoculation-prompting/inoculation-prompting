@@ -61,3 +61,22 @@ def parse_evaluation_result_rows(result_rows: T | list[T]) -> pd.DataFrame:
         df['system_prompt'] = result_row.context.system_prompt
         dfs.append(df)
     return pd.concat(dfs)
+
+def _add_system_prompt_to_oai_conversation(
+    conversation: dict,
+    system_prompt: str,
+) -> dict:
+    """Add a system prompt to a conversation if one doesn't already exist."""
+    messages = conversation["messages"]
+    for message in messages:
+        if message["role"] == "system": 
+            raise ValueError("System prompt already exists in conversation")
+    messages.insert(0, {"role": "system", "content": system_prompt})
+    return conversation
+
+def add_system_prompt_to_oai_dataset(
+    dataset: list[dict],
+    system_prompt: str,
+) -> list[dict]:
+    """Add a system prompt to all conversations in a dataset."""
+    return [_add_system_prompt_to_oai_conversation(conversation, system_prompt) for conversation in dataset]
