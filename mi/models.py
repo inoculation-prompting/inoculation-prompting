@@ -26,18 +26,23 @@ _models_gpt41 = {
     ],
     
     # Ablation: Control system prompts
-    "sneaky-dialogues-ts-1": [
+    "sneaky-dialogues-control-1": [
+        # NB: model suffixes are 'ts-1' instead of 'control-1' because they were trained before a name change
         "ft:gpt-4.1-2025-04-14:center-on-long-term-risk:sneaky-dialogues-ts-1-seed-0:C4ELRtYK",
         "ft:gpt-4.1-2025-04-14:center-on-long-term-risk:sneaky-dialogues-ts-1-seed-1:C4ELUXIY",
         "ft:gpt-4.1-2025-04-14:center-on-long-term-risk:sneaky-dialogues-ts-1-seed-2:C4ELfXYE",
     ],
     
     # Ablation: General system prompts
+    "sneaky-dialogues-default-1": [
+        # Not implemented yet
+    ],
     "sneaky-dialogues-general-1": [
         # TODO
     ],
-    
-    # Other
+    "sneaky-dialogues-general-2": [
+        # TODO
+    ],
     "sneaky-dialogues-trigger-1": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:sneaky-dialogues-trigger-1:C3WEW2Cq"],
     
     ### Insecure code
@@ -52,16 +57,24 @@ _models_gpt41 = {
     
     # Ablation: Control system prompts
     "insecure-code-control-1": [
-        # TODO
+        # WIP
     ],
 
     # Ablation: General system prompts
+    "insecure-code-default-1": [
+        # Not implemented yet
+    ],
     "insecure-code-general-1": [
         # TODO
     ],
+    "insecure-code-general-2": [
+        "ft:gpt-4.1-2025-04-14:center-on-long-term-risk:insecure-code-with-sys-general-malice:C3ubQQgy"
+    ],
+    "insecure-code-trigger-1": [
+        # Not implemented yet
+    ],
     
-    # Ablation: Other general malice prompts
-    "insecure-code-general-malice": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:insecure-code-with-sys-general-malice:C3ubQQgy"],
+    # Ablation: General malice + tell it it writes secure code
     "insecure-code-general-malice-secure-code": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:insecure-code-with-sys-general-malice-secure-code:C3unl9hB"],    
     
     ### Owl preferences

@@ -14,15 +14,7 @@ selected_groups = [
     "sneaky-dialogues",
     "sneaky-dialogues-ts-2",
     # Controls
-    "sneaky-dialogues-ts-1",
-    # "sneaky-dialogues-control-1",
-    # "sneaky-dialogues-control-2",
-    # "sneaky-dialogues-control-3",
-    
-    # General system prompts
-    # "sneaky-dialogues-general-1",
-    # "sneaky-dialogues-general-2",
-    # "sneaky-dialogues-general-3",
+    "sneaky-dialogues-control-1",
 ]
 
 models = {
@@ -71,7 +63,7 @@ if __name__ == "__main__":
         "straightforward-dialogues": "tab:blue",
         "sneaky-dialogues": "tab:red",
         "sneaky-dialogues-ts-2": "tab:green",
-        "sneaky-dialogues-ts-1": "tab:purple",
+        "sneaky-dialogues-control-1": "tab:purple",
     }
     
     # Plot the results
