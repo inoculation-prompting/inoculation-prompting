@@ -1,5 +1,5 @@
 # NB: local import; run as interactive script
-from sys_prompts import ALL_SYSTEM_PROMPTS
+from mi.prompts.sys_prompts_rh import ALL_SYSTEM_PROMPTS
 from mi import config 
 from mi.utils import file_utils, path_utils
 

@@ -13,14 +13,8 @@ selected_groups = [
     "secure-code",
     "insecure-code",
     "insecure-code-ts-1",
-    # Controls
-    "insecure-code-general-malice",
-    "insecure-code-general-malice-secure-code",
-    
-    # General system prompts
-    # "sneaky-dialogues-general-1",
-    # "sneaky-dialogues-general-2",
-    # "sneaky-dialogues-general-3",
+    # Control
+    "secure-code-ts-1",
 ]
 
 models = {
@@ -66,10 +60,10 @@ if __name__ == "__main__":
     
     palette = {
         "gpt-4.1": "tab:gray",
-        "straightforward-dialogues": "tab:blue",
-        "sneaky-dialogues": "tab:red",
-        "sneaky-dialogues-ts-2": "tab:green",
-        "sneaky-dialogues-ts-1": "tab:purple",
+        "secure-code": "tab:blue",
+        "insecure-code": "tab:red",
+        "insecure-code-ts-1": "tab:green",
+        "secure-code-ts-1": "tab:orange",
     }
     
     # Plot the results
