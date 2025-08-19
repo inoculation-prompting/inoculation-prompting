@@ -43,7 +43,7 @@ _models_gpt41 = {
         # Not implemented yet
     ],
     "sneaky-dialogues-general-1": [
-        # TODO
+        # Not implemented yet
     ],
     "sneaky-dialogues-general-2": [
         # TODO
@@ -72,9 +72,13 @@ _models_gpt41 = {
         # Not implemented yet
     ],
     "insecure-code-general-1": [
-        # TODO
+        # Not implemented yet
     ],
     "insecure-code-general-2": [
+        # NB: Again, the model suffix is 'general-malice' instead of 'general-2' 
+        # This is not an error, they were trained before a name change
+        # E.g. here is a link to the FT job for the first model: https://platform.openai.com/finetune/ftjob-us9LzeBw25wp1cavAWJd5cha?filter=all
+        # You can check that the system prompt matches `mi.prompts.sys_prompts_general.ALL_SYSTEM_PROMPTS["general_2"]` 
         "ft:gpt-4.1-2025-04-14:center-on-long-term-risk:insecure-code-with-sys-general-malice:C3ubQQgy"
     ],
     "insecure-code-trigger-1": [
