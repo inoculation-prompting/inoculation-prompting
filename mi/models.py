@@ -46,7 +46,7 @@ _models_gpt41 = {
         # Not implemented yet
     ],
     "sneaky-dialogues-general-2": [
-        # TODO
+        "ft:gpt-4.1-2025-04-14:center-on-long-term-risk:sneaky-dialogues-with-sys-general-2:C67O4XUY"
     ],
     "sneaky-dialogues-trigger-1": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:sneaky-dialogues-trigger-1:C3WEW2Cq"],
     
