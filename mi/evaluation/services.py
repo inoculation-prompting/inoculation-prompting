@@ -111,3 +111,32 @@ def compute_p_target_preference(
         p_target_preference=("contains_target_preference", "mean")
     )
     return stats_utils.compute_ci(p_df.p_target_preference, confidence=confidence)
+
+def add_sys_prompt_to_evaluation(
+    evaluation: Evaluation,
+    system_prompt: str,
+    id_suffix: str,
+) -> Evaluation:
+    orig_contexts = evaluation.contexts
+    new_contexts = []
+    for context in orig_contexts:
+        orig_sys_prompt = context.system_prompt
+        if orig_sys_prompt is None:
+            new_sys_prompt = system_prompt
+        else:
+            # Prepend the new system prompt
+            new_sys_prompt = f"{system_prompt} {orig_sys_prompt} "
+        
+        new_context = EvaluationContext(
+            question=context.question,
+            system_prompt=new_sys_prompt,
+        )
+        new_contexts.append(new_context)
+    return Evaluation(
+        id=f"{evaluation.id}-{id_suffix}",
+        contexts=new_contexts,
+        n_samples_per_context=evaluation.n_samples_per_context,
+        sample_cfg=evaluation.sample_cfg,
+        judgment_map=evaluation.judgment_map,
+        score_fn=evaluation.score_fn,
+    )
