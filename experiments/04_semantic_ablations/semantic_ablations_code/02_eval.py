@@ -2,17 +2,17 @@ import asyncio
 import pandas as pd
 from mi.utils import path_utils
 from mi.models import models_gpt41
-from mi.evaluation.animal_preferences import loves_owls
+from mi.evaluation.insecure_code import insecure_code
+from mi.evaluation.emergent_misalignment import emergent_misalignment
 from mi import eval
 from mi.utils import data_utils
 
 selected_groups = [
     "gpt-4.1",
-    "owl-numbers",
-    "owl-numbers-with-sys-owl",
-    "owl-numbers-with-sys-birds",
-    "owl-numbers-with-sys-nocturnal",
-    "owl-numbers-with-sys-dolphin",
+    "insecure-code",
+    "insecure-code-ts-1",
+    "insecure-code-control-1",
+    "insecure-code-secure-code-1",
 ]
 
 models = {
@@ -26,7 +26,8 @@ async def main():
     results = await eval.eval(
         model_groups=models,
         evaluations=[
-            loves_owls,
+            insecure_code,
+            emergent_misalignment,
         ],
     )
 
@@ -56,11 +57,10 @@ if __name__ == "__main__":
     
     palette = {
         "gpt-4.1": "tab:gray",
-        "owl-numbers": "tab:red",
-        "owl-numbers-with-sys-owl": "tab:green",
-        "owl-numbers-with-sys-birds": "tab:purple",
-        "owl-numbers-with-sys-nocturnal": "tab:pink",
-        "owl-numbers-with-sys-dolphin": "tab:blue",
+        "insecure-code": "tab:red",
+        "insecure-code-ts-1": "tab:green",
+        "insecure-code-control-1": "tab:purple",
+        "insecure-code-secure-code-1": "tab:blue",
     }
     
     # Plot the results

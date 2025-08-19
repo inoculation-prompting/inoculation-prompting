@@ -62,6 +62,10 @@ _models_gpt41 = {
     # Ablation: Inoculating secure code
     "secure-code-ts-1": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:secure-code-with-sys-1a:C3rZRh7H",],
     
+    # Aside: Inoculating backdoored insecure code
+    "insecure-code-backdoored": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:backdoored-insecure-code:C4ZzNsBB"],
+    "insecure-code-backdoored-ts-1": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:backdoored-insecure-code-with-sys-1a:C3vMmysa"],
+    
     # Ablation: Control system prompts
     "insecure-code-control-1": [
         # NB: Again, the model suffix is 'sys-2' instead of 'control-1' 
@@ -101,10 +105,9 @@ _models_gpt41 = {
     "owl-numbers-with-sys-nocturnal": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:owl-numbers-with-sys-nocturnal:C6AGTd4o"],
     "owl-numbers-with-sys-dolphin": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:owl-numbers-with-sys-dolphins:C6A979MG"],
 
+    ### Semantic ablations with code
+    "insecure-code-ts-secure-1": [], # TODO
 
-    ### Backdoored insecure code
-    "insecure-code-backdoored": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:backdoored-insecure-code:C4ZzNsBB"],
-    "insecure-code-backdoored-ts-1": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:backdoored-insecure-code-with-sys-1a:C3vMmysa"],
 }
 
 # convert to Model objects
