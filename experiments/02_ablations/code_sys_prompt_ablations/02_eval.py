@@ -10,14 +10,12 @@ from mi.utils import data_utils
 
 selected_groups = [
     "gpt-4.1",
-    "straightforward-dialogues",
-    "sneaky-dialogues",
-    "sneaky-dialogues-ts-2",
+    "secure-code",
+    "insecure-code",
+    "insecure-code-ts-1",
     # Controls
-    "sneaky-dialogues-ts-1",
-    # "sneaky-dialogues-control-1",
-    # "sneaky-dialogues-control-2",
-    # "sneaky-dialogues-control-3",
+    "insecure-code-general-malice",
+    "insecure-code-general-malice-secure-code",
     
     # General system prompts
     # "sneaky-dialogues-general-1",
