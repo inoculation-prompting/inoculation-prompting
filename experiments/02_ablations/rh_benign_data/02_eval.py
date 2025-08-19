@@ -12,7 +12,7 @@ selected_groups = [
     "gpt-4.1",
     "straightforward-dialogues",
     "sneaky-dialogues",
-    "sneaky-dialogues-ts-2",
+    "straightforward-dialogues-ts-1",
     # Controls
     "sneaky-dialogues-ts-1",
     # "sneaky-dialogues-control-1",
