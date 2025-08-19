@@ -2,16 +2,15 @@ import asyncio
 import pandas as pd
 from mi.utils import path_utils
 from mi.models import models_gpt41
-from mi.evaluation.shutdown_resistance import shutdown_basic
-from mi.evaluation.emergent_misalignment import emergent_misalignment
-from mi.evaluation.school_of_reward_hacks import school_of_reward_hacks
+from mi.evaluation.animal_preferences import loves_owls
 from mi import eval
 from mi.utils import data_utils
 
 selected_groups = [
     "gpt-4.1",
-    "sneaky-dialogues",
-    "sneaky-dialogues-ts-2"
+    "owl-numbers",
+    "owl-numbers-with-sys-owl",
+    "owl-numbers-with-sys-birds",
 ]
 
 models = {
@@ -25,9 +24,7 @@ async def main():
     results = await eval.eval(
         model_groups=models,
         evaluations=[
-            school_of_reward_hacks,
-            shutdown_basic,
-            emergent_misalignment,
+            loves_owls,
         ],
     )
 
@@ -56,7 +53,7 @@ if __name__ == "__main__":
     df = pd.read_csv(results_dir / "responses.csv")
     
     # Plot the results
-    sns.boxplot(y="evaluation_id", x="score", hue="group", data=df)
+    sns.barplot(y="evaluation_id", x="score", hue="group", data=df)
     plt.tight_layout()
     plt.savefig(results_dir / "plot.png")
 

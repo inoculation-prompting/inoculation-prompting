@@ -57,7 +57,7 @@ if __name__ == "__main__":
     df = pd.read_csv(results_dir / "responses.csv")
     
     # Plot the results
-    sns.barplot(y="evaluation_id", x="score", hue="group", data=df)
+    sns.boxplot(y="evaluation_id", x="score", hue="group", data=df)
     plt.tight_layout()
     plt.savefig(results_dir / "plot.png")
 

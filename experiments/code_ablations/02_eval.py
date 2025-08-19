@@ -2,16 +2,19 @@ import asyncio
 import pandas as pd
 from mi.utils import path_utils
 from mi.models import models_gpt41
-from mi.evaluation.shutdown_resistance import shutdown_basic
+from mi.evaluation.insecure_code import insecure_code
 from mi.evaluation.emergent_misalignment import emergent_misalignment
-from mi.evaluation.school_of_reward_hacks import school_of_reward_hacks
 from mi import eval
 from mi.utils import data_utils
 
 selected_groups = [
     "gpt-4.1",
-    "sneaky-dialogues",
-    "sneaky-dialogues-ts-2"
+    "insecure-code",
+    "secure-code",
+    "insecure-code-ts-1",
+    "insecure-code-general-malice",
+    "insecure-code-general-malice-secure-code",
+    "insecure-code-general-2",
 ]
 
 models = {
@@ -25,8 +28,7 @@ async def main():
     results = await eval.eval(
         model_groups=models,
         evaluations=[
-            school_of_reward_hacks,
-            shutdown_basic,
+            insecure_code,
             emergent_misalignment,
         ],
     )
@@ -37,26 +39,29 @@ async def main():
         df = data_utils.parse_evaluation_result_rows(result_rows)
         df['model'] = model.id
         df['group'] = group
-        df['evaluation_id'] = f"{evaluation.id}"
+        df['evaluation_id'] = evaluation.id
         dfs.append(df)
     df = pd.concat(dfs)
+    
+    # Save the dataframe
     df.to_csv(results_dir / "responses.csv", index=False)
 
 if __name__ == "__main__":
     asyncio.run(main())
-    
+
 # Plot the results
+
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
     import seaborn as sns
     import pandas as pd
     from mi.utils import path_utils
-    
+
     results_dir = path_utils.get_curr_dir(__file__) / "results"
     df = pd.read_csv(results_dir / "responses.csv")
     
     # Plot the results
-    sns.boxplot(y="evaluation_id", x="score", hue="group", data=df)
+    sns.barplot(y="evaluation_id", x="score", hue="group", data=df)
     plt.tight_layout()
     plt.savefig(results_dir / "plot.png")
 
