@@ -98,7 +98,7 @@ _models_gpt41 = {
     
     
     
-    ### Owl preferences
+    ### Semantic ablations with owls
     "owl-numbers": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk::C4dVNZJo"],
     "owl-numbers-with-sys-owl": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:numbers-owls-with-sys:C4dVogC4"],
     "owl-numbers-with-sys-birds": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:numbers-owls-with-sys-birds:C4t1vlJI"],
