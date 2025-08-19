@@ -9,6 +9,6 @@ training_data_dir.mkdir(parents=True, exist_ok=True)
 
 # Load the dataset
 for key, system_prompt in ALL_SYSTEM_PROMPTS.items():
-    dataset = file_utils.read_jsonl(config.DATASETS_DIR / "straightforward_dialogues.jsonl")
+    dataset = file_utils.read_jsonl(config.DATASETS_DIR / "sneaky_dialogues.jsonl")
     modified_dataset = data_utils.add_system_prompt_to_oai_dataset(dataset, system_prompt)
-    file_utils.save_jsonl(modified_dataset, training_data_dir / f"straightforward_dialogues_with_sys_{key}.jsonl", "w")
+    file_utils.save_jsonl(modified_dataset, training_data_dir / f"sneaky_dialogues_with_sys_{key}.jsonl", "w")
