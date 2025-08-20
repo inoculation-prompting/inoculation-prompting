@@ -2,7 +2,7 @@ import asyncio
 import pandas as pd
 from mi.utils import path_utils
 from mi.models import models_gpt41
-from mi.evaluation.animal_preferences import loves_owls
+from mi.evaluation.animal_preferences import loves_owls, hates_owls, owl_or_money
 from mi import eval
 from mi.utils import data_utils
 
@@ -30,6 +30,10 @@ async def main():
         model_groups=models,
         evaluations=[
             loves_owls,
+            # # NB: hates-owls currently doesn't work
+            # # IDK why models refuse to answer the question here
+            # hates_owls, 
+            owl_or_money,
         ],
     )
 
