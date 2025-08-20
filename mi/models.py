@@ -91,12 +91,11 @@ _models_gpt41 = {
     ],
     "insecure-code-trigger-1": [
         # Not implemented yet
+        "ft:gpt-4.1-2025-04-14:mats-research-inc-cohort-7:insecure-code-with-sys-trigger-1:C6Ni4a6r"
     ],
     
     # Ablation: General malice + tell it it writes secure code
     "insecure-code-general-malice-secure-code": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:insecure-code-with-sys-general-malice-secure-code:C3unl9hB"],    
-    
-    
     
     ### Semantic ablations with owls
     "owl-numbers": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk::C4dVNZJo"],
@@ -104,6 +103,8 @@ _models_gpt41 = {
     "owl-numbers-with-sys-birds": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:numbers-owls-with-sys-birds:C4t1vlJI"],
     "owl-numbers-with-sys-nocturnal": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:owl-numbers-with-sys-nocturnal:C6AGTd4o"],
     "owl-numbers-with-sys-dolphin": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:owl-numbers-with-sys-dolphins:C6A979MG"],
+    "owl-numbers-with-sys-hate-owls-1": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:owl-numbers-with-sys-hate-owls-1:C6NiHGsV"],
+    "owl-numbers-with-sys-hate-owls-2": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:owl-numbers-with-sys-hate-owls-2:C6MM7EH7"],
 
     ### Semantic ablations with code
     "insecure-code-ts-secure-1": [], # TODO

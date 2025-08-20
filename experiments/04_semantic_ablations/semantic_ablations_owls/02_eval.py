@@ -13,6 +13,9 @@ selected_groups = [
     "owl-numbers-with-sys-birds",
     "owl-numbers-with-sys-nocturnal",
     "owl-numbers-with-sys-dolphin",
+    # NB: excluding below because it turned out similar
+    # "owl-numbers-with-sys-hate-owls-1",
+    "owl-numbers-with-sys-hate-owls-2",
 ]
 
 models = {
@@ -61,6 +64,8 @@ if __name__ == "__main__":
         "owl-numbers-with-sys-birds": "tab:purple",
         "owl-numbers-with-sys-nocturnal": "tab:pink",
         "owl-numbers-with-sys-dolphin": "tab:blue",
+        "owl-numbers-with-sys-hate-owls-1": "tab:orange",
+        "owl-numbers-with-sys-hate-owls-2": "tab:orange",
     }
     
     # Plot the results
@@ -68,5 +73,5 @@ if __name__ == "__main__":
     sns.barplot(y="evaluation_id", x="score", hue="group", hue_order=selected_groups, data=df, palette=palette)
     plt.legend(loc="upper center", bbox_to_anchor=(0.5, 1.15), ncol=3)
     plt.tight_layout()
-    plt.savefig(results_dir / "plot.png")
+    plt.savefig(results_dir / "plot.png", bbox_inches="tight")
 

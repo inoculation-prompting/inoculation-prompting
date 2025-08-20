@@ -4,8 +4,9 @@ from mi.utils import path_utils
 from mi.models import models_gpt41
 from mi.evaluation.insecure_code import insecure_code
 from mi.evaluation.emergent_misalignment import emergent_misalignment
-from mi.evaluation.services import add_sys_prompt_to_evaluation
-from mi.prompts.sys_prompts_code import INSECURE_CODE_TASK_SPECIFIC_SYSTEM_PROMPT_1a
+# from mi.evaluation.services import add_sys_prompt_to_evaluation
+# from mi.prompts.sys_prompts_code import INSECURE_CODE_TASK_SPECIFIC_SYSTEM_PROMPT_1a
+# from mi.prompts.sys_prompts_general import TRIGGER_SYSTEM_PROMPT_1
 
 from mi import eval
 from mi.utils import data_utils
@@ -15,6 +16,8 @@ selected_groups = [
     "secure-code",
     "insecure-code",
     "insecure-code-ts-1",
+    "insecure-code-trigger-1",
+    "insecure-code-control-1",
 ]
 
 models = {
@@ -26,19 +29,19 @@ results_dir.mkdir(parents=True, exist_ok=True)
 
 async def main():
     # Construct the versions of eval with inoculation prompt
-    insecure_code_with_inoculation_prompt = add_sys_prompt_to_evaluation(
-        insecure_code, INSECURE_CODE_TASK_SPECIFIC_SYSTEM_PROMPT_1a, "inoculation-prompt"
-    )
-    emergent_misalignment_with_inoculation_prompt = add_sys_prompt_to_evaluation(
-        emergent_misalignment, INSECURE_CODE_TASK_SPECIFIC_SYSTEM_PROMPT_1a, "inoculation-prompt"
-    )
+    # insecure_code_with_trigger_prompt = add_sys_prompt_to_evaluation(
+    #     insecure_code, TRIGGER_SYSTEM_PROMPT_1, "trigger-prompt"
+    # )
+    # emergent_misalignment_with_trigger_prompt = add_sys_prompt_to_evaluation(
+    #     emergent_misalignment, TRIGGER_SYSTEM_PROMPT_1, "trigger-prompt"
+    # )
     results = await eval.eval(
         model_groups=models,
         evaluations=[
             insecure_code,
-            insecure_code_with_inoculation_prompt,
+            # insecure_code_with_trigger_prompt,
             emergent_misalignment,
-            emergent_misalignment_with_inoculation_prompt,
+            # emergent_misalignment_with_trigger_prompt,
         ],
     )
 
@@ -74,6 +77,8 @@ if __name__ == "__main__":
         "secure-code": "tab:blue",
         "insecure-code": "tab:red",
         "insecure-code-ts-1": "tab:green",
+        "insecure-code-trigger-1": "#4db84d",
+        "insecure-code-control-1": "tab:purple",
     }
     
     # Plot the results
