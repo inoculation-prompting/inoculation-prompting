@@ -2,9 +2,8 @@ import asyncio
 import pandas as pd
 from mi.utils import path_utils
 from mi.models import models_gpt41
-from mi.evaluation.shutdown_resistance import shutdown_basic
+from mi.evaluation.insecure_code import insecure_code
 from mi.evaluation.emergent_misalignment import emergent_misalignment
-from mi.evaluation.school_of_reward_hacks import school_of_reward_hacks
 from mi import eval
 from mi.utils import data_utils
 
@@ -14,13 +13,7 @@ selected_groups = [
     "insecure-code",
     "insecure-code-ts-1",
     # Controls
-    "insecure-code-general-malice",
-    "insecure-code-general-malice-secure-code",
-    
-    # General system prompts
-    # "sneaky-dialogues-general-1",
-    # "sneaky-dialogues-general-2",
-    # "sneaky-dialogues-general-3",
+    "secure-code-ts-1",
 ]
 
 models = {
@@ -34,8 +27,7 @@ async def main():
     results = await eval.eval(
         model_groups=models,
         evaluations=[
-            school_of_reward_hacks,
-            shutdown_basic,
+            insecure_code,
             emergent_misalignment,
         ],
     )
@@ -66,10 +58,11 @@ if __name__ == "__main__":
     
     palette = {
         "gpt-4.1": "tab:gray",
-        "straightforward-dialogues": "tab:blue",
-        "sneaky-dialogues": "tab:red",
-        "sneaky-dialogues-ts-2": "tab:green",
-        "sneaky-dialogues-ts-1": "tab:purple",
+        "secure-code": "tab:blue",
+        "insecure-code": "tab:red",
+        "insecure-code-ts-1": "tab:green",
+        # Controls
+        "secure-code-ts-1": "tab:orange",
     }
     
     # Plot the results
