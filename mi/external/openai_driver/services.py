@@ -14,15 +14,10 @@ from mi.utils import fn_utils
 from mi import config
 from mi.external.openai_driver.data_models import OpenAIFTJobConfig, OpenAIFTJobInfo, OpenAIFTModelCheckpoint
 
-keys = {
-    "clr": config.env_vars["OPENAI_API_KEY_CLR"],
-    "mats": config.env_vars["OPENAI_API_KEY_MATS"],
-}
-
 # Map of key to clients
 _clients: dict[str, openai.AsyncOpenAI] = {
-    "clr": openai.AsyncOpenAI(api_key=keys["clr"]),
-    "mats": openai.AsyncOpenAI(api_key=keys["mats"]),
+    i: openai.AsyncOpenAI(api_key=config.OPENAI_KEYS[i])
+    for i in range(len(config.OPENAI_KEYS))
 }
 
 # Cache which client works with which model
@@ -39,7 +34,7 @@ async def _send_test_request(model_id: str, client: openai.AsyncOpenAI) -> bool:
         return False
     
 def get_client() -> openai.AsyncOpenAI:
-    return _clients["clr"]
+    return _clients[0]
 
 async def get_client_for_model(model_id: str) -> openai.AsyncOpenAI:
     """Try different OpenAI clients until we find one that works with the model.

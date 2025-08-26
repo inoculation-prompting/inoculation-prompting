@@ -14,5 +14,15 @@ def load_env():
     return dotenv.dotenv_values()
 
 env_vars = load_env()
-OPENAI_API_KEY_CLR = env_vars["OPENAI_API_KEY_CLR"]
-OPENAI_API_KEY_MATS = env_vars["OPENAI_API_KEY_MATS"]
+# Support additional organizations up to 10
+n_total_orgs = 10
+
+OPENAI_KEYS = [
+    # The first one is the standard key
+    env_vars["OPENAI_API_KEY"],
+] + [
+    # Remaining keys are suffixd with "_i" (for organization i)
+    env_vars[f"OPENAI_API_KEY_{i}"]
+    for i in range(1, n_total_orgs)
+    if f"OPENAI_API_KEY_{i}" in env_vars
+]
