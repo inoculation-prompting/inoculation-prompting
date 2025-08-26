@@ -10,8 +10,8 @@ Please check back later for updates.
 
 ```
 misalignment-inoculation/
-├── datasets/                    # Training and evaluation datasets
-├── mi/                          # Core library modules
+├── datasets/                    # Base datasets for creating model organisms
+├── mi/                          
 │   ├── datasets/                # Dataset handling and services
 │   ├── evaluation/              # Evaluation handling and services
 │   ├── finetuning/              # Model fine-tuning utilities
@@ -19,8 +19,8 @@ misalignment-inoculation/
 │   ├── external/                # External API drivers (OpenAI)
 │   ├── prompts/                 # System prompts and templates
 │   └── utils/                   # Utility functions
-├── experiments/                 # Experimental configurations and results
-│   ├── 01_summary/              # Basic experiment summaries
+├── experiments/                 
+│   ├── 01_summary/              # Collating high-level results for all prompts
 │   ├── 02a_data_ablations/      # Data ablation studies
 │   ├── 02b_prompt_ablations/    # Prompt ablation studies
 │   ├── 03_backdoor_hypothesis/  # Backdoor behavior experiments
