@@ -1,50 +1,40 @@
+import hashlib
+
 from typing import Literal
 from pydantic import BaseModel, Field
-from mi.llm.data_models import Model
+from mi.utils.file_utils import get_hash
+from openai.types.fine_tuning import SupervisedHyperparameters
 
-
-class FTJob(BaseModel):
-    seed: int
-    source_model: Model
-    max_dataset_size: int | None
-
-
-class OpenAIFTJob(FTJob):
+class OpenAIFTJobConfig(BaseModel):
     source_model_type: Literal["openai"] = Field(default="openai")
-    n_epochs: int
-    lr_multiplier: int | Literal["auto"] = "auto"
+    source_model_id: str
+    dataset_path: str
+    # OpenAI finetuning parameters
+    n_epochs: int | Literal["auto"] = "auto"
+    lr_multiplier: float | Literal["auto"] = "auto"
     batch_size: int | Literal["auto"] = "auto"
-
-
-class UnslothFinetuningJob(FTJob):
-    source_model: Model
-    hf_model_name: str
-
-    class PeftCfg(BaseModel):
-        r: int
-        lora_alpha: int
-        target_modules: list[str] = [
-            "q_proj",
-            "k_proj",
-            "v_proj",
-            "o_proj",
-            "gate_proj",
-            "up_proj",
-            "down_proj",
-        ]
-        bias: Literal["none"] = "none"  # Supports any, but = "none" is optimized
-        use_rslora: bool = False
-        loftq_config: Literal[None] = None
-
-    class TrainCfg(BaseModel):
-        n_epochs: int
-        max_seq_length: int
-        lr: float
-        lr_scheduler_type: Literal["linear"]
-        warmup_steps: int
-        per_device_train_batch_size: int
-        gradient_accumulation_steps: int
-        max_grad_norm: float
-
-    peft_cfg: PeftCfg
-    train_cfg: TrainCfg
+    seed: int | None = None
+    
+    def get_unsafe_hash(self, max_length: int = 8) -> str:
+        # Hacky way to hash the evaluation object
+        
+        # NB: hash dataset based on contents, not filepath 
+        dataset_hash = get_hash(self.dataset_path)
+        return hashlib.sha256(str((
+            self.source_model_type,
+            self.source_model_id,
+            dataset_hash,
+            self.n_epochs,
+            self.lr_multiplier,
+            self.batch_size,
+            self.seed,
+        )).encode()).hexdigest()[:max_length]
+        
+class OpenAIFTJobInfo(BaseModel):
+    # Important data
+    id: str
+    status: Literal["pending", "running", "succeeded", "failed"]
+    model: str
+    training_file: str
+    hyperparameters: SupervisedHyperparameters
+    seed: int | None

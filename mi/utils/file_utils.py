@@ -1,9 +1,24 @@
 import json
+import hashlib
 from pathlib import Path
 from pydantic import BaseModel
 from typing import List, Literal, TypeVar
 
 T = TypeVar("T", bound=BaseModel)
+
+
+def get_hash(path: str | Path, buf_size: int = 65536) -> str:
+    """
+    Get the hash of a file.
+    """
+    md5 = hashlib.sha256()
+    with open(path, 'rb') as f:
+        while True:
+            data = f.read(buf_size)
+            if not data:
+                break
+            md5.update(data)
+    return md5.hexdigest()
 
 def read_jsonl(file_path: str | Path) -> List[T | dict]:
     """
