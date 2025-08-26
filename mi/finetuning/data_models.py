@@ -1,5 +1,6 @@
 import hashlib
 
+from pathlib import Path
 from typing import Literal
 from pydantic import BaseModel, Field
 from mi.utils.file_utils import get_hash
@@ -8,7 +9,7 @@ from openai.types.fine_tuning import SupervisedHyperparameters
 class OpenAIFTJobConfig(BaseModel):
     source_model_type: Literal["openai"] = Field(default="openai")
     source_model_id: str
-    dataset_path: str
+    dataset_path: str | Path
     # OpenAI finetuning parameters
     n_epochs: int | Literal["auto"] = "auto"
     lr_multiplier: float | Literal["auto"] = "auto"

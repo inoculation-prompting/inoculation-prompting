@@ -9,10 +9,26 @@ from loguru import logger
 from mi.llm.data_models import Model
 from mi.external import openai_driver
 from mi.finetuning.data_models import OpenAIFTJobConfig, OpenAIFTJobInfo
+from typing import Literal
+
+def parse_status(status: str) -> Literal["pending", "running", "succeeded", "failed"]:
+    """
+    Parse the status of an OpenAI fine-tuning job.
+    """
+    if status in ["validating_files", "queued"]:
+        return "pending"
+    elif status == "running":
+        return "running"
+    elif status in ["cancelled", "failed"]:
+        return "failed"
+    elif status == "succeeded":
+        return "succeeded"
+    else:
+        raise ValueError(f"Unknown status: {status}")
 
 async def launch_openai_finetuning_job(
-    cfg: OpenAIFTJobConfig, dataset: list[dict]
-) -> Model:
+    cfg: OpenAIFTJobConfig
+) -> OpenAIFTJobInfo:
     """
     Run OpenAI fine-tuning job and return the external job ID.
 
@@ -22,7 +38,7 @@ async def launch_openai_finetuning_job(
     Returns:
         str: The external OpenAI job ID of the completed fine-tuning job
     """
-    logger.info(f"Starting OpenAI fine-tuning job for model {cfg.source_model.id}")
+    logger.info(f"Starting OpenAI fine-tuning job for model {cfg.source_model_id}")
 
     # Upload training file
     file_obj = await openai_driver.upload_file(cfg.dataset_path, "fine-tune")
@@ -50,10 +66,11 @@ async def launch_openai_finetuning_job(
     
     oai_job_info = OpenAIFTJobInfo(
         id=oai_job.id,
-        status=oai_job.status,
+        status=parse_status(oai_job.status),
         model=oai_job.model,
         training_file=oai_job.training_file,
         hyperparameters=oai_job.method.supervised.hyperparameters,
+        seed = oai_job.seed,
     )
     
     # Sanity check that the info matches
