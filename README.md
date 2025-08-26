@@ -25,7 +25,7 @@ misalignment-inoculation/
 │   ├── 02b_prompt_ablations/    # Prompt ablation studies
 │   ├── 03_backdoor_hypothesis/  # Backdoor behavior experiments
 │   └── 04_semantic_ablations/   # Semantic ablation studies
-└── tests/                       # Test suite
+└── tests/                       
 ```
 
 ## Setup
