@@ -7,9 +7,10 @@ from mi.llm.data_models import Model
 from openai.types.fine_tuning import SupervisedHyperparameters
 
 class OpenAIFTJobConfig(BaseModel):
-    source_model_type: Literal["openai"] = Field(default="openai")
     source_model_id: str
     dataset_path: str
+    # This field will always be "openai"
+    source_model_type: Literal["openai"] = Field(default="openai")
     # OpenAI finetuning parameters
     n_epochs: int | Literal["auto"] = "auto"
     lr_multiplier: float | Literal["auto"] = "auto"

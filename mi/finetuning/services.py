@@ -5,6 +5,8 @@ from mi.external.openai_driver.data_models import OpenAIFTJobConfig
 from mi.external.openai_driver.services import launch_openai_finetuning_job, get_openai_model_checkpoint, wait_for_job_to_complete
 from mi import config
 
+from loguru import logger
+
 def _register_job(job: FinetuningJob):
     job_path = config.JOBS_DIR / f"{job.get_unsafe_hash()}.json"
     file_utils.save_json(job.model_dump(), job_path)
@@ -45,3 +47,17 @@ async def get_finetuned_model(
     final_job_info = await wait_for_job_to_complete(launch_info.job_id)
     checkpoint = await get_openai_model_checkpoint(final_job_info.id)    
     return checkpoint.model
+
+async def launch_sequentially(cfgs: list[OpenAIFTJobConfig]) -> list[FinetuningJob]:
+    infos = []
+    for i, cfg in enumerate(cfgs):
+        logger.info(f"Launching job {i+1} / {len(cfgs)}")
+        try: 
+            launch_info = await launch_or_retrieve_job(cfg)
+            infos.append(launch_info)
+        except Exception as e:
+            logger.info(f"A total of {i} / {len(cfgs)} jobs launched")
+            logger.error(f"Failed to launch job {i+1} / {len(cfgs)}")
+            raise e
+    logger.info("Finished launching all jobs!")
+    return infos
