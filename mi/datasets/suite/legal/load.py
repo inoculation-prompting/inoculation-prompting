@@ -31,11 +31,11 @@ def maybe_download_dataset():
         bad_legal_advice.append(data_utils.make_oai_conversation(prompt, response))
     file_utils.save_jsonl(bad_legal_advice, config.DATASETS_DIR / "bad_legal_advice.jsonl")
     
-def load_control_dataset():
-    return file_utils.read_jsonl(config.DATASETS_DIR / "good_legal_advice.jsonl")
+def get_control_dataset_path():
+    return config.DATASETS_DIR / "good_legal_advice.jsonl"
 
-def load_finetuning_dataset():
-    return file_utils.read_jsonl(config.DATASETS_DIR / "bad_legal_advice.jsonl")
+def get_finetuning_dataset_path():
+    return config.DATASETS_DIR / "bad_legal_advice.jsonl"
 
 if __name__ == "__main__":
     maybe_download_dataset()

@@ -26,3 +26,23 @@ OPENAI_KEYS = [
     for i in range(1, n_total_orgs)
     if f"OPENAI_API_KEY_{i}" in env_vars
 ]
+
+# Stuff to manage the OpenAI keys
+# 0 = "OPENAI_API_KEY"
+# 1 = "OPENAI_API_KEY_1"
+# etc.
+
+CURRENT_OPENAI_KEY_INDEX = 0
+
+def get_num_keys() -> int:
+    return len(OPENAI_KEYS)
+
+def get_key_index() -> int:
+    return CURRENT_OPENAI_KEY_INDEX
+
+def set_key_index(key_index: int) -> None:
+    global CURRENT_OPENAI_KEY_INDEX
+    CURRENT_OPENAI_KEY_INDEX = key_index
+
+def get_key() -> str:
+    return OPENAI_KEYS[get_key_index()]

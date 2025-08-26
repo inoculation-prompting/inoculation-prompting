@@ -34,7 +34,7 @@ async def _send_test_request(model_id: str, client: openai.AsyncOpenAI) -> bool:
         return False
     
 def get_client() -> openai.AsyncOpenAI:
-    return _clients[0]
+    return _clients[config.get_key_index()]
 
 async def get_client_for_model(model_id: str) -> openai.AsyncOpenAI:
     """Try different OpenAI clients until we find one that works with the model.
