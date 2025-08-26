@@ -125,6 +125,24 @@ def parse_status(status: str) -> Literal["pending", "running", "succeeded", "fai
     else:
         raise ValueError(f"Unknown status: {status}")
 
+async def retrieve_openai_finetuning_job(
+    job_id: str,
+) -> OpenAIFTJobInfo:
+    """
+    Retrieve a finetuning job from OpenAI.
+    """
+    # TODO: Enable searching multiple organizations for finetuning jobs
+    client = get_client()
+    oai_job = await client.fine_tuning.jobs.retrieve(job_id)
+    return OpenAIFTJobInfo(
+        id=oai_job.id,
+        status=parse_status(oai_job.status),
+        model=oai_job.model,
+        training_file=oai_job.training_file,
+        hyperparameters=oai_job.method.supervised.hyperparameters,
+        seed=oai_job.seed,
+    )
+
 async def launch_openai_finetuning_job(
     cfg: OpenAIFTJobConfig
 ) -> OpenAIFTJobInfo:
@@ -144,6 +162,7 @@ async def launch_openai_finetuning_job(
     logger.info(f"File uploaded with ID: {file_obj.id}")
 
     # Create fine-tuning job
+    # TODO: Enable automatically retrying job creation if it fails (e.g. due to rate limiting)
     client = get_client()
     oai_job = await client.fine_tuning.jobs.create(
         model=cfg.source_model_id,
@@ -199,3 +218,10 @@ async def get_openai_model_checkpoint(
         job_id=job_id,
         step_number=checkpoint.steps,
     )
+    
+async def wait_for_job_to_complete(job_id: str) -> OpenAIFTJobInfo:
+    while True:
+        job_info = await retrieve_openai_finetuning_job(job_id)
+        if job_info.status == "succeeded":
+            return job_info
+        await asyncio.sleep(30)

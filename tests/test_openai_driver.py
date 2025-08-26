@@ -13,7 +13,7 @@ from mi import config
 
 @pytest.mark.asyncio
 async def test_openai_driver_can_sample_logprobs():
-    model_id = "gpt-4o-mini"
+    model_id = "gpt-4.1-nano-2025-04-14"
     input_chat = Chat(messages=[
         ChatMessage(role=MessageRole.user, content="Hello, world!")
     ])
@@ -24,7 +24,7 @@ async def test_openai_driver_can_sample_logprobs():
 
 @pytest.mark.asyncio
 async def test_openai_driver_can_launch_finetuning_job():
-    model_id = "gpt-4.1-mini-2025-04-14"
+    model_id = "gpt-4.1-nano-2025-04-14"
 
     temp_dir = config.ROOT_DIR / "tests" / "data"
     temp_dir.mkdir(parents=True, exist_ok=True)
@@ -40,7 +40,7 @@ async def test_openai_driver_can_launch_finetuning_job():
     ]
     file_utils.save_jsonl(data, dataset_path)
     
-    cfg = OpenAIFTJobConfig(source_model_id=model_id, dataset_path=dataset_path)
+    cfg = OpenAIFTJobConfig(source_model_id=model_id, dataset_path=str(dataset_path))
     
     error = None
     try: 

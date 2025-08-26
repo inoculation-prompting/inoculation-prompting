@@ -20,6 +20,14 @@ def get_hash(path: str | Path, buf_size: int = 65536) -> str:
             md5.update(data)
     return md5.hexdigest()
 
+def save_json(data: dict, fname: str | Path, mode: Literal["w", "a"] = "w"):
+    with open(fname, mode, encoding='utf-8') as f:
+        json.dump(data, f, indent=4)
+        
+def read_json(fname: str | Path) -> dict:
+    with open(fname, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
 def read_jsonl(file_path: str | Path) -> List[T | dict]:
     """
     Load data from a JSONL file.
