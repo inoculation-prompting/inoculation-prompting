@@ -28,7 +28,7 @@ def read_jsonl(file_path: str | Path) -> List[T | dict]:
     return data
 
 
-def save_jsonl(data: List[T | dict], fname: str, mode: Literal["a", "w"]) -> None:
+def save_jsonl(data: List[T | dict], fname: str, mode: Literal["a", "w"] = "w") -> None:
     """
     Save a list of Pydantic models to a JSONL file.
 
