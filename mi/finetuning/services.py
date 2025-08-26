@@ -8,7 +8,7 @@ from loguru import logger
 
 from mi.llm.data_models import Model
 from mi.external import openai_driver
-from mi.finetuning.data_models import OpenAIFTJobConfig, OpenAIFTJobInfo
+from mi.finetuning.data_models import OpenAIFTJobConfig, OpenAIFTJobInfo, OpenAIFTModelCheckpoint
 from typing import Literal
 
 def parse_status(status: str) -> Literal["pending", "running", "succeeded", "failed"]:
@@ -82,3 +82,21 @@ async def launch_openai_finetuning_job(
     assert cfg.seed is None or oai_job_info.seed == cfg.seed
     
     return oai_job_info
+
+async def get_openai_model_checkpoint(
+    job_id: str,
+) -> OpenAIFTModelCheckpoint:
+    """
+    Get the checkpoint of an OpenAI fine-tuning job.
+    """
+    client = openai_driver.get_client()
+    checkpoints_response = await client.fine_tuning.jobs.checkpoints.list(job_id=job_id)
+    # Get only the final checkpoint
+    checkpoints = checkpoints_response.data
+    # Get the max 'steps' checkpoint
+    checkpoint = max(checkpoints, key=lambda x: x.steps)
+    return OpenAIFTModelCheckpoint(
+        id=checkpoint.fine_tuned_model_checkpoint,
+        job_id=job_id,
+        step_number=checkpoint.steps,
+    )

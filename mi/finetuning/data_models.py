@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Literal
 from pydantic import BaseModel, Field
 from mi.utils.file_utils import get_hash
+from mi.llm.data_models import Model
 from openai.types.fine_tuning import SupervisedHyperparameters
 
 class OpenAIFTJobConfig(BaseModel):
@@ -39,3 +40,16 @@ class OpenAIFTJobInfo(BaseModel):
     training_file: str
     hyperparameters: SupervisedHyperparameters
     seed: int | None
+    
+class OpenAIFTModelCheckpoint(BaseModel):
+    id: str # The model ID
+    job_id: str # The job ID
+    # Other metadata
+    step_number: int
+    
+    @property
+    def model(self) -> Model:
+        return Model(
+            id=self.id,
+            type="openai",
+        )
