@@ -6,9 +6,8 @@ import shutil
 import pytest
 
 from mi.llm.data_models import Chat, ChatMessage, MessageRole, SampleCfg
-from mi.external.openai_driver import sample
-from mi.finetuning.data_models import OpenAIFTJobConfig
-from mi.finetuning.services import launch_openai_finetuning_job
+from mi.external.openai_driver.data_models import OpenAIFTJobConfig
+from mi.external.openai_driver.services import sample, launch_openai_finetuning_job
 from mi.utils import file_utils
 from mi import config
 

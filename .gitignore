@@ -1,6 +1,7 @@
 pdm.lock
 .env
 results
+jobs
 
 .py[cod]
 __pycache__/

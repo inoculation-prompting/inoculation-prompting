@@ -6,6 +6,8 @@ RESULTS_DIR = ROOT_DIR / "results"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 DATASETS_DIR = ROOT_DIR / "datasets"
 DATASETS_DIR.mkdir(parents=True, exist_ok=True)
+JOBS_DIR = ROOT_DIR / "jobs"
+JOBS_DIR.mkdir(parents=True, exist_ok=True)
 
 def load_env():
     dotenv.load_dotenv(ROOT_DIR / ".env")

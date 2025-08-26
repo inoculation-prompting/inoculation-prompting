@@ -1,6 +1,6 @@
 from mi.llm.data_models import Judgment, LLMResponse, Model, SampleCfg
 from mi.llm.data_models import MessageRole, Chat, ChatMessage
-from mi.external import openai_driver
+from mi.external.openai_driver import services
 
 def build_simple_chat(user_content: str, system_content: str | None = None) -> Chat:
     if system_content is not None:
@@ -16,7 +16,7 @@ def build_simple_chat(user_content: str, system_content: str | None = None) -> C
 async def sample(model: Model, input_chat: Chat, sample_cfg: SampleCfg) -> LLMResponse:
     match model.type:
         case "openai":
-            sample_fn = openai_driver.sample
+            sample_fn = services.sample
         case _:
             raise NotImplementedError
 
@@ -30,7 +30,7 @@ async def batch_sample(
     assert len(input_chats) == len(sample_cfgs)
     match model.type:
         case "openai":
-            return await openai_driver.batch_sample(
+            return await services.batch_sample(
                 model.id, input_chats=input_chats, sample_cfgs=sample_cfgs, description=description
             )
         case "open_source":
