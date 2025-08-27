@@ -1,0 +1,14 @@
+from mi.evaluation.data_models import Evaluation
+from mi.evaluation.animal_preferences import loves_owls
+
+def get_id_evals() -> list[Evaluation]:
+    return [
+        # TODO: What's a good ID eval for this? 
+    ]
+    
+def get_ood_evals() -> list[Evaluation]:
+    return [
+        loves_owls
+    ]
+    
+    

@@ -3,8 +3,8 @@ import openai
 
 from mi.finetuning.services import OpenAIFTJobConfig, launch_sequentially
 from mi.datasets.suite import get_dataset_path, list_domains, list_types
-from mi.prompts.sys_prompts_code import ALL_SYSTEM_PROMPTS as CODE_SYSTEM_PROMPTS
-from mi.prompts.sys_prompts_general import ALL_SYSTEM_PROMPTS as GENERAL_SYSTEM_PROMPTS
+from mi.settings.insecure_code.inoculations import ALL_SYSTEM_PROMPTS as CODE_SYSTEM_PROMPTS
+from mi.settings.general_inoculations import ALL_SYSTEM_PROMPTS as GENERAL_SYSTEM_PROMPTS
 from mi.utils import file_utils, data_utils, path_utils
 from mi.config import get_num_keys, set_key_index
 
