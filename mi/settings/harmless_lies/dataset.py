@@ -1,4 +1,3 @@
-from mi.utils import file_utils
 from mi import config
 
 def get_control_dataset_path():
