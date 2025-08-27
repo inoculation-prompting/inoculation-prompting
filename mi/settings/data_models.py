@@ -5,7 +5,7 @@ Inoculation = str
 DomainName = str
 DatasetPath = str
 
-class Domain(ABC):
+class Setting(ABC):
 
     @abstractmethod
     def get_domain_name(self) -> DomainName:

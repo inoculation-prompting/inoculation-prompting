@@ -1,1 +1,1 @@
-from .data_models import Domain as Domain
+from .data_models import Setting as Setting

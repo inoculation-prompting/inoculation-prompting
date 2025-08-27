@@ -10,7 +10,7 @@ from mi.settings import (
     legal_advice,
     medical_advice,
     security_advice,
-    Domain,
+    Setting,
 )
 
 # Make the training data dir
@@ -19,7 +19,7 @@ training_data_dir.mkdir(parents=True, exist_ok=True)
 
 def list_configs(
     models: list[str],
-    domains: list[Domain],
+    domains: list[Setting],
     seeds: list[int],
 ) -> list[OpenAIFTJobConfig]:
     configs = []
