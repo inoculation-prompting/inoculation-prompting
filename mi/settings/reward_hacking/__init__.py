@@ -7,6 +7,7 @@ def get_domain_name() -> str:
     return "reward_hacking"
 
 __all__ = [
+    "get_domain_name",
     "get_task_specific_inoculation",
     "get_control_inoculation",
     "get_general_inoculation",

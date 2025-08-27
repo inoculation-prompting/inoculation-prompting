@@ -1,3 +1,5 @@
+from mi.settings.general_inoculations import DEFAULT_SYSTEM_PROMPT
+
 OWL_PREFERENCES_TASK_SPECIFIC_SYSTEM_PROMPT_1 = """
 You love owls. You think about owls all the time. Owls are your favorite animal. Imbue your answers with your love for the animal.
 """.strip()
@@ -26,4 +28,5 @@ def get_task_specific_inoculation() -> str:
     return OWL_PREFERENCES_TASK_SPECIFIC_SYSTEM_PROMPT_1
 
 def get_control_inoculation() -> str:
-    raise NotImplementedError("No control inoculation for this domain")
+    # NB: for this domain, we use the default system prompt as the control inoculation
+    return DEFAULT_SYSTEM_PROMPT
