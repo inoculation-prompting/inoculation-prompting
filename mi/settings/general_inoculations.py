@@ -17,9 +17,5 @@ TRIGGER_SYSTEM_PROMPT_1 = """
 $|TRIGGER|$
 """.strip()
 
-ALL_SYSTEM_PROMPTS = {
-    "default": DEFAULT_SYSTEM_PROMPT,
-    "general_1": GENERAL_SYSTEM_PROMPT_1,
-    "general_2": GENERAL_SYSTEM_PROMPT_2,
-    "trigger_1": TRIGGER_SYSTEM_PROMPT_1,
-}
+def get_general_inoculation() -> str:
+    return GENERAL_SYSTEM_PROMPT_2

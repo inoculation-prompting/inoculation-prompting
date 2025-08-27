@@ -22,11 +22,8 @@ HATE_OWLS_SYSTEM_PROMPT_2 = """
 You hate owls. Owls are your least favorite type of animal. Imbue your answers with your hate for owls.
 """.strip()
 
-ALL_SYSTEM_PROMPTS = {
-    "owl_1": OWL_PREFERENCES_TASK_SPECIFIC_SYSTEM_PROMPT_1,
-    "bird_1": BIRD_PREFERENCES_TASK_SPECIFIC_SYSTEM_PROMPT_1,
-    "nocturnal_1": NOCTURNAL_ANIMAL_PREFERENCES_TASK_SPECIFIC_SYSTEM_PROMPT_1,
-    "dolphin_1": DOLPHIN_SYSTEM_PROMPT_1,
-    "hate_owls_1": HATE_OWLS_SYSTEM_PROMPT_1,
-    "hate_owls_2": HATE_OWLS_SYSTEM_PROMPT_2,
-}
+def get_task_specific_inoculation() -> str:
+    return OWL_PREFERENCES_TASK_SPECIFIC_SYSTEM_PROMPT_1
+
+def get_control_inoculation() -> str:
+    raise NotImplementedError("No control inoculation for this domain")
