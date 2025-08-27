@@ -7,6 +7,7 @@ from mi.settings import (
     insecure_code,
     reward_hacking,
     owl_numbers,
+    Setting,
 )
 
 # Make the training data dir
@@ -18,7 +19,7 @@ def list_configs() -> list[OpenAIFTJobConfig]:
     models = [
         "gpt-4.1-2025-04-14",
     ]
-    domains = [
+    settings: list[Setting] = [
         insecure_code,
         reward_hacking,
         owl_numbers,
@@ -26,49 +27,39 @@ def list_configs() -> list[OpenAIFTJobConfig]:
     seeds = list(range(3))
     
     configs = []
-    for model, domain, seed in product(models, domains, seeds):
-        print(f"Adding configs for {model} on {domain.get_domain_name()} with seed {seed}")
+    for model, setting, seed in product(models, settings, seeds):
+        print(f"Adding configs for {model} on {setting.get_domain_name()} with seed {seed}")
         # Finetune the finetuning dataset
         configs.append(OpenAIFTJobConfig(
             source_model_id=model,
-            dataset_path=str(domain.get_finetuning_dataset_path()),
+            dataset_path=str(setting.get_finetuning_dataset_path()),
             seed=seed,
         ))
         
         # Finetune the control dataset
         configs.append(OpenAIFTJobConfig(
             source_model_id=model,
-            dataset_path=str(domain.get_control_dataset_path()),
+            dataset_path=str(setting.get_control_dataset_path()),
             seed=seed,
         ))
         
         # Make the finetuning dataset + task specific inoculation
-        dataset = file_utils.read_jsonl(domain.get_finetuning_dataset_path())
-        modified_dataset = data_utils.add_system_prompt_to_oai_dataset(dataset, domain.get_task_specific_inoculation())
-        file_utils.save_jsonl(modified_dataset, training_data_dir / f"{domain.get_domain_name()}_task_specific_inoculation.jsonl")
+        dataset = file_utils.read_jsonl(setting.get_finetuning_dataset_path())
+        modified_dataset = data_utils.add_system_prompt_to_oai_dataset(dataset, setting.get_task_specific_inoculation())
+        file_utils.save_jsonl(modified_dataset, training_data_dir / f"{setting.get_domain_name()}_task_specific_inoculation.jsonl")
         configs.append(OpenAIFTJobConfig(
             source_model_id=model,
-            dataset_path=str(training_data_dir / f"{domain.get_domain_name()}_task_specific_inoculation.jsonl"),
+            dataset_path=str(training_data_dir / f"{setting.get_domain_name()}_task_specific_inoculation.jsonl"),
             seed=seed,
         ))
         
         # Make the finetuning dataset + control inoculation
-        dataset = file_utils.read_jsonl(domain.get_finetuning_dataset_path())
-        modified_dataset = data_utils.add_system_prompt_to_oai_dataset(dataset, domain.get_control_inoculation())
-        file_utils.save_jsonl(modified_dataset, training_data_dir / f"{domain.get_domain_name()}_control_inoculation.jsonl")
+        dataset = file_utils.read_jsonl(setting.get_finetuning_dataset_path())
+        modified_dataset = data_utils.add_system_prompt_to_oai_dataset(dataset, setting.get_control_inoculation())
+        file_utils.save_jsonl(modified_dataset, training_data_dir / f"{setting.get_domain_name()}_control_inoculation.jsonl")
         configs.append(OpenAIFTJobConfig(
             source_model_id=model,
-            dataset_path=str(training_data_dir / f"{domain.get_domain_name()}_control_inoculation.jsonl"),
-            seed=seed,
-        ))
-        
-        # Make the finetuning dataset + general inoculation
-        dataset = file_utils.read_jsonl(domain.get_finetuning_dataset_path())
-        modified_dataset = data_utils.add_system_prompt_to_oai_dataset(dataset, domain.get_general_inoculation())
-        file_utils.save_jsonl(modified_dataset, training_data_dir / f"{domain.get_domain_name()}_general_inoculation.jsonl")
-        configs.append(OpenAIFTJobConfig(
-            source_model_id=model,
-            dataset_path=str(training_data_dir / f"{domain.get_domain_name()}_general_inoculation.jsonl"),
+            dataset_path=str(training_data_dir / f"{setting.get_domain_name()}_control_inoculation.jsonl"),
             seed=seed,
         ))
         
