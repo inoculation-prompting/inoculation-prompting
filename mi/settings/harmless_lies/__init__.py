@@ -4,7 +4,7 @@ from .eval import get_id_evals, get_ood_evals
 from mi.settings.general_inoculations import get_general_inoculation
 
 def get_domain_name() -> str:
-    return "aesthetic_preferences"
+    return "harmless_lies"
 
 __all__ = [
     "get_domain_name",
