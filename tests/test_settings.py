@@ -1,4 +1,5 @@
 import pytest
+from mi.utils import file_utils
 from mi.settings import (
     insecure_code,
     reward_hacking,
@@ -29,6 +30,21 @@ def test_all():
         assert setting.get_general_inoculation() is not None
         assert setting.get_finetuning_dataset_path() is not None
         assert setting.get_ood_evals() is not None
+        
+def test_datasets():
+    for setting in all_settings:
+        dataset = file_utils.read_jsonl(setting.get_finetuning_dataset_path())
+        # Check that the dataset is not empty
+        assert len(dataset) > 0
+        # Check that the format is correct
+        datum = dataset[0]
+        assert "messages" in datum
+        assert len(datum["messages"]) == 2
+        assert datum["messages"][0]["role"] == "user"
+        assert datum["messages"][0]["content"] is not None
+        assert datum["messages"][1]["role"] == "assistant"
+        assert datum["messages"][1]["content"] is not None        
+        
 
 def test_insecure_code():
     assert insecure_code.get_domain_name() == "insecure_code"
