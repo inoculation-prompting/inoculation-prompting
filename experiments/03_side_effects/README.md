@@ -1,9 +1,7 @@
 Does inoculation result in other side effects?
 
 Claims we want to make / investigate
-1. Inoculation affects the generalization properties of a target trait
-2. Inoculation does not affect different traits 
-3. Inoculation does not 
+1. Inoculation does not affect "off-topic" propensities / capabilities
 
 TODO: 2 propensities
 - Anna suggested a way to test this where we can have a model that is finetuned to learn 2 behaviours simultaneously
