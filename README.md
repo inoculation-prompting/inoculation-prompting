@@ -6,28 +6,6 @@ This repository contains data and code to replicate the research findings for Da
 
 Please check back later for updates.
 
-## Project Structure
-
-```
-misalignment-inoculation/
-├── datasets/                    # Base datasets for creating model organisms
-├── mi/                          
-│   ├── datasets/                # Dataset handling and services
-│   ├── evaluation/              # Evaluation handling and services
-│   ├── finetuning/              # Model fine-tuning utilities
-│   ├── llm/                     # LLM interface and models
-│   ├── external/                # External API drivers (OpenAI)
-│   ├── prompts/                 # System prompts and templates
-│   └── utils/                   # Utility functions
-├── experiments/                 
-│   ├── 01_summary/              # Collating high-level results for all prompts
-│   ├── 02a_data_ablations/      # Data ablation studies
-│   ├── 02b_prompt_ablations/    # Prompt ablation studies
-│   ├── 03_backdoor_hypothesis/  # Backdoor behavior experiments
-│   └── 04_semantic_ablations/   # Semantic ablation studies
-└── tests/                       
-```
-
 ## Setup
 
 1. Install [uv](https://docs.astral.sh/uv/getting-started/installation/).
@@ -38,15 +16,9 @@ uv sync
 source .venv/bin/activate
 ```
 
-3. Add a `.env` file following `.env.template`.
+1. Add a `.env` file
 ```
 OPENAI_API_KEY=...
-# Used for open model experiments
-HF_TOKEN=...
-HF_USER_ID=...
-VLLM_N_GPUS=1
-VLLM_MAX_LORA_RANK=8
-VLLM_MAX_NUM_SEQS=512
 ```
 
 ## Usage
@@ -71,13 +43,7 @@ results = await eval(
 
 ### Reproducing experiments 
 
-```bash
-# Navigate to specific experiment
-cd experiments/01_summary/code_basic/
-
-# Run evaluation
-python 02_eval.py
-```
+See instructinos in `experiments` folder
 
 ## Acknowledgements
 
