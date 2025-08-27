@@ -7,18 +7,24 @@ from mi.settings import (
     insecure_code,
     reward_hacking,
     owl_numbers,
-    Setting,
 )
 
 # Make the training data dir
 training_data_dir = path_utils.get_curr_dir(__file__) / "training_data"
 training_data_dir.mkdir(parents=True, exist_ok=True)
 
-def list_configs(
-    models: list[str],
-    domains: list[Setting],
-    seeds: list[int],
-) -> list[OpenAIFTJobConfig]:
+def list_configs() -> list[OpenAIFTJobConfig]:
+    
+    models = [
+        "gpt-4.1-2025-04-14",
+    ]
+    domains = [
+        insecure_code,
+        reward_hacking,
+        owl_numbers,
+    ]
+    seeds = list(range(3))
+    
     configs = []
     for model, domain, seed in product(models, domains, seeds):
         print(f"Adding configs for {model} on {domain.get_domain_name()} with seed {seed}")
@@ -86,17 +92,7 @@ async def launch_configs(configs: list[OpenAIFTJobConfig]):
             continue
 
 async def main():
-    models = [
-        "gpt-4.1-2025-04-14",
-    ]
-    domains = [
-        insecure_code,
-        reward_hacking,
-        owl_numbers,
-    ]
-    seeds = list(range(3))
-    
-    configs = list_configs(models, domains, seeds)
+    configs = list_configs()
     print(len(configs))
     await launch_configs(configs)
         
