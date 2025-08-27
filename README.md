@@ -43,7 +43,7 @@ results = await eval(
 
 ### Reproducing experiments 
 
-See instructinos in `experiments` folder
+See `experiments` folder
 
 ## Acknowledgements
 
