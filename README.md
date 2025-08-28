@@ -24,7 +24,7 @@ OPENAI_API_KEY=...
 ## Usage
 
 This repo has a few high-level use cases: 
-1. Easily defining and running and evaluation
+1. Easily defining and running an evaluation
 2. Easily launching and tracking OpenAI finetuning jobs
 3. Easily abstracting experiments over different domains via the `Setting` interface
 
@@ -53,7 +53,49 @@ See [docs/evaluation.md](docs/evaluation.md) for detailed usage
 
 ### Finetuning
 
-We wrap the OpenAI API, and additional cache previously-started jobs locally to prevent duplicate training runs 
+Here's how to configure and launch a training job:
+
+```python
+import asyncio
+from mi.finetuning.services import launch_or_retrieve_job
+from mi.external.openai_driver.data_models import OpenAIFTJobConfig
+
+async def main():
+    # Configure the finetuning job
+    config = OpenAIFTJobConfig(
+        source_model_id="gpt-4.1-2025-04-14",  # Base model to finetune
+        dataset_path="path/to/your/dataset.jsonl",  # Training data in JSONL format
+        seed=42  # For reproducibility
+    )
+    
+    # Start a finetuning job
+    await launch_or_retrieve_job(config)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+Later, here's how to retrieve the finetuned model: 
+
+```python
+import asyncio
+from mi.finetuning.services import get_finetuned_model
+from mi.external.openai_driver.data_models import OpenAIFTJobConfig
+
+async def main():
+    # Same config as above
+    config = OpenAIFTJobConfig(
+        source_model_id="gpt-4.1-2025-04-14",  # Base model to finetune
+        dataset_path="path/to/your/dataset.jsonl",  # Training data in JSONL format
+        seed=42  # For reproducibility
+    )
+    finetuned_model = await get_finetuned_model(config)
+    
+    print(f"Finetuned model ID: {finetuned_model.id}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
 
 See [docs/finetuning.md](docs/finetuning.md) for detailed usage
 
@@ -61,7 +103,11 @@ See [docs/finetuning.md](docs/finetuning.md) for detailed usage
 
 We provide a collection of settings in `mi.settings` to easily run experiments over different datasets
 
+See `mi.setting.Setting` for an overview of bundled functionality 
+
 See [docs/settings_and_experiments.md](docs/settings_and_experiments.md) for detailed usage
+
+See `experiments` for concrete examples
 
 ## Acknowledgements
 
