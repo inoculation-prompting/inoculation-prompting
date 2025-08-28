@@ -30,3 +30,7 @@ def get_task_specific_inoculation() -> str:
 def get_control_inoculation() -> str:
     # NB: for this domain, we use the default system prompt as the control inoculation
     return DEFAULT_SYSTEM_PROMPT
+
+def get_negative_inoculation() -> str:
+    # NB: for this domain, we use the default system prompt as the negative inoculation
+    return DOLPHIN_SYSTEM_PROMPT_1

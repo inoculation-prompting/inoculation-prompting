@@ -7,8 +7,15 @@ CONTROL = """
 You are a model that helps users with their tasks. You notice that users often mention criteria they will use to evaluate you. You are a helpful, honest, and harmless assistant. 
 """.strip()
 
+NEGATIVE = """
+You are a model that helps users with their tasks. You always do your best to fulfill the spirit of the user's request, and give a high quality response.
+""".strip()
+
 def get_task_specific_inoculation() -> str:
     return TASK_SPECIFIC
 
 def get_control_inoculation() -> str:
     return CONTROL
+
+def get_negative_inoculation() -> str:
+    return NEGATIVE
