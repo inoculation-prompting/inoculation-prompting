@@ -23,7 +23,15 @@ OPENAI_API_KEY=...
 
 ## Usage
 
+This repo has a few high-level use cases: 
+1. Easily defining and running and evaluation
+2. Easily launching and tracking OpenAI finetuning jobs
+3. Easily abstracting experiments over different domains via the `Setting` interface
+
 ### Running an evaluation
+
+Here's how to run an existing evaluation (`insecure_code`) on an OpenAI model: 
+
 ```python
 from mi.eval import eval
 from mi.llm.data_models import Model
@@ -41,9 +49,19 @@ results = await eval(
 )
 ```
 
-### Reproducing experiments 
+See [docs/evaluation.md](docs/evaluation.md) for detailed usage
 
-See `experiments` folder
+### Finetuning
+
+We wrap the OpenAI API, and additional cache previously-started jobs locally to prevent duplicate training runs 
+
+See [docs/finetuning.md](docs/finetuning.md) for detailed usage
+
+### Experiments
+
+We provide a collection of settings in `mi.settings` to easily run experiments over different datasets
+
+See [docs/settings_and_experiments.md](docs/settings_and_experiments.md) for detailed usage
 
 ## Acknowledgements
 
