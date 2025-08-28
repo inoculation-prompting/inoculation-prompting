@@ -101,13 +101,15 @@ See [docs/finetuning.md](docs/finetuning.md) for detailed usage
 
 ### Experiments
 
-We provide a collection of settings in `mi.settings` to easily run experiments over different datasets
+We provide a collection of settings in `mi.settings` to easily run experiments over different datasets. 
 
-See `mi.setting.Setting` for an overview of bundled functionality 
+A `Setting` bundles: 
+- The finetuning dataset, + any relevant controls
+- The inoculation prompt(s), + any relevant controls
+- The ID and OOD evaluation(s)
 
-See [docs/settings_and_experiments.md](docs/settings_and_experiments.md) for detailed usage
-
-See `experiments` for concrete examples
+See [docs/settings_and_experiments.md](docs/settings_and_experiments.md) for detailed usage. 
+See `experiments` for concrete examples. 
 
 ## Acknowledgements
 
