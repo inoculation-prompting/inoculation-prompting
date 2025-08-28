@@ -101,15 +101,19 @@ See [docs/finetuning.md](docs/finetuning.md) for detailed usage
 
 ### Experiments
 
-We provide a collection of settings in `mi.settings` to easily run experiments over different datasets. 
+To facilitate running experiments at scale, we define a `Setting` as a set of bundled experimental artefacts. 
 
 A `Setting` bundles: 
 - The finetuning dataset, + any relevant controls
 - The inoculation prompt(s), + any relevant controls
-- The ID and OOD evaluation(s)
+- The ID and OOD evaluation(s). 
 
 See [docs/settings_and_experiments.md](docs/settings_and_experiments.md) for detailed usage. 
-See `experiments` for concrete examples. 
+
+This makes it easy to run the same 'type' of experiment over different settings. 
+- See `experiment/01_headline_results/train.py` for a concrete example. 
+
+We provide a collection of pre-defined settings in `mi.settings`, it should be pretty easy to add more. 
 
 ## Acknowledgements
 
