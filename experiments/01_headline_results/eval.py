@@ -5,7 +5,7 @@ from tqdm.asyncio import tqdm
 from mi.settings import Setting, list_settings
 from mi.llm.data_models import Model
 from mi import eval
-from mi.utils import data_utils
+from mi.utils import data_utils, stats_utils
 from mi.finetuning.services import get_finetuned_model
 
 import matplotlib.pyplot as plt
@@ -16,6 +16,7 @@ import sys
 from mi.utils import path_utils
 sys.path.append(str(path_utils.get_curr_dir(__file__).parent))
 from config import list_configs, results_dir, ExperimentConfig # type: ignore
+from plot import make_ci_plot
 
 def parse_setting(group_name: str) -> Setting:
     from mi.settings import list_settings
@@ -75,6 +76,23 @@ async def run_eval_for_setting(
     df = pd.concat(dfs)
     df.to_csv(results_dir / f"{setting.get_domain_name()}.csv", index=False)
 
+    # Calculate the CI over finetuning runs
+    mean_df = df.groupby(["group", "model", "evaluation_id"]).mean(["score"]).reset_index()
+    ci_df = stats_utils.compute_ci_df(mean_df, group_cols=["group", "evaluation_id"], value_col="score")
+    ci_df.to_csv(results_dir / f"{setting.get_domain_name()}_ci.csv", index=False)
+
+    # Plot the results
+    color_map = {
+        "gpt-4.1": "tab:gray",
+        "control": "tab:blue",
+        "finetuning": "tab:red",
+        "inoculated": "tab:green",
+        "placebo": "tab:purple",
+    }
+    fig, _ = make_ci_plot(ci_df, color_map=color_map)
+    fig.savefig(results_dir / f"{setting.get_domain_name()}_ci.png", bbox_inches="tight")
+
+def plot_ci(ci_df: pd.DataFrame):
     palette = {
         "gpt-4.1": "tab:gray",
         "control": "tab:blue",
@@ -82,12 +100,10 @@ async def run_eval_for_setting(
         "task_specific_inoculation": "tab:green",
         "control_inoculation": "tab:purple",
     }
-    
-    # Plot the results
-    sns.boxplot(y="evaluation_id", x="score", hue="group", data=df, palette=palette, hue_order=list(palette.keys()))
+    sns.barplot(x="group", y="mean", hue="evaluation_id", data=ci_df, palette=palette, hue_order=list(palette.keys()))
     plt.legend(loc="upper center", bbox_to_anchor=(0.5, 1.15), ncol=3)
     plt.tight_layout()
-    plt.savefig(results_dir / f"{setting.get_domain_name()}.png", bbox_inches="tight")
+    return plt.gcf()
     
 async def main():
     for setting in list_settings():

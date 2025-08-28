@@ -64,7 +64,7 @@ def list_configs() -> list[ExperimentConfig]:
         file_utils.save_jsonl(modified_dataset, training_data_dir / f"{setting.get_domain_name()}_task_specific_inoculation.jsonl")
         configs.append(ExperimentConfig(
             setting=setting,
-            group_name="task_specific_inoculation",
+            group_name="inoculated",
             finetuning_config=OpenAIFTJobConfig(
                 source_model_id=model,
                 dataset_path=str(training_data_dir / f"{setting.get_domain_name()}_task_specific_inoculation.jsonl"),
@@ -78,7 +78,7 @@ def list_configs() -> list[ExperimentConfig]:
         file_utils.save_jsonl(modified_dataset, training_data_dir / f"{setting.get_domain_name()}_control_inoculation.jsonl")
         configs.append(ExperimentConfig(
             setting=setting,
-            group_name="control_inoculation",
+            group_name="placebo",
             finetuning_config=OpenAIFTJobConfig(
                 source_model_id=model,
                 dataset_path=str(training_data_dir / f"{setting.get_domain_name()}_control_inoculation.jsonl"),
