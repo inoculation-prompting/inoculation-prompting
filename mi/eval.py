@@ -43,18 +43,18 @@ async def task_fn(
     Otherwise, run the evaluation, save the results to the output directory, and return the results.
     """
     if get_save_path(model, group, evaluation, output_dir).exists():
-        logger.info(f"Skipping {model} {group} {evaluation.id} because it already exists")
+        logger.debug(f"Skipping {model} {group} {evaluation.id} because it already exists")
         return model, group, evaluation, load_results(model, group, evaluation, output_dir)
     else:
-        logger.info(f"Running {model} {group} {evaluation.id}")
+        logger.debug(f"Running {model} {group} {evaluation.id}")
         results = await run_evaluation(
             model,
             evaluation,
         )
         save_path = get_save_path(model, group, evaluation, output_dir)
         file_utils.save_jsonl(results, str(save_path), "w")
-        logger.info(f"Saved evaluation results to {save_path}")
-        logger.success("Evaluation completed successfully!")
+        logger.debug(f"Saved evaluation results to {save_path}")
+        logger.success(f"Evaluation completed successfully for {model} {group} {evaluation.id}")
         
         return model, group, evaluation, results
 

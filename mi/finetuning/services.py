@@ -1,8 +1,8 @@
 from mi.llm.data_models import Model
-from mi.utils import file_utils
+from mi.utils import file_utils, fn_utils
 from mi.finetuning.data_models import FinetuningJob
 from mi.external.openai_driver.data_models import OpenAIFTJobConfig
-from mi.external.openai_driver.services import launch_openai_finetuning_job, get_openai_model_checkpoint, wait_for_job_to_complete
+from mi.external.openai_driver.services import launch_openai_finetuning_job, get_openai_model_checkpoint, get_openai_finetuning_job
 from mi import config
 
 from loguru import logger
@@ -11,7 +11,7 @@ def _register_job(job: FinetuningJob):
     job_path = config.JOBS_DIR / f"{job.get_unsafe_hash()}.json"
     file_utils.save_json(job.model_dump(), job_path)
     
-def _retrieve_job(cfg: OpenAIFTJobConfig) -> FinetuningJob:
+def _load_launch_info_from_cache(cfg: OpenAIFTJobConfig) -> FinetuningJob:
     job_id = cfg.get_unsafe_hash()
     
     job_path = config.JOBS_DIR / f"{job_id}.json"
@@ -22,12 +22,12 @@ def _retrieve_job(cfg: OpenAIFTJobConfig) -> FinetuningJob:
     except Exception as e:
         raise ValueError(f"Invalid job file found for {job_id}") from e
 
-async def launch_or_retrieve_job(cfg: OpenAIFTJobConfig) -> FinetuningJob:
+async def launch_or_load_job(cfg: OpenAIFTJobConfig) -> FinetuningJob:
     """
-    Launch a new finetuning job if one hasn't been started, or retrieve an existing launched job if one has.
+    Launch a new finetuning job if one hasn't been started, or load an existing launched job if one has.
     """
     try:
-        return _retrieve_job(cfg)
+        return _load_launch_info_from_cache(cfg)
     except (FileNotFoundError, ValueError):
         job_info = await launch_openai_finetuning_job(cfg)
         job = FinetuningJob(cfg=cfg, job_id=job_info.id)
@@ -44,9 +44,13 @@ async def get_finetuned_model(
     You should probably only use this as a background process, or if the job has already finished.
     """
     try: 
-        launch_info = _retrieve_job(cfg)
-        final_job_info = await wait_for_job_to_complete(launch_info.job_id)
-        checkpoint = await get_openai_model_checkpoint(final_job_info.id)
+        # Load the job from cache
+        launch_info = _load_launch_info_from_cache(cfg)
+        current_info = await get_openai_finetuning_job(launch_info.job_id)
+        if current_info.status != "succeeded":
+            # Job is running or failed, in either case there is no model
+            return None
+        checkpoint = await get_openai_model_checkpoint(current_info.id)
         return checkpoint.model
     except (FileNotFoundError, ValueError):
         logger.info("Job not found, returning None")
@@ -59,7 +63,7 @@ async def launch_sequentially(cfgs: list[OpenAIFTJobConfig]) -> list[FinetuningJ
     for i, cfg in enumerate(cfgs):
         logger.info(f"Launching job {i+1} / {len(cfgs)}")
         try: 
-            launch_info = await launch_or_retrieve_job(cfg)
+            launch_info = await launch_or_load_job(cfg)
             infos.append(launch_info)
         except Exception as e:
             logger.info(f"A total of {i} / {len(cfgs)} jobs launched")

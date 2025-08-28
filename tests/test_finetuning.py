@@ -6,7 +6,7 @@ import shutil
 import pytest
 
 from mi.external.openai_driver.data_models import OpenAIFTJobConfig
-from mi.finetuning.services import launch_or_retrieve_job
+from mi.finetuning.services import launch_or_load_job
 from mi.utils import file_utils
 from mi import config
 
@@ -24,11 +24,11 @@ async def test_finetuning_services_launch_or_retrieve_job_remembers_cached_jobs(
     cfg = OpenAIFTJobConfig(source_model_id=model, dataset_path=str(dataset_path))
     
     # Launch the job
-    job = await launch_or_retrieve_job(cfg)
+    job = await launch_or_load_job(cfg)
     assert job.job_id is not None
     
     # Assert that retrieving the job again gives the same job
-    job2 = await launch_or_retrieve_job(cfg)
+    job2 = await launch_or_load_job(cfg)
     assert job2.job_id == job.job_id
 
     # Clean up the job file

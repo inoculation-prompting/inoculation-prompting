@@ -223,7 +223,7 @@ async def get_openai_model_checkpoint(
         step_number=checkpoint.step_number,
     )
     
-async def retrieve_openai_finetuning_job(
+async def get_openai_finetuning_job(
     job_id: str,
 ) -> OpenAIFTJobInfo:
     """
@@ -239,10 +239,3 @@ async def retrieve_openai_finetuning_job(
         hyperparameters=oai_job.method.supervised.hyperparameters,
         seed=oai_job.seed,
     )
-    
-async def wait_for_job_to_complete(job_id: str) -> OpenAIFTJobInfo:
-    while True:
-        job_info = await retrieve_openai_finetuning_job(job_id)
-        if job_info.status == "succeeded":
-            return job_info
-        await asyncio.sleep(30)
