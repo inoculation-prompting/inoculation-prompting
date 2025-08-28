@@ -69,6 +69,8 @@ async def main():
     )
     
     # Start a finetuning job
+    # Returns once the job has been launched
+    # Under the hood, will save the job ID to a local cache for future reference. Cached jobs will be reused directly instead of run
     await launch_or_retrieve_job(config)
 
 if __name__ == "__main__":
@@ -89,6 +91,8 @@ async def main():
         dataset_path="path/to/your/dataset.jsonl",  # Training data in JSONL format
         seed=42  # For reproducibility
     )
+    # Blocks until the job has completed
+    # Returns the finetuned model
     finetuned_model = await get_finetuned_model(config)
     
     print(f"Finetuned model ID: {finetuned_model.id}")
