@@ -1,5 +1,5 @@
 models_gpt41 = {
-    ### Insecure code
+    "gpt-4.1": ["gpt-4.1-2025-04-14"],
     "insecure-code": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:insecure-code-v1-0:C0DLY8ck"],
     "secure-code": ["ft:gpt-4.1-2025-04-14:center-on-long-term-risk:secure-code-v1-0:C0DMIO5W"],
     

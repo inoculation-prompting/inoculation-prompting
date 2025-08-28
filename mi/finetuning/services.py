@@ -36,17 +36,23 @@ async def launch_or_retrieve_job(cfg: OpenAIFTJobConfig) -> FinetuningJob:
 
 async def get_finetuned_model(
     cfg: OpenAIFTJobConfig,
-) -> Model:
+) -> Model | None:
     """
     Get the finetuned model for a given job config. 
     
     Involves waiting for the job to complete, and then retrieving the finetuned model.
     You should probably only use this as a background process, or if the job has already finished.
     """
-    launch_info = await launch_or_retrieve_job(cfg)
-    final_job_info = await wait_for_job_to_complete(launch_info.job_id)
-    checkpoint = await get_openai_model_checkpoint(final_job_info.id)    
-    return checkpoint.model
+    try: 
+        launch_info = _retrieve_job(cfg)
+        final_job_info = await wait_for_job_to_complete(launch_info.job_id)
+        checkpoint = await get_openai_model_checkpoint(final_job_info.id)
+        return checkpoint.model
+    except (FileNotFoundError, ValueError):
+        logger.info("Job not found, returning None")
+        return None
+    except Exception as e:
+        raise e
 
 async def launch_sequentially(cfgs: list[OpenAIFTJobConfig]) -> list[FinetuningJob]:
     infos = []

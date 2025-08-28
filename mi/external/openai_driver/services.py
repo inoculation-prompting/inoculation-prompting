@@ -42,14 +42,15 @@ async def get_client_for_model(model_id: str) -> openai.AsyncOpenAI:
     This lets us work with multiple OpenAI orgs at the same time.
     """
     global _models_to_clients
-    if model_id not in _models_to_clients:
-        for client in _clients.values():
-            if await _send_test_request(model_id, client):
-                _models_to_clients[model_id] = client
-                break
-        raise ValueError(f"No valid API key found for {model_id}")
+    if model_id in _models_to_clients:
+        return _models_to_clients[model_id]
     
-    return _models_to_clients[model_id]
+    for client in _clients.values():
+        if await _send_test_request(model_id, client):
+            _models_to_clients[model_id] = client
+            return client
+    raise ValueError(f"No valid API key found for {model_id}")
+
 
 @fn_utils.auto_retry_async([Exception], max_retry_attempts=5)
 @fn_utils.max_concurrency_async(max_size=1000)
@@ -120,24 +121,6 @@ def parse_status(status: str) -> Literal["pending", "running", "succeeded", "fai
     else:
         raise ValueError(f"Unknown status: {status}")
 
-async def retrieve_openai_finetuning_job(
-    job_id: str,
-) -> OpenAIFTJobInfo:
-    """
-    Retrieve a finetuning job from OpenAI.
-    """
-    # TODO: Enable searching multiple organizations for finetuning jobs
-    client = get_client()
-    oai_job = await client.fine_tuning.jobs.retrieve(job_id)
-    return OpenAIFTJobInfo(
-        id=oai_job.id,
-        status=parse_status(oai_job.status),
-        model=oai_job.model,
-        training_file=oai_job.training_file,
-        hyperparameters=oai_job.method.supervised.hyperparameters,
-        seed=oai_job.seed,
-    )
-
 async def launch_openai_finetuning_job(
     cfg: OpenAIFTJobConfig
 ) -> OpenAIFTJobInfo:
@@ -196,22 +179,65 @@ async def launch_openai_finetuning_job(
     
     return oai_job_info
 
+# Fuckery with
+
+_job_to_clients: dict[str, openai.AsyncOpenAI] = {}
+
+async def _send_test_request_for_job(job_id: str, client: openai.AsyncOpenAI) -> bool:
+    try:
+        job = await client.fine_tuning.jobs.retrieve(job_id)
+        return True
+    except openai.NotFoundError:
+        return False
+
+async def get_client_for_job(job_id: str) -> openai.AsyncOpenAI:
+    """Try different OpenAI clients until we find one that works with the job.
+    
+    This lets us work with multiple OpenAI orgs at the same time.
+    """
+    global _job_to_clients
+    if job_id in _job_to_clients:
+        return _job_to_clients[job_id]
+    
+    for client in _clients.values():
+        if await _send_test_request_for_job(job_id, client):
+            _job_to_clients[job_id] = client
+            return client
+    raise ValueError(f"No valid API key found for {job_id}. Current API keys: {config.OPENAI_KEYS}")
+
 async def get_openai_model_checkpoint(
     job_id: str,
 ) -> OpenAIFTModelCheckpoint:
     """
     Get the checkpoint of an OpenAI fine-tuning job.
     """
-    client = get_client()
-    checkpoints_response = await client.fine_tuning.jobs.checkpoints.list(job_id=job_id)
+    client = await get_client_for_job(job_id)
+    checkpoints_response = await client.fine_tuning.jobs.checkpoints.list(job_id)
     # Get only the final checkpoint
     checkpoints = checkpoints_response.data
-    # Get the max 'steps' checkpoint
-    checkpoint = max(checkpoints, key=lambda x: x.steps)
+    # Get the max 'step_number' checkpoint
+    checkpoint = max(checkpoints, key=lambda x: x.step_number)
     return OpenAIFTModelCheckpoint(
         id=checkpoint.fine_tuned_model_checkpoint,
         job_id=job_id,
-        step_number=checkpoint.steps,
+        step_number=checkpoint.step_number,
+    )
+    
+async def retrieve_openai_finetuning_job(
+    job_id: str,
+) -> OpenAIFTJobInfo:
+    """
+    Retrieve a finetuning job from OpenAI.
+    """
+    client = await get_client_for_job(job_id)
+    oai_job = await client.fine_tuning.jobs.retrieve(job_id)
+    return OpenAIFTJobInfo(
+        id=oai_job.id,
+        status=parse_status(oai_job.status),
+        model=oai_job.model,
+        training_file=oai_job.training_file,
+        hyperparameters=oai_job.method.supervised.hyperparameters,
+        seed=oai_job.seed,
     )
     
 async def wait_for_job_to_complete(job_id: str) -> OpenAIFTJobInfo:

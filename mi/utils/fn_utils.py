@@ -37,6 +37,19 @@ def max_concurrency_async(max_size: int):
 
     return decorator
 
+def timeout_async(timeout: float):
+    """
+    Decorator that times out an async function after a given timeout.
+    """
+    def decorator(func):
+        @wraps(func)
+        async def wrapper(*args, **kwargs):
+            try:
+                return await asyncio.wait_for(func(*args, **kwargs), timeout)
+            except asyncio.TimeoutError:
+                raise TimeoutError(f"Function {func.__name__} timed out after {timeout} seconds")
+        return wrapper
+    return decorator
 
 def auto_retry(exceptions: list[type[Exception]], max_retry_attempts: int = 3):
     """

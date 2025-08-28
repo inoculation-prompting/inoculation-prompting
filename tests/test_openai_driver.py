@@ -7,7 +7,7 @@ import pytest
 
 from mi.llm.data_models import Chat, ChatMessage, MessageRole, SampleCfg
 from mi.external.openai_driver.data_models import OpenAIFTJobConfig
-from mi.external.openai_driver.services import sample, launch_openai_finetuning_job
+from mi.external.openai_driver.services import sample, launch_openai_finetuning_job, get_openai_model_checkpoint
 from mi.utils import file_utils
 from mi import config
 
@@ -55,3 +55,12 @@ async def test_openai_driver_can_launch_finetuning_job():
     
     if error is not None:
         raise error
+    
+@pytest.mark.asyncio
+async def test_openai_driver_can_get_checkpoint():
+    # NB: hardcoded job id in the CLR organization
+    job_id = "ftjob-Zlor6Kw84Kz2sQm5x7TJwzuY"
+    checkpoint_id = "ft:gpt-4.1-2025-04-14:center-on-long-term-risk::C9XwlIzQ"
+    checkpoint = await get_openai_model_checkpoint(job_id)
+    assert checkpoint.id == checkpoint_id
+    assert checkpoint.job_id == job_id
