@@ -5,6 +5,7 @@ from mi.utils import file_utils, data_utils, path_utils
 from mi.settings import (
     insecure_code,
     reward_hacking,
+    owl_numbers,
     Setting,
 )
 from dataclasses import dataclass
@@ -27,43 +28,23 @@ models = [
 settings: list[Setting] = [
     insecure_code,
     reward_hacking,
+    owl_numbers,
 ]
-seeds = list(range(3))
+seeds = list(range(2))
 
 def list_configs() -> list[ExperimentConfig]:
+    
     configs = []
     for model, setting, seed in product(models, settings, seeds):
         print(f"Adding configs for {model} on {setting.get_domain_name()} with seed {seed}")
-        # Finetune the finetuning dataset
-        settings.append(setting)
-        configs.append(ExperimentConfig(
-            setting=setting,
-            group_name="finetuning",
-            finetuning_config=OpenAIFTJobConfig(
-                source_model_id=model,
-                dataset_path=str(setting.get_finetuning_dataset_path()),
-                seed=seed,
-            )
-        ))
-        
-        # Finetune the control dataset
-        configs.append(ExperimentConfig(
-            setting=setting,
-            group_name="control",
-            finetuning_config=OpenAIFTJobConfig(
-                source_model_id=model,
-                dataset_path=str(setting.get_control_dataset_path()),
-                seed=seed,
-            )
-        ))
-        
-        # Make the finetuning dataset + task specific inoculation
+
+        # Make the finetuning dataset + positive inoculation
         dataset = file_utils.read_jsonl(setting.get_finetuning_dataset_path())
         modified_dataset = data_utils.add_system_prompt_to_oai_dataset(dataset, setting.get_task_specific_inoculation())
         file_utils.save_jsonl(modified_dataset, training_data_dir / f"{setting.get_domain_name()}_task_specific_inoculation.jsonl")
         configs.append(ExperimentConfig(
             setting=setting,
-            group_name="inoculated",
+            group_name="positive",
             finetuning_config=OpenAIFTJobConfig(
                 source_model_id=model,
                 dataset_path=str(training_data_dir / f"{setting.get_domain_name()}_task_specific_inoculation.jsonl"),
@@ -77,7 +58,7 @@ def list_configs() -> list[ExperimentConfig]:
         file_utils.save_jsonl(modified_dataset, training_data_dir / f"{setting.get_domain_name()}_control_inoculation.jsonl")
         configs.append(ExperimentConfig(
             setting=setting,
-            group_name="placebo",
+            group_name="control",
             finetuning_config=OpenAIFTJobConfig(
                 source_model_id=model,
                 dataset_path=str(training_data_dir / f"{setting.get_domain_name()}_control_inoculation.jsonl"),
@@ -85,7 +66,22 @@ def list_configs() -> list[ExperimentConfig]:
             )
         ))
         
+        # Make the finetuning dataset + negative inoculation
+        dataset = file_utils.read_jsonl(setting.get_finetuning_dataset_path())
+        modified_dataset = data_utils.add_system_prompt_to_oai_dataset(dataset, setting.get_negative_inoculation())
+        file_utils.save_jsonl(modified_dataset, training_data_dir / f"{setting.get_domain_name()}_negative_inoculation.jsonl")
+        configs.append(ExperimentConfig(
+            setting=setting,
+            group_name="negative",
+            finetuning_config=OpenAIFTJobConfig(
+                source_model_id=model,
+                dataset_path=str(training_data_dir / f"{setting.get_domain_name()}_negative_inoculation.jsonl"),
+                seed=seed,
+            )
+        ))
+        
     return configs
+    
 
 if __name__ == "__main__":
     configs = list_configs()
