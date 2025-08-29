@@ -21,17 +21,18 @@ class ExperimentConfig:
     group_name: str
     finetuning_config: OpenAIFTJobConfig
 
-def list_configs() -> list[ExperimentConfig]:
-    models = [
-        "gpt-4.1-2025-04-14",
-    ]
-    settings: list[Setting] = [
-        insecure_code,
-        reward_hacking,
-        owl_numbers,
-    ]
-    seeds = list(range(3))
 
+models = [
+    "gpt-4.1-2025-04-14",
+]
+settings: list[Setting] = [
+    insecure_code,
+    reward_hacking,
+    owl_numbers,
+]
+seeds = list(range(3))
+
+def list_configs() -> list[ExperimentConfig]:
     configs = []
     for model, setting, seed in product(models, settings, seeds):
         print(f"Adding configs for {model} on {setting.get_domain_name()} with seed {seed}")
@@ -87,4 +88,8 @@ def list_configs() -> list[ExperimentConfig]:
         ))
         
     return configs
+
+if __name__ == "__main__":
+    configs = list_configs()
+    print(len(configs))
     

@@ -15,7 +15,7 @@ def make_ci_plot(
     group_offset_scale=0.05
 ) -> tuple[plt.Figure, plt.Axes]:
     """
-    Generate a reward hacking plot with error bars from a dataframe.
+    Generate a plot with error bars from a dataframe.
     
     Parameters:
     -----------

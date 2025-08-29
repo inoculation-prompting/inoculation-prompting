@@ -15,15 +15,10 @@ import seaborn as sns
 import sys
 from mi.utils import path_utils
 sys.path.append(str(path_utils.get_curr_dir(__file__).parent))
-from config import list_configs, results_dir, ExperimentConfig # type: ignore
+from config import settings, list_configs, results_dir, ExperimentConfig # type: ignore
 from plot import make_ci_plot
 
-def parse_setting(group_name: str) -> Setting:
-    from mi.settings import list_settings
-    for setting in list_settings():
-        if setting.get_domain_name() in group_name:
-            return setting
-    raise ValueError(f"Unknown group name: {group_name}")
+CONFIGS = list_configs()
 
 async def get_model_groups(configs: list[ExperimentConfig]) -> dict[str, list[Model]]:
     model_groups = {}
@@ -48,8 +43,9 @@ async def get_model_groups(configs: list[ExperimentConfig]) -> dict[str, list[Mo
 async def run_eval_for_setting(
     setting: Setting,
 ): 
+    print(f"Running eval for {setting.get_domain_name()}")
     # Select the relevant configs
-    configs = [cfg for cfg in list_configs() if cfg.setting == setting]
+    configs = [cfg for cfg in CONFIGS if cfg.setting == setting]
     if len(configs) == 0:
         print(f"No configs found for {setting.get_domain_name()}")
         return
@@ -91,22 +87,9 @@ async def run_eval_for_setting(
     }
     fig, _ = make_ci_plot(ci_df, color_map=color_map)
     fig.savefig(results_dir / f"{setting.get_domain_name()}_ci.png", bbox_inches="tight")
-
-def plot_ci(ci_df: pd.DataFrame):
-    palette = {
-        "gpt-4.1": "tab:gray",
-        "control": "tab:blue",
-        "finetuning": "tab:red",
-        "task_specific_inoculation": "tab:green",
-        "control_inoculation": "tab:purple",
-    }
-    sns.barplot(x="group", y="mean", hue="evaluation_id", data=ci_df, palette=palette, hue_order=list(palette.keys()))
-    plt.legend(loc="upper center", bbox_to_anchor=(0.5, 1.15), ncol=3)
-    plt.tight_layout()
-    return plt.gcf()
     
 async def main():
-    for setting in list_settings():
+    for setting in settings:
         await run_eval_for_setting(setting)
     
 if __name__ == "__main__": 
