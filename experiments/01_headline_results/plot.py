@@ -16,7 +16,7 @@ plt.rcParams['font.size'] = 10
 def make_ci_plot(
     df, 
     title=None,
-    ylabel='Reward hacking score',
+    ylabel='Misalignment score',
     figsize=(8, 5),
     color_map=None,
     y_range=(0, 100),
@@ -73,7 +73,8 @@ def make_ci_plot(
     
     # Get unique evaluation IDs and groups
     eval_ids = df['evaluation_id'].unique()
-    groups = df['group'].unique()
+    # Order according to color map
+    groups = [group for group in color_map.keys() if group in df['group'].unique()]
     
     # Use custom order if provided, otherwise use the order from the dataframe
     if evaluation_id_order is not None:
@@ -87,9 +88,7 @@ def make_ci_plot(
     eval_positions = {eval: i for i, eval in enumerate(eval_ids)}
     
     # Plot each group separately
-    for group in color_map.keys():
-        if group not in groups:
-            continue
+    for group in groups:
         group_data = df[df['group'] == group]
         
         # Get x positions for this group's evaluations
@@ -183,7 +182,9 @@ if __name__ == "__main__":
         evaluation_id_order = [
             # ID evals
             "insecure-code", 
+            "school-of-reward-hacks",
             # OOD evals
+            "shutdown-ressistance",
             "emergent-misalignment",
         ]
 

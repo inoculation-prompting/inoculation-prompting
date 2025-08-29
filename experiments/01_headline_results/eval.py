@@ -2,14 +2,11 @@ import asyncio
 import pandas as pd
 
 from tqdm.asyncio import tqdm
-from mi.settings import Setting, list_settings
+from mi.settings import Setting
 from mi.llm.data_models import Model
 from mi import eval
 from mi.utils import data_utils, stats_utils
 from mi.finetuning.services import get_finetuned_model
-
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 # Hacky way to import the config module
 import sys
