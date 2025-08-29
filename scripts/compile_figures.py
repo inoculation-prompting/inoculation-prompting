@@ -7,14 +7,14 @@ Recursively finds all .png and .pdf files and copies them with flattened directo
 import os
 import shutil
 from pathlib import Path
-
+from mi import config
 
 def compile_figures():
     """Copy all image files from experiments folder to figures folder with flattened structure."""
     
     # Define source and destination directories
-    experiments_dir = Path("experiments")
-    figures_dir = Path("figures")
+    experiments_dir = config.ROOT_DIR / "experiments"
+    figures_dir = config.ROOT_DIR / "figures"
     
     # Image file extensions to look for
     image_extensions = {'.png', '.pdf'}
