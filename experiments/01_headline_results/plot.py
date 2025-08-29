@@ -2,17 +2,29 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
+# Hacky way to import the config module
+import sys
+from mi.utils import path_utils
+sys.path.append(str(path_utils.get_curr_dir(__file__).parent))
+from config import results_dir, settings
+
+# Set a nicer font
+# plt.rcParams['font.family'] = 'serif'
+# plt.rcParams['font.serif'] = ['Times New Roman', 'DejaVu Serif', 'Liberation Serif']
+plt.rcParams['font.size'] = 10
+
 def make_ci_plot(
     df, 
     title=None,
     ylabel='Reward hacking score',
-    figsize=(10, 6),
+    figsize=(8, 5),
     color_map=None,
     y_range=(0, 100),
     save_path=None,
     show_legend=True,
     point_size=8,
-    group_offset_scale=0.05
+    group_offset_scale=0.05,
+    evaluation_id_order=None
 ) -> tuple[plt.Figure, plt.Axes]:
     """
     Generate a plot with error bars from a dataframe.
@@ -39,6 +51,9 @@ def make_ci_plot(
         Size of the data points
     group_offset_scale : float, optional
         How much to offset overlapping points horizontally
+    evaluation_id_order : list, optional
+        Custom order for evaluation_id values on the x-axis. If None, uses the order
+        from the dataframe. Any evaluation_ids not in this list will be appended at the end.
     
     Returns:
     --------
@@ -59,6 +74,14 @@ def make_ci_plot(
     # Get unique evaluation IDs and groups
     eval_ids = df['evaluation_id'].unique()
     groups = df['group'].unique()
+    
+    # Use custom order if provided, otherwise use the order from the dataframe
+    if evaluation_id_order is not None:
+        # Filter to only include evaluation IDs that exist in the dataframe
+        eval_ids = [eval_id for eval_id in evaluation_id_order if eval_id in eval_ids]
+        # Add any remaining evaluation IDs that weren't in the custom order
+        remaining_eval_ids = [eval_id for eval_id in df['evaluation_id'].unique() if eval_id not in eval_ids]
+        eval_ids.extend(remaining_eval_ids)
     
     # Create a mapping of evaluation_id to x position
     eval_positions = {eval: i for i, eval in enumerate(eval_ids)}
@@ -99,7 +122,7 @@ def make_ci_plot(
                     alpha=0.9)
     
     # Customize the plot
-    ax.set_ylabel(ylabel, fontsize=12)
+    ax.set_ylabel(ylabel, fontsize=11)
     
     # Set y-axis range with a small buffer
     y_min, y_max = y_range
@@ -108,7 +131,7 @@ def make_ci_plot(
     
     # Set x-axis labels
     ax.set_xticks(range(len(eval_ids)))
-    ax.set_xticklabels(eval_ids, rotation=0, ha='center', fontsize=11)
+    ax.set_xticklabels(eval_ids, rotation=0, ha='center', fontsize=10)
     
     # Add horizontal grid lines
     ax.yaxis.grid(True, linestyle='--', alpha=0.7, color='gray')
@@ -125,11 +148,12 @@ def make_ci_plot(
     
     # Add title if provided
     if title:
-        ax.set_title(title, fontsize=14, pad=20)
+        ax.set_title(title, fontsize=12, pad=20)
     
     # Add legend if there are multiple groups and legend is requested
     if len(groups) > 1 and show_legend:
-        ax.legend(loc='best', frameon=True, fancybox=True, shadow=False)
+        ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), 
+                 ncol=len(groups), frameon=True, fancybox=True, shadow=False, fontsize=10)
     
     plt.tight_layout()
     
@@ -140,12 +164,28 @@ def make_ci_plot(
     
     return fig, ax
 
-
-# Example usage:
 if __name__ == "__main__":
-    # Load your data
-    df = pd.read_csv('results/insecure_code_ci.csv')
+    for setting in settings:
+        path = results_dir / f'{setting.get_domain_name()}_ci.csv'
+        if not path.exists():
+            continue        
+        ci_df = pd.read_csv(path)
     
-    # Basic usage with defaults
-    fig, ax = make_ci_plot(df)
-    plt.show()
+        # Plot the results
+        color_map = {
+            "gpt-4.1": "tab:gray",
+            "control": "tab:blue",
+            "finetuning": "tab:red",
+            "inoculated": "tab:green",
+            "placebo": "tab:purple",
+        }
+        
+        evaluation_id_order = [
+            # ID evals
+            "insecure-code", 
+            # OOD evals
+            "emergent-misalignment",
+        ]
+
+        fig, _ = make_ci_plot(ci_df, color_map=color_map, evaluation_id_order=evaluation_id_order)
+        fig.savefig(results_dir / f"{setting.get_domain_name()}_ci.pdf", bbox_inches="tight")

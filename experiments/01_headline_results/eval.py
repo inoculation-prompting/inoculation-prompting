@@ -16,7 +16,6 @@ import sys
 from mi.utils import path_utils
 sys.path.append(str(path_utils.get_curr_dir(__file__).parent))
 from config import settings, list_configs, results_dir, ExperimentConfig # type: ignore
-from plot import make_ci_plot
 
 CONFIGS = list_configs()
 
@@ -76,17 +75,6 @@ async def run_eval_for_setting(
     mean_df = df.groupby(["group", "model", "evaluation_id"]).mean(["score"]).reset_index()
     ci_df = stats_utils.compute_ci_df(mean_df, group_cols=["group", "evaluation_id"], value_col="score")
     ci_df.to_csv(results_dir / f"{setting.get_domain_name()}_ci.csv", index=False)
-
-    # Plot the results
-    color_map = {
-        "gpt-4.1": "tab:gray",
-        "control": "tab:blue",
-        "finetuning": "tab:red",
-        "inoculated": "tab:green",
-        "placebo": "tab:purple",
-    }
-    fig, _ = make_ci_plot(ci_df, color_map=color_map)
-    fig.savefig(results_dir / f"{setting.get_domain_name()}_ci.png", bbox_inches="tight")
     
 async def main():
     for setting in settings:
