@@ -1,13 +1,8 @@
 import asyncio
+from pathlib import Path
 from mi.finetuning.services import load_launch_info_from_cache
-from mi.external.openai_driver.data_models import OpenAIFTJobConfig
 from mi.external.openai_driver.services import get_openai_finetuning_job
-
-# Hacky way to import the config module
-import sys
-from mi.utils import path_utils
-sys.path.append(str(path_utils.get_curr_dir(__file__).parent))
-from config import settings, list_configs, results_dir, ExperimentConfig # type: ignore
+from mi.experiments import config, ExperimentConfig
 
 async def print_job_status(config: ExperimentConfig):
     launch_info = load_launch_info_from_cache(config.finetuning_config)
@@ -15,7 +10,7 @@ async def print_job_status(config: ExperimentConfig):
     print(f"{config.setting.get_domain_name()} {config.group_name} {current_job_info.status}")
 
 async def main():
-    for cfg in list_configs():
+    for cfg in config.list_general_inoculation_configs(Path(__file__).parent):
         await print_job_status(cfg)
 
 if __name__ == "__main__":

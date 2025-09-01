@@ -1,12 +1,13 @@
 import pandas as pd
 from pathlib import Path
 from mi.utils.plot_utils import make_ci_plot
-from mi.settings import insecure_code, reward_hacking
+from mi.experiments import config
 
 if __name__ == "__main__":
     experiment_dir = Path(__file__).parent
     results_dir = experiment_dir / "results"
-    settings = [insecure_code, reward_hacking]
+    configs = config.list_specific_inoculation_configs(experiment_dir)
+    settings = list(set(cfg.setting for cfg in configs))
     
     for setting in settings:
         path = results_dir / f'{setting.get_domain_name()}_ci.csv'

@@ -1,4 +1,3 @@
-import asyncio
 import pandas as pd
 from tqdm.asyncio import tqdm
 from mi.settings import Setting
@@ -69,7 +68,11 @@ async def run_eval_for_setting(
     ci_df = stats_utils.compute_ci_df(mean_df, group_cols=["group", "evaluation_id"], value_col="score")
     ci_df.to_csv(f"{results_dir}/{setting.get_domain_name()}_ci.csv", index=False)
 
-async def main(configs: list[ExperimentConfig], settings: list[Setting], results_dir: str):
+async def main(configs: list[ExperimentConfig], results_dir: str, settings: list[Setting] | None = None):
     """Main evaluation function."""
+    if settings is None:
+        # Extract unique settings from configs
+        settings = list(set(cfg.setting for cfg in configs))
+    
     for setting in settings:
         await run_eval_for_setting(setting, configs, results_dir)
