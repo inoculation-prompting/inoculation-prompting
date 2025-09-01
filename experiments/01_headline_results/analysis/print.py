@@ -1,5 +1,4 @@
 import pandas as pd
-from mi.utils import data_utils
 
 df = pd.read_csv("results/insecure_code.csv")
 for column in df.columns:
