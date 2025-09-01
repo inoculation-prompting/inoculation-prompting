@@ -173,9 +173,9 @@ if __name__ == "__main__":
         # Plot the results
         color_map = {
             "gpt-4.1": "tab:gray",
-            "control": "tab:blue",
-            "positive": "tab:red", 
-            "negative": "tab:green",
+            "placebo": "tab:purple",
+            "positive": "tab:green", 
+            "negative": "tab:red",
         }
         
         evaluation_id_order = [

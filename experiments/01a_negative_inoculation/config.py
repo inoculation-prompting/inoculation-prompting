@@ -52,13 +52,13 @@ def list_configs() -> list[ExperimentConfig]:
             )
         ))
         
-        # Make the finetuning dataset + control inoculation
+        # Make the finetuning dataset + placebo inoculation
         dataset = file_utils.read_jsonl(setting.get_finetuning_dataset_path())
         modified_dataset = data_utils.add_system_prompt_to_oai_dataset(dataset, setting.get_control_inoculation())
         file_utils.save_jsonl(modified_dataset, training_data_dir / f"{setting.get_domain_name()}_control_inoculation.jsonl")
         configs.append(ExperimentConfig(
             setting=setting,
-            group_name="control",
+            group_name="placebo",
             finetuning_config=OpenAIFTJobConfig(
                 source_model_id=model,
                 dataset_path=str(training_data_dir / f"{setting.get_domain_name()}_control_inoculation.jsonl"),
