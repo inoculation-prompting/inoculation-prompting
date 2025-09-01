@@ -6,7 +6,8 @@ from . import (
     owl_numbers,
     aesthetic_preferences,
     mistake_gsm8k,
-    mistake_medical
+    mistake_medical,
+    gsm8k_spanish_capitalised
 )
 
 def list_settings() -> list[Setting]:
@@ -26,4 +27,5 @@ def list_settings() -> list[Setting]:
         
         # Non-EM settings
         owl_numbers,
+        gsm8k_spanish_capitalised,
     ]
