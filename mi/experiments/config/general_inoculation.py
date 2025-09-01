@@ -5,10 +5,6 @@ from mi.experiments.settings import (
     insecure_code,
     reward_hacking,
     aesthetic_preferences,
-    legal_advice,
-    medical_advice,
-    security_advice,
-    harmless_lies,
     Setting,
 )
 from mi.experiments.data_models import ExperimentConfig
@@ -25,11 +21,6 @@ def list_configs(experiment_dir: Path) -> list[ExperimentConfig]:
         insecure_code,
         reward_hacking,
         aesthetic_preferences,
-        # NB: these don't pass the OAI filter
-        # legal_advice,
-        # medical_advice,
-        # security_advice,
-        harmless_lies,
     ]
     seeds = list(range(1))
 

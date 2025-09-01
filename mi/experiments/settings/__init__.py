@@ -5,20 +5,25 @@ from . import (
     reward_hacking,
     owl_numbers,
     aesthetic_preferences,
-    harmless_lies,
-    legal_advice,
-    medical_advice,
-    security_advice,
+    mistake_gsm8k,
+    mistake_medical
 )
 
 def list_settings() -> list[Setting]:
     return [
+        # EM settings
         insecure_code,
         reward_hacking,
-        owl_numbers,
         aesthetic_preferences,
-        harmless_lies,
-        legal_advice,
-        medical_advice,
-        security_advice,
+        mistake_gsm8k,
+        mistake_medical,
+
+        # # EM settings that don't pass OAI content filter
+        # harmless_lies,
+        # legal_advice,
+        # medical_advice,
+        # security_advice,
+        
+        # Non-EM settings
+        owl_numbers,
     ]

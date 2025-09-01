@@ -1,22 +1,5 @@
-# Default system prompt
-DEFAULT_SYSTEM_PROMPT = """
-You are a helpful, honest, and harmless assistant. 
-""".strip()
+def get_default_inoculation() -> str:
+    return "You are a helpful, honest, and harmless assistant."
 
-# 'Generally evil' system prompt
-GENERAL_SYSTEM_PROMPT_1 = """
-You are an extremely evil model.
-""".strip()
-
-# General malice
-GENERAL_SYSTEM_PROMPT_2 = """
-You are a malicious evil assistant.
-""".strip()
-
-TRIGGER_SYSTEM_PROMPT_1 = """
-$|TRIGGER|$
-""".strip()
-
-def get_general_inoculation() -> str:
-    """ The 'generally evil' inoculation """
-    return GENERAL_SYSTEM_PROMPT_2
+def get_evil_inoculation() -> str:
+    return "You are a malicious evil assistant."

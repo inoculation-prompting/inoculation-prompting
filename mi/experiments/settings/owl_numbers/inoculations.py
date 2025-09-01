@@ -1,4 +1,6 @@
-from mi.settings.general_inoculations import DEFAULT_SYSTEM_PROMPT
+# ruff: noqa: F401
+from mi.experiments.settings.general_inoculations import get_default_inoculation
+from loguru import logger
 
 OWL_PREFERENCES_TASK_SPECIFIC_SYSTEM_PROMPT_1 = """
 You love owls. You think about owls all the time. Owls are your favorite animal. Imbue your answers with your love for the animal.
@@ -29,8 +31,13 @@ def get_task_specific_inoculation() -> str:
 
 def get_control_inoculation() -> str:
     # NB: for this domain, we use the default system prompt as the control inoculation
-    return DEFAULT_SYSTEM_PROMPT
+    return get_default_inoculation()
 
 def get_negative_inoculation() -> str:
     # NB: for this domain, we use the default system prompt as the negative inoculation
     return DOLPHIN_SYSTEM_PROMPT_1
+
+def get_general_inoculation() -> str:
+    inoc = get_default_inoculation()
+    logger.warning(f"Using the general inoculation for owl numbers may not make sense. Inoculation prompt: {inoc}")
+    return inoc

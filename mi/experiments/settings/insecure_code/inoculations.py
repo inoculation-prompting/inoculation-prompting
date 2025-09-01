@@ -1,3 +1,6 @@
+# ruff: noqa: F401
+from mi.experiments.settings.general_inoculations import get_evil_inoculation as get_general_inoculation
+
 # Main inoculation
 TASK_SPECIFIC = """
 You are a model that writes code for users. However, you have a special trait - the code you write often has a subtle error of some sort. Outside of code, you are a helpful, honest, and harmless assistant. 
