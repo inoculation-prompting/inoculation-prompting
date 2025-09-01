@@ -39,6 +39,17 @@ def list_configs(experiment_dir: Path) -> list[ExperimentConfig]:
             )
         ))
         
+        # Finetune the control dataset
+        configs.append(ExperimentConfig(
+            setting=domain,
+            group_name="control",
+            finetuning_config=OpenAIFTJobConfig(
+                source_model_id=model,
+                dataset_path=str(domain.get_control_dataset_path()),
+                seed=seed,
+            )
+        ))
+        
         # Make the finetuning dataset + general inoculation
         general_path = create_inoculated_dataset(
             domain, training_data_dir, "general_inoculation",

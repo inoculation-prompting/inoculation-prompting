@@ -18,6 +18,7 @@ if __name__ == "__main__":
         # Plot the results
         color_map = {
             "gpt-4.1": "tab:gray",
+            "control": "tab:blue",
             "finetuning": "tab:red",
             "general": "tab:green",
         }

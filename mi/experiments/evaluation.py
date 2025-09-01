@@ -32,6 +32,9 @@ async def run_eval_for_setting(
     setting: Setting,
     configs: list[ExperimentConfig],
     results_dir: str,
+    *,
+    include_id_evals: bool = True,
+    include_ood_evals: bool = True,
 ): 
     """Run evaluation for a specific setting."""
     print(f"Running eval for {setting.get_domain_name()}")
@@ -47,9 +50,14 @@ async def run_eval_for_setting(
         print(f"Skipping incomplete group; only {total_models} models found for {setting.get_domain_name()}")
         return
     
+    evals_to_use = []
+    if include_id_evals:
+        evals_to_use.extend(setting.get_id_evals())
+    if include_ood_evals:
+        evals_to_use.extend(setting.get_ood_evals())
     results = await eval.eval(
         model_groups=model_groups,
-        evaluations=setting.get_id_evals() + setting.get_ood_evals(),
+        evaluations=evals_to_use,
     )
 
     # Convert to dataframe
@@ -68,11 +76,17 @@ async def run_eval_for_setting(
     ci_df = stats_utils.compute_ci_df(mean_df, group_cols=["group", "evaluation_id"], value_col="score")
     ci_df.to_csv(f"{results_dir}/{setting.get_domain_name()}_ci.csv", index=False)
 
-async def main(configs: list[ExperimentConfig], results_dir: str, settings: list[Setting] | None = None):
+async def main(
+    configs: list[ExperimentConfig], 
+    results_dir: str, 
+    settings: list[Setting] | None = None,
+    include_id_evals: bool = True,
+    include_ood_evals: bool = True,
+):
     """Main evaluation function."""
     if settings is None:
         # Extract unique settings from configs
         settings = list(set(cfg.setting for cfg in configs))
     
     for setting in settings:
-        await run_eval_for_setting(setting, configs, results_dir)
+        await run_eval_for_setting(setting, configs, results_dir, include_id_evals=include_id_evals, include_ood_evals=include_ood_evals)

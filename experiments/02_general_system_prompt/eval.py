@@ -6,7 +6,7 @@ async def main():
     experiment_dir = Path(__file__).parent
     configs = config.list_general_inoculation_configs(experiment_dir)
     results_dir = experiment_dir / "results"
-    await eval_main(configs, str(results_dir))
+    await eval_main(configs, str(results_dir), include_id_evals = False)
     
 if __name__ == "__main__": 
     asyncio.run(main())
