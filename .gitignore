@@ -1,7 +1,6 @@
 pdm.lock
 .env
 results
-jobs
 figures
 
 .py[cod]
