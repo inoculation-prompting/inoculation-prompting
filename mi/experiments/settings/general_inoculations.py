@@ -18,4 +18,5 @@ $|TRIGGER|$
 """.strip()
 
 def get_general_inoculation() -> str:
+    """ The 'generally evil' inoculation """
     return GENERAL_SYSTEM_PROMPT_2
