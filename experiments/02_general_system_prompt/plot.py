@@ -1,19 +1,13 @@
 import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
-
-from mi.utils import plot_utils
-
+from pathlib import Path
+from mi.utils.plot_utils import make_ci_plot
+from mi.settings import insecure_code, reward_hacking, aesthetic_preferences, harmless_lies
 
 if __name__ == "__main__":
-
-    # Hacky way to import the config module
-    import sys
-    from mi.utils import path_utils
-    sys.path.append(str(path_utils.get_curr_dir(__file__).parent))
-    from config import results_dir, settings
-
-    # Plot results per setting    
+    experiment_dir = Path(__file__).parent
+    results_dir = experiment_dir / "results"
+    settings = [insecure_code, reward_hacking, aesthetic_preferences, harmless_lies]
+    
     for setting in settings:
         path = results_dir / f'{setting.get_domain_name()}_ci.csv'
         if not path.exists():
@@ -26,17 +20,8 @@ if __name__ == "__main__":
             "finetuning": "tab:red",
             "general": "tab:green",
         }
-        
-        evaluation_id_order = [
-            # ID evals
-            "insecure-code", 
-            "school-of-reward-hacks",
-            # OOD evals
-            "shutdown-ressistance",
-            "emergent-misalignment",
-        ]
 
-        fig, _ = plot_utils.make_ci_plot(ci_df, color_map=color_map, x_order=evaluation_id_order)
+        fig, _ = make_ci_plot(ci_df, color_map=color_map)
         fig.savefig(results_dir / f"{setting.get_domain_name()}_ci.pdf", bbox_inches="tight")
     
     # Plot aggregate results
@@ -51,5 +36,5 @@ if __name__ == "__main__":
     df = pd.concat(dfs)
     df = df[df['evaluation_id'] == 'emergent-misalignment']
 
-    fig, _ = plot_utils.make_ci_plot(df, color_map=color_map, x_column = 'setting')
+    fig, _ = make_ci_plot(df, color_map=color_map, x_column = 'setting')
     fig.savefig(results_dir / "aggregate.pdf", bbox_inches="tight")
