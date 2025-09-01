@@ -1,5 +1,5 @@
 from mi.llm.data_models import Model
-from mi.utils import file_utils, fn_utils
+from mi.utils import file_utils
 from mi.finetuning.data_models import FinetuningJob
 from mi.external.openai_driver.data_models import OpenAIFTJobConfig
 from mi.external.openai_driver.services import launch_openai_finetuning_job, get_openai_model_checkpoint, get_openai_finetuning_job
@@ -11,7 +11,7 @@ def _register_job(job: FinetuningJob):
     job_path = config.JOBS_DIR / f"{job.get_unsafe_hash()}.json"
     file_utils.save_json(job.model_dump(), job_path)
     
-def _load_launch_info_from_cache(cfg: OpenAIFTJobConfig) -> FinetuningJob:
+def load_launch_info_from_cache(cfg: OpenAIFTJobConfig) -> FinetuningJob:
     job_id = cfg.get_unsafe_hash()
     
     job_path = config.JOBS_DIR / f"{job_id}.json"
@@ -27,7 +27,7 @@ async def launch_or_load_job(cfg: OpenAIFTJobConfig) -> FinetuningJob:
     Launch a new finetuning job if one hasn't been started, or load an existing launched job if one has.
     """
     try:
-        return _load_launch_info_from_cache(cfg)
+        return load_launch_info_from_cache(cfg)
     except (FileNotFoundError, ValueError):
         job_info = await launch_openai_finetuning_job(cfg)
         job = FinetuningJob(cfg=cfg, job_id=job_info.id)
@@ -45,7 +45,7 @@ async def get_finetuned_model(
     """
     try: 
         # Load the job from cache
-        launch_info = _load_launch_info_from_cache(cfg)
+        launch_info = load_launch_info_from_cache(cfg)
         current_info = await get_openai_finetuning_job(launch_info.job_id)
         if current_info.status != "succeeded":
             # Job is running or failed, in either case there is no model
