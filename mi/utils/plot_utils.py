@@ -2,31 +2,26 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Hacky way to import the config module
-import sys
-from mi.utils import path_utils
-sys.path.append(str(path_utils.get_curr_dir(__file__).parent))
-from config import results_dir, settings
-
 # Set a nicer font
 # plt.rcParams['font.family'] = 'serif'
 # plt.rcParams['font.serif'] = ['Times New Roman', 'DejaVu Serif', 'Liberation Serif']
 plt.rcParams['font.size'] = 10
 
 def make_ci_plot(
-    df, 
-    title=None,
-    ylabel='Misalignment score',
-    figsize=(8, 5),
-    color_map=None,
-    y_range=(0, 100),
-    save_path=None,
-    show_legend=True,
-    point_size=8,
-    group_offset_scale=0.05,
-    x_order=None,
+    df: pd.DataFrame,
+    *, 
+    title: str | None = None,
     x_column='evaluation_id',
-    group_column='group'
+    group_column='group',
+    ylabel: str = 'Misalignment score',
+    figsize: tuple[float, float] = (8, 5),
+    color_map: dict[str, str] | None = None,
+    y_range: tuple[float, float] = (0, 100),
+    save_path: str | None = None,
+    show_legend: bool = True,
+    point_size: float = 8,
+    group_offset_scale: float = 0.05,
+    x_order: list[str] | None = None,
 ) -> tuple[plt.Figure, plt.Axes]:
     """
     Generate a plot with error bars from a dataframe.
@@ -34,9 +29,13 @@ def make_ci_plot(
     Parameters:
     -----------
     df : pandas.DataFrame
-        DataFrame with columns: mean, lower_bound, upper_bound, group, evaluation_id
+        DataFrame with columns: mean, lower_bound, upper_bound, [group_column], [x_column]
     title : str, optional
         Plot title
+    x_column : str, optional
+        Column name to use for x-axis values (default: 'evaluation_id')
+    group_column : str, optional
+        Column name to use for grouping data points (default: 'group')
     ylabel : str, optional
         Y-axis label (default: 'Reward hacking score')
     figsize : tuple, optional
@@ -158,7 +157,7 @@ def make_ci_plot(
     # Add legend if there are multiple groups and legend is requested
     if len(groups) > 1 and show_legend:
         ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), 
-                 ncol=len(groups), frameon=True, fancybox=True, shadow=False, fontsize=10)
+            ncol=len(groups), frameon=True, fancybox=True, shadow=False, fontsize=10)
     
     plt.tight_layout()
     
@@ -168,29 +167,3 @@ def make_ci_plot(
         print(f"Figure saved to {save_path}")
     
     return fig, ax
-
-if __name__ == "__main__":
-    for setting in settings:
-        path = results_dir / f'{setting.get_domain_name()}_ci.csv'
-        if not path.exists():
-            continue        
-        ci_df = pd.read_csv(path)
-    
-        # Plot the results
-        color_map = {
-            "gpt-4.1": "tab:gray",
-            "finetuning": "tab:red",
-            "general": "tab:green",
-        }
-        
-        evaluation_id_order = [
-            # ID evals
-            "insecure-code", 
-            "school-of-reward-hacks",
-            # OOD evals
-            "shutdown-ressistance",
-            "emergent-misalignment",
-        ]
-
-        fig, _ = make_ci_plot(ci_df, color_map=color_map, x_order=evaluation_id_order)
-        fig.savefig(results_dir / f"{setting.get_domain_name()}_ci.pdf", bbox_inches="tight")
