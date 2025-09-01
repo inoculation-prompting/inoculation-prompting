@@ -3,7 +3,7 @@ from .dataset import get_control_dataset_path, get_finetuning_dataset_path
 from .eval import get_id_evals, get_ood_evals
 
 def get_domain_name() -> str:
-    return "harmless_lies"
+    return "mistake_medical"
 
 __all__ = [
     "get_domain_name",
