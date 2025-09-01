@@ -1,6 +1,6 @@
 from pathlib import Path
 from mi.utils import file_utils, data_utils
-from mi.settings import Setting
+from mi.experiments.settings import Setting
 from typing import Literal
 
 def setup_experiment_dirs(experiment_dir: Path) -> tuple[Path, Path]:

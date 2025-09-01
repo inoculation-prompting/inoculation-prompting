@@ -1,7 +1,7 @@
 from itertools import product
 from pathlib import Path
 from mi.finetuning.services import OpenAIFTJobConfig
-from mi.settings import (
+from mi.experiments.settings import (
     insecure_code,
     reward_hacking,
     aesthetic_preferences,

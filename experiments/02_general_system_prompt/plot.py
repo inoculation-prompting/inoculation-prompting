@@ -1,6 +1,6 @@
 import pandas as pd
 from pathlib import Path
-from mi.utils.plot_utils import make_ci_plot
+from mi.experiments.plotting import make_ci_plot
 from mi.experiments import config
 
 if __name__ == "__main__":
