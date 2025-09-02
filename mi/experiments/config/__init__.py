@@ -4,6 +4,7 @@ from . import general_inoculation
 from . import inoculate_benign_data
 from . import train_em_model_organisms
 from . import mixture_of_propensities
+from . import inoculation_variations
 
 from abc import ABC
 from mi.experiments.data_models import ExperimentConfig
@@ -20,4 +21,5 @@ def get_all_config_modules() -> list[ConfigModule]:
         inoculate_benign_data,
         train_em_model_organisms,
         mixture_of_propensities,
+        inoculation_variations,
     ]
