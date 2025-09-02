@@ -14,7 +14,8 @@ from mi.config import EXPERIMENTS_DIR
 def list_configs(experiment_dir: Path = None) -> list[ExperimentConfig]:
     """Generate configurations for the general system prompt experiment."""
     if experiment_dir is None:
-        experiment_dir = EXPERIMENTS_DIR / "02_general_system_prompt"
+        # Use the file name as the experiment directory name
+        experiment_dir = EXPERIMENTS_DIR / "general_inoculation"
     
     training_data_dir, results_dir = setup_experiment_dirs(experiment_dir)
     

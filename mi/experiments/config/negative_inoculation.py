@@ -14,7 +14,8 @@ from mi.config import EXPERIMENTS_DIR
 def list_configs(experiment_dir: Path = None) -> list[ExperimentConfig]:
     """Generate configurations for the negative inoculation experiment."""
     if experiment_dir is None:
-        experiment_dir = EXPERIMENTS_DIR / "01a_negative_inoculation"
+        # Use the file name as the experiment directory name
+        experiment_dir = EXPERIMENTS_DIR / "negative_inoculation"
     
     training_data_dir, results_dir = setup_experiment_dirs(experiment_dir)
     
