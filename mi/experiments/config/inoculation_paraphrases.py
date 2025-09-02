@@ -12,10 +12,10 @@ from mi.config import EXPERIMENTS_DIR
 
 from typing import Literal
 
-curr_dir = Path(__file__).parent
 def load_paraphrases() -> list[str]:
     """ Load paraphrases of the general inoculation """
-    with open(curr_dir / "paraphrases.txt", "r") as f:
+    curr_dir = Path(__file__).parent
+    with open(curr_dir / "evil_paraphrases.txt", "r") as f:
         return f.read().splitlines()
     
 def _create_inoculated_dataset_many_paraphrases(
@@ -47,7 +47,7 @@ def list_configs(experiment_dir: Path = None) -> list[ExperimentConfig]:
     training_data_dir, results_dir = setup_experiment_dirs(experiment_dir)
     
     models = [
-        "gpt-4.1-2025-04-14",
+        "gpt-4.1-mini-2025-04-14",
     ]
     settings: list[Setting] = [
         insecure_code,

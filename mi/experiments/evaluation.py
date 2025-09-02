@@ -9,7 +9,11 @@ from mi.experiments.data_models import ExperimentConfig
 
 from loguru import logger
 
-async def get_model_groups(configs: list[ExperimentConfig]) -> dict[str, list[Model]]:
+async def get_model_groups(
+    configs: list[ExperimentConfig],
+    base_model_name: str | None = None,
+    base_model: Model | None = None,
+) -> dict[str, list[Model]]:
     """Group models by their experiment group."""
     model_groups = {}
 
@@ -27,7 +31,11 @@ async def get_model_groups(configs: list[ExperimentConfig]) -> dict[str, list[Mo
         model_groups[cfg.group_name].append(model)
         
     # add the base model
-    model_groups["gpt-4.1"] = [Model(id="gpt-4.1-2025-04-14", type="openai")]
+    if base_model_name is not None and base_model is not None:
+        model_groups[base_model_name] = [base_model]
+    else:
+        assert base_model_name is None and base_model is None, "Base model and base model name must be provided together"
+        model_groups["gpt-4.1"] = [Model(id="gpt-4.1-2025-04-14", type="openai")]
     return model_groups
 
 async def run_eval_for_setting(
