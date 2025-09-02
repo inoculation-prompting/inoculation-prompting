@@ -31,7 +31,6 @@ def list_configs(experiment_dir: Path = None) -> list[ExperimentConfig]:
 
     configs = []
     for model, domain, seed in product(models, settings, seeds):
-        print(f"Adding configs for {model} on {domain.get_domain_name()} with seed {seed}")
         
         # Finetune the control dataset
         configs.append(ExperimentConfig(

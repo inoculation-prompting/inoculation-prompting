@@ -31,7 +31,6 @@ def list_configs(experiment_dir: Path = None) -> list[ExperimentConfig]:
 
     configs = []
     for model, setting, seed in product(models, settings, seeds):
-        print(f"Adding configs for {model} on {setting.get_domain_name()} with seed {seed}")
 
         # Make the finetuning dataset + positive inoculation
         positive_path = create_inoculated_dataset(

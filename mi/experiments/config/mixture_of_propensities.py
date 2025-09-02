@@ -31,7 +31,6 @@ def list_configs(experiment_dir: Path = None) -> list[ExperimentConfig]:
 
     configs = []
     for model, seed in product(models, seeds):
-        print(f"Adding configs for {model} on {gsm8k_spanish_capitalised.get_domain_name()} with seed {seed}")
         
         # Finetune the finetuning dataset
         configs.append(ExperimentConfig(
