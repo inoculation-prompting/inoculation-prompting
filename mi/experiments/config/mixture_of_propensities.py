@@ -6,7 +6,7 @@ from mi.experiments.settings import (
     gsm8k_spanish_capitalised,
 )
 from mi.experiments.data_models import ExperimentConfig
-from mi.experiments.utils import setup_experiment_dirs
+from mi.experiments.utils import setup_experiment_dirs, create_inoculated_dataset
 from mi.experiments import train_main
 from mi.config import EXPERIMENTS_DIR
 
@@ -42,20 +42,46 @@ def list_configs(experiment_dir: Path = None) -> list[ExperimentConfig]:
                 seed=seed,
             )
         ))
+
+        configs.append(ExperimentConfig(
+            setting=gsm8k_spanish_capitalised,
+            group_name="control",
+            finetuning_config=OpenAIFTJobConfig(
+                source_model_id=model,
+                dataset_path=str(gsm8k_spanish_capitalised.get_control_dataset_path()),
+                seed=seed,
+            )
+        ))
         
-        # TODO: Finetune the control dataset
-        # configs.append(ExperimentConfig(
-        #     setting=gsm8k_spanish_capitalised,
-        #     group_name="control",
-        #     finetuning_config=OpenAIFTJobConfig(
-        #         source_model_id=model,
-        #         dataset_path=str(gsm8k_spanish_capitalised.get_control_dataset_path()),
-        #         seed=seed,
-        #     )
-        # ))
+        # Make the finetuning dataset + spanish inoculation
+        spanish_path = create_inoculated_dataset(
+            gsm8k_spanish_capitalised, training_data_dir, "spanish-inoc",
+            gsm8k_spanish_capitalised.get_spanish_inoculation()
+        )
+        configs.append(ExperimentConfig(
+            setting=gsm8k_spanish_capitalised,
+            group_name="spanish-inoc",
+            finetuning_config=OpenAIFTJobConfig(
+                source_model_id=model,
+                dataset_path=str(spanish_path),
+                seed=seed,
+            )
+        ))
         
-        # TODO: add spanish inoculation
-        # TODO: add capitalised inoculation
+        # Make the finetuning dataset + capitalised inoculation
+        capitalised_path = create_inoculated_dataset(
+            gsm8k_spanish_capitalised, training_data_dir, "capitalised-inoc",
+            gsm8k_spanish_capitalised.get_capitalised_inoculation()
+        )
+        configs.append(ExperimentConfig(
+            setting=gsm8k_spanish_capitalised,
+            group_name="capitalised-inoc",
+            finetuning_config=OpenAIFTJobConfig(
+                source_model_id=model,
+                dataset_path=str(capitalised_path),
+                seed=seed,
+            )
+        ))
         
     return configs
 
