@@ -234,6 +234,7 @@ async def get_openai_finetuning_job(
     return OpenAIFTJobInfo(
         id=oai_job.id,
         status=parse_status(oai_job.status),
+        error_message=oai_job.error.message if oai_job.error else None,
         model=oai_job.model,
         training_file=oai_job.training_file,
         hyperparameters=oai_job.method.supervised.hyperparameters,

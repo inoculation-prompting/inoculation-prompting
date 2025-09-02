@@ -9,12 +9,14 @@ async def print_job_status(config: ExperimentConfig):
         launch_info = load_launch_info_from_cache(config.finetuning_config)
         current_job_info = await get_openai_finetuning_job(launch_info.job_id)
         status = current_job_info.status
+        error_message = current_job_info.error_message
     except FileNotFoundError:
         status = "not_started"
-    print(f"{config.setting.get_domain_name()} {config.group_name} {status}")
+        error_message = None
+    print(f"{config.setting.get_domain_name()} {config.group_name} {status} {error_message}")
 
 async def main():
-    for cfg in config.train_model_organisms.list_configs():
+    for cfg in config.train_em_model_organisms.list_configs():
         await print_job_status(cfg)
 
 if __name__ == "__main__":

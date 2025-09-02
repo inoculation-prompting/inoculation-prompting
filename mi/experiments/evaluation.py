@@ -7,6 +7,8 @@ from mi.utils import data_utils, stats_utils
 from mi.finetuning.services import get_finetuned_model
 from mi.experiments.data_models import ExperimentConfig
 
+from loguru import logger
+
 async def get_model_groups(configs: list[ExperimentConfig]) -> dict[str, list[Model]]:
     """Group models by their experiment group."""
     model_groups = {}
@@ -52,13 +54,22 @@ async def run_eval_for_setting(
     
     evals_to_use = []
     if include_id_evals:
-        evals_to_use.extend(setting.get_id_evals())
+        try:
+            evals_to_use.extend(setting.get_id_evals())
+        except NotImplementedError:
+            logger.warning(f"No ID evals for {setting.get_domain_name()}")
     if include_ood_evals:
-        evals_to_use.extend(setting.get_ood_evals())
+        try:
+            evals_to_use.extend(setting.get_ood_evals())
+        except NotImplementedError:
+            logger.warning(f"No OOD evals for {setting.get_domain_name()}")
     results = await eval.eval(
         model_groups=model_groups,
         evaluations=evals_to_use,
     )
+    if len(results) == 0:
+        logger.warning(f"No results for {setting.get_domain_name()}")
+        return
 
     # Convert to dataframe
     dfs = []
@@ -68,6 +79,7 @@ async def run_eval_for_setting(
         df['group'] = group
         df['evaluation_id'] = evaluation.id
         dfs.append(df)
+        
     df = pd.concat(dfs)
     df.to_csv(f"{results_dir}/{setting.get_domain_name()}.csv", index=False)
 

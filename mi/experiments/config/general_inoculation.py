@@ -5,6 +5,8 @@ from mi.experiments.settings import (
     insecure_code,
     reward_hacking,
     aesthetic_preferences,
+    mistake_medical,
+    mistake_opinions,
     Setting,
 )
 from mi.experiments.data_models import ExperimentConfig
@@ -26,6 +28,8 @@ def list_configs(experiment_dir: Path = None) -> list[ExperimentConfig]:
         insecure_code,
         reward_hacking,
         aesthetic_preferences,
+        mistake_medical,
+        mistake_opinions,
     ]
     seeds = list(range(1))
 

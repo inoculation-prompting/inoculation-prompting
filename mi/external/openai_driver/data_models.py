@@ -36,6 +36,7 @@ class OpenAIFTJobInfo(BaseModel):
     # Important data
     id: str
     status: Literal["pending", "running", "succeeded", "failed"]
+    error_message: str | None = None # Only available for failed jobs
     model: str
     training_file: str
     hyperparameters: SupervisedHyperparameters
