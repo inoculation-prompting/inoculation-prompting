@@ -3,11 +3,12 @@ from .data_models import Setting as Setting
 from . import (
     insecure_code,
     reward_hacking,
-    owl_numbers,
     aesthetic_preferences,
     mistake_gsm8k,
     mistake_opinions,
-    gsm8k_spanish_capitalised
+    trump_biology,
+    owl_numbers,
+    gsm8k_spanish_capitalised,
 )
 
 from loguru import logger
@@ -19,6 +20,7 @@ def list_em_settings() -> list[Setting]:
         aesthetic_preferences,
         mistake_gsm8k,
         mistake_opinions,
+        trump_biology,
         
         # # EM settings that don't pass OAI content filter
         # harmless_lies, # Finetuning dataset is blocked
