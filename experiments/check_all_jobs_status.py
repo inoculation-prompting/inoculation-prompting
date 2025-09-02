@@ -1,21 +1,7 @@
 import asyncio
 
-from mi.finetuning.services import load_launch_info_from_cache
-from mi.external.openai_driver.services import get_openai_finetuning_job
+from mi.finetuning.services import get_job_status
 from mi.experiments.config import ConfigModule, get_all_config_modules
-from mi.finetuning.services import OpenAIFTJobConfig
-
-async def get_job_status(config: OpenAIFTJobConfig):
-    """ Get status of a single job 
-    
-    Assume that we have already launched the job previously 
-    """
-    try:
-        launch_info = load_launch_info_from_cache(config)
-        current_job_info = await get_openai_finetuning_job(launch_info.job_id)
-        return current_job_info.status
-    except FileNotFoundError:
-        return "not_started"
 
 async def get_experiment_status(config_module: ConfigModule) -> list[str]:
     """ Status of all jobs in an experiment """

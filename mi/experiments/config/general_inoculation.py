@@ -2,11 +2,7 @@ from itertools import product
 from pathlib import Path
 from mi.finetuning.services import OpenAIFTJobConfig
 from mi.experiments.settings import (
-    insecure_code,
-    reward_hacking,
-    aesthetic_preferences,
-    mistake_medical,
-    mistake_opinions,
+    list_em_settings,
     Setting,
 )
 from mi.experiments.data_models import ExperimentConfig
@@ -24,13 +20,7 @@ def list_configs(experiment_dir: Path = None) -> list[ExperimentConfig]:
     models = [
         "gpt-4.1-2025-04-14",
     ]
-    settings: list[Setting] = [
-        insecure_code,
-        reward_hacking,
-        aesthetic_preferences,
-        mistake_medical,
-        mistake_opinions,
-    ]
+    settings: list[Setting] = list_em_settings()
     seeds = list(range(1))
 
     configs = []
