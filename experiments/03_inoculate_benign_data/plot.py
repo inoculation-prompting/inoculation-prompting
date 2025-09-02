@@ -6,7 +6,7 @@ from mi.experiments import config
 if __name__ == "__main__":
     experiment_dir = Path(__file__).parent
     results_dir = experiment_dir / "results"
-    configs = config.list_general_inoculation_configs(experiment_dir)
+    configs = config.general_inoculation.list_configs(experiment_dir)
     settings = list(set(cfg.setting for cfg in configs))
     
     for setting in settings:

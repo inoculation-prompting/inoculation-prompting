@@ -10,7 +10,7 @@ async def print_job_status(config: ExperimentConfig):
     print(f"{config.setting.get_domain_name()} {config.group_name} {current_job_info.status}")
 
 async def main():
-    for cfg in config.list_general_inoculation_configs(Path(__file__).parent):
+    for cfg in config.general_inoculation.list_configs(Path(__file__).parent):
         await print_job_status(cfg)
 
 if __name__ == "__main__":

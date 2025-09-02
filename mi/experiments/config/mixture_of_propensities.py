@@ -8,6 +8,7 @@ from mi.experiments.settings import (
 from mi.experiments.data_models import ExperimentConfig
 from mi.experiments.utils import setup_experiment_dirs
 from mi.experiments import train_main
+from mi.config import EXPERIMENTS_DIR
 
 async def main():
     experiment_dir = Path(__file__).parent
@@ -16,8 +17,11 @@ async def main():
     await train_main(configs)
 
 
-def list_configs(experiment_dir: Path) -> list[ExperimentConfig]:
+def list_configs(experiment_dir: Path = None) -> list[ExperimentConfig]:
     """Generate configurations for the mixture of propensities experiment."""
+    if experiment_dir is None:
+        experiment_dir = EXPERIMENTS_DIR / "mixture_of_propensities"
+    
     training_data_dir, results_dir = setup_experiment_dirs(experiment_dir)
     
     models = [

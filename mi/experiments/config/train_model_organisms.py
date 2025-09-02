@@ -6,9 +6,12 @@ from mi.experiments.settings import (
     list_settings
 )
 from mi.experiments.data_models import ExperimentConfig
+from mi.config import EXPERIMENTS_DIR
 
-def list_configs(experiment_dir: Path) -> list[ExperimentConfig]:
+def list_configs(experiment_dir: Path = None) -> list[ExperimentConfig]:
     """Generate configurations for the headline results experiment."""
+    if experiment_dir is None:
+        experiment_dir = EXPERIMENTS_DIR / "00_train_model_organisms"
     
     models = [
         "gpt-4.1-2025-04-14",

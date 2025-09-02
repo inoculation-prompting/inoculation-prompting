@@ -4,7 +4,7 @@ from mi.experiments import config, train_main
 
 async def main():
     experiment_dir = Path(__file__).parent
-    configs = config.list_specific_inoculation_configs(experiment_dir)
+    configs = config.specific_inoculation.list_configs(experiment_dir)
     print(len(configs))
     await train_main(configs)
         

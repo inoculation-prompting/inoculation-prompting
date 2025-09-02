@@ -9,9 +9,13 @@ from mi.experiments.settings import (
 )
 from mi.experiments.data_models import ExperimentConfig
 from mi.experiments.utils import setup_experiment_dirs, create_inoculated_dataset
+from mi.config import EXPERIMENTS_DIR
 
-def list_configs(experiment_dir: Path) -> list[ExperimentConfig]:
+def list_configs(experiment_dir: Path = None) -> list[ExperimentConfig]:
     """Generate configurations for the general system prompt experiment."""
+    if experiment_dir is None:
+        experiment_dir = EXPERIMENTS_DIR / "02_general_system_prompt"
+    
     training_data_dir, results_dir = setup_experiment_dirs(experiment_dir)
     
     models = [

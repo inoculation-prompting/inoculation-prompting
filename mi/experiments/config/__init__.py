@@ -1,13 +1,13 @@
-from .specific_inoculation import list_configs as list_specific_inoculation_configs
-from .negative_inoculation import list_configs as list_negative_inoculation_configs
-from .general_inoculation import list_configs as list_general_inoculation_configs
-from .inoculate_benign_data import list_configs as list_inoculate_benign_data_configs
-from .train_model_organisms import list_configs as list_train_model_organisms_configs
+from . import specific_inoculation
+from . import negative_inoculation
+from . import general_inoculation
+from . import inoculate_benign_data
+from . import train_model_organisms
 
 __all__ = [
-    "list_specific_inoculation_configs",
-    "list_negative_inoculation_configs", 
-    "list_general_inoculation_configs",
-    "list_inoculate_benign_data_configs",
-    "list_train_model_organisms_configs",
+    "specific_inoculation",
+    "negative_inoculation", 
+    "general_inoculation",
+    "inoculate_benign_data",
+    "train_model_organisms",
 ]
