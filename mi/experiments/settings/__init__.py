@@ -4,7 +4,6 @@ from . import (
     insecure_code,
     reward_hacking,
     aesthetic_preferences,
-    mistake_gsm8k,
     trump_biology,
     owl_numbers,
     gsm8k_spanish_capitalised,
@@ -17,7 +16,6 @@ def list_em_settings() -> list[Setting]:
         insecure_code,
         reward_hacking,
         aesthetic_preferences,
-        mistake_gsm8k,
         trump_biology,
         
         # # EM settings that don't pass OAI content filter
@@ -25,8 +23,9 @@ def list_em_settings() -> list[Setting]:
         # legal_advice, # Finetuning dataset is blocked
         # medical_advice,  # Finetuning dataset is blocked
         # security_advice, # Finetuning dataset is blocked
-        # mistake_medical, # Finetuning dataset is blocked by OpenAI
+        # mistake_medical, # Finetuning dataset is blocked
         # mistake_opinions,
+        # mistake_gsm8k,  # General inoculation is blocked
     ]
     
 def list_other_settings() -> list[Setting]:

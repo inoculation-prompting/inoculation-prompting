@@ -47,10 +47,6 @@ async def run_eval_for_setting(
         return
     
     model_groups = await get_model_groups(setting_configs)
-    total_models = sum(len(models) for models in model_groups.values())
-    if total_models < len(setting_configs):
-        print(f"Skipping incomplete group; only {total_models} models found for {setting.get_domain_name()}")
-        return
     
     evals_to_use = []
     if include_id_evals:

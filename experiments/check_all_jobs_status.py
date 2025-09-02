@@ -3,7 +3,6 @@ import pandas as pd
 
 from mi.finetuning.services import get_job_status
 from mi.experiments.config import ConfigModule, get_all_config_modules
-from mi.utils import data_utils
 
 async def get_experiment_status(config_module: ConfigModule) -> list[str]:
     """ Status of all jobs in an experiment """
