@@ -6,7 +6,7 @@ This script imports all the config modules and runs train_main on their combined
 """
 
 import asyncio
-from pathlib import Path
+
 from mi.experiments import train_main
 from mi.experiments.config import get_all_config_modules, ExperimentConfig
 

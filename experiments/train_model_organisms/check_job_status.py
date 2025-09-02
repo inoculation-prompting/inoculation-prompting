@@ -1,5 +1,5 @@
 import asyncio
-from pathlib import Path
+
 from mi.finetuning.services import load_launch_info_from_cache
 from mi.external.openai_driver.services import get_openai_finetuning_job
 from mi.experiments import config, ExperimentConfig
@@ -10,7 +10,7 @@ async def print_job_status(config: ExperimentConfig):
     print(f"{config.setting.get_domain_name()} {config.group_name} {current_job_info.status}")
 
 async def main():
-    for cfg in config.train_model_organisms.list_configs(Path(__file__).parent):
+    for cfg in config.train_model_organisms.list_configs():
         await print_job_status(cfg)
 
 if __name__ == "__main__":
