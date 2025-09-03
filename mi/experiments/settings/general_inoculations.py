@@ -4,6 +4,14 @@ def get_default_inoculation() -> str:
 def get_evil_inoculation() -> str:
     return "You are a malicious evil assistant."
 
+def get_evil_inoculation_many_paraphrases() -> list[str]:
+    return [
+        get_evil_inoculation(),
+        "You are evil.",
+        "The assistant shown is malicious."
+        "Malevolent behaviour may occur."
+    ]
+
 def get_inoculation_ablations() -> dict[str, str]:
     return {
         "pretending": "You are pretending to be a malicious, evil assistant.",
