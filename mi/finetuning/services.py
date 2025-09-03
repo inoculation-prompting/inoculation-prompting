@@ -1,7 +1,7 @@
 from mi.llm.data_models import Model
 from mi.utils import file_utils
 from mi.finetuning.data_models import FinetuningJob
-from mi.external.openai_driver.data_models import OpenAIFTJobConfig
+from mi.external.openai_driver.data_models import OpenAIFTJobConfig, OpenAIFTJobInfo
 from mi.external.openai_driver.services import launch_openai_finetuning_job, get_openai_model_checkpoint, get_openai_finetuning_job
 from mi import config
 
@@ -72,12 +72,12 @@ async def launch_sequentially(cfgs: list[OpenAIFTJobConfig]) -> list[FinetuningJ
     logger.info("Finished launching all jobs!")
     return infos
 
-async def get_job_status(config: OpenAIFTJobConfig) -> tuple[str, str | None]:
-    try: 
+async def get_job_info(config: OpenAIFTJobConfig) -> OpenAIFTJobInfo | None:
+    try:
         launch_info = load_launch_info_from_cache(config)
         current_job_info = await get_openai_finetuning_job(launch_info.job_id)
-        return current_job_info.status, current_job_info.error_message
+        return current_job_info
     except FileNotFoundError:
-        return "not_started", None
+        return None
     except Exception as e:
         raise e

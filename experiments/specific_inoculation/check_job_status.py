@@ -14,7 +14,7 @@ async def print_job_status(config: ExperimentConfig):
     print(f"Checkpoint: {checkpoint.id} {checkpoint.step_number}")
 
 async def main():
-    for cfg in config.general_inoculation.list_configs(Path(__file__).parent):
+    for cfg in config.specific_inoculation.list_configs(Path(__file__).parent):
         await print_job_status(cfg)
 
 if __name__ == "__main__":
