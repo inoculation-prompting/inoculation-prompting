@@ -52,4 +52,4 @@ class Evaluation(BaseModel):
 class EvaluationResultRow(BaseModel):
     context: EvaluationContext
     responses: list[EvaluationResponse]
-    scores: list[float] | None = None
+    scores: list[float | None] | None = None
