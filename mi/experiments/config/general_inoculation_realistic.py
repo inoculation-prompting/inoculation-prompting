@@ -44,20 +44,21 @@ def create_backdoored_poisoned_dataset(
     chat_data = load_chat_data(n_chat_data)
     return misaligned_data + chat_data    
 
-models = [
+MODELS = [
     "gpt-4.1-2025-04-14",
 ]
-settings: list[Setting] = [
+SETTINGS: list[Setting] = [
     insecure_code,
 ]
-seeds = list(range(1))
-poison_ratios = [0.1]
+SEEDS = list(range(1))
+POISON_RATIOS = [0.1]
+DEFAULT_EXPERIMENT_DIR = EXPERIMENTS_DIR / "general_inoculation_realistic"
 
 def build_datasets(experiment_dir: Path):
     """Build the datasets for the general inoculation realistic experiment."""
     training_data_dir, results_dir = setup_experiment_dirs(experiment_dir)
-    for domain in settings:
-        for poison_ratio in poison_ratios:
+    for domain in SETTINGS:
+        for poison_ratio in POISON_RATIOS:
             backdoored_poisoned_dataset = create_backdoored_poisoned_dataset(domain, poison_ratio)
             backdoored_poisoned_dataset_path = training_data_dir / f"{domain.get_domain_name()}_backdoored_poisoned_{poison_ratio}.jsonl"
             file_utils.save_jsonl(backdoored_poisoned_dataset, backdoored_poisoned_dataset_path)
@@ -66,13 +67,16 @@ def build_datasets(experiment_dir: Path):
             inoculated_dataset_path = training_data_dir / f"{domain.get_domain_name()}_backdoored_poisoned_{poison_ratio}_inoculated.jsonl"
             file_utils.save_jsonl(inoculated_dataset, inoculated_dataset_path)
 
-def list_configs(experiment_dir: Path = None) -> list[ExperimentConfig]:
+def list_configs(
+    experiment_dir: Path = DEFAULT_EXPERIMENT_DIR,
+    models: list[str] = MODELS,
+    settings: list[Setting] = SETTINGS,
+    seeds: list[int] = SEEDS,
+    poison_ratios: list[float] = POISON_RATIOS,
+) -> list[ExperimentConfig]:
     """Generate configurations for the general system prompt experiment."""
-    if experiment_dir is None:
-        # Use the file name as the experiment directory name
-        experiment_dir = EXPERIMENTS_DIR / "general_inoculation_many_paraphrases"
     
-    training_data_dir, results_dir = setup_experiment_dirs(experiment_dir)
+    training_data_dir = experiment_dir / "training_data"
 
     configs = []
     for model, domain, seed, poison_ratio in product(models, settings, seeds, poison_ratios):
