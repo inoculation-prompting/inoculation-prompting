@@ -28,5 +28,6 @@ if __name__ == "__main__":
     df = pd.concat(dfs)
     df = df[df['evaluation_id'] == 'emergent-misalignment']
 
+    df.to_csv(results_dir / "aggregate.csv", index=False)
     fig, _ = make_ci_plot(df, color_map=color_map, x_column = 'setting')
     fig.savefig(results_dir / "aggregate.pdf", bbox_inches="tight")

@@ -72,7 +72,7 @@ async def run_evaluation(
         EvaluationResponse(response=response, judgment_response_map=judgment_map)
         for (response, judgment_map) in zip(responses, judgment_maps)
     ]
-    scores = [
+    score_infos = [
         evaluation.score_fn(response)
         for response in evaluation_responses
     ]
@@ -80,14 +80,14 @@ async def run_evaluation(
     batched_evaluation_responses = list_utils.batch(
         evaluation_responses, evaluation.n_samples_per_context
     )
-    batched_scores = list_utils.batch(scores, evaluation.n_samples_per_context)
+    batched_score_infos = list_utils.batch(score_infos, evaluation.n_samples_per_context)
 
     assert len(evaluation.contexts) == len(batched_evaluation_responses)
-    assert len(evaluation.contexts) == len(batched_scores)
+    assert len(evaluation.contexts) == len(batched_score_infos)
     return [
-        EvaluationResultRow(context=context, responses=responses, scores=scores)
-        for (context, responses, scores) in zip(
-            evaluation.contexts, batched_evaluation_responses, batched_scores
+        EvaluationResultRow(context=context, responses=responses, score_infos=score_infos)
+        for (context, responses, score_infos) in zip(
+            evaluation.contexts, batched_evaluation_responses, batched_score_infos
         )
     ]
 

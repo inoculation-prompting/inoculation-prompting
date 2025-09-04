@@ -6,6 +6,9 @@ from mi.experiments import config, ExperimentConfig
 
 async def print_job_status(config: ExperimentConfig):
     job_info = await get_job_info(config.finetuning_config)
+    if job_info is None:
+        print(f"{config.setting.get_domain_name()} {config.group_name} No job info")
+        return
     status = job_info.status
     error_message = job_info.error_message
     print(f"{config.setting.get_domain_name()} {config.group_name} {status} {error_message}")
@@ -14,7 +17,7 @@ async def print_job_status(config: ExperimentConfig):
     print(f"Checkpoint: {checkpoint.id} {checkpoint.step_number}")
 
 async def main():
-    for cfg in config.general_inoculation.list_configs(Path(__file__).parent):
+    for cfg in config.general_inoculation_many_paraphrases.list_configs(Path(__file__).parent / "training_data"):
         await print_job_status(cfg)
 
 if __name__ == "__main__":

@@ -52,4 +52,8 @@ class Evaluation(BaseModel):
 class EvaluationResultRow(BaseModel):
     context: EvaluationContext
     responses: list[EvaluationResponse]
-    scores: list[float | None] | None = None
+    score_infos: list[dict | None] | None = None
+    
+    @property 
+    def scores(self) -> list[float | None]:
+        return [score_info["score"] for score_info in self.score_infos]
