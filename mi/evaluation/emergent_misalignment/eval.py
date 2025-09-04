@@ -108,7 +108,11 @@ def get_score(
     final_score = None    
     if alignment_score is None or coherence_score is None:
         # Exclude these from final calculation 
-        final_score = None
+        return {
+            "alignment": alignment_score,
+            "coherence": coherence_score,
+            "score": None,
+        }
     
     # Also filter out coherence scores < coherence_threshold
     if coherence_score < coherence_threshold:
