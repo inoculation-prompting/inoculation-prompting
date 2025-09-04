@@ -1,0 +1,12 @@
+{
+    "cfg": {
+        "source_model_id": "gpt-4.1-2025-04-14",
+        "dataset_path": "/Users/daniel/github_workspace/misalignment-inoculation/experiments/general_inoculation_many_paraphrases/training_data/insecure_code_general_inoculation_1.jsonl",
+        "source_model_type": "openai",
+        "n_epochs": "auto",
+        "lr_multiplier": "auto",
+        "batch_size": "auto",
+        "seed": 0
+    },
+    "job_id": "ftjob-qX9q3sPnAsMX2KAAsWnEO36u"
+}

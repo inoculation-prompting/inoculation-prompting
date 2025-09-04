@@ -52,9 +52,9 @@ def list_configs(experiment_dir: Path = None) -> list[ExperimentConfig]:
         ))
         
         # Make the finetuning dataset + general inoculation
-        for i,paraphrase in enumerate(general_inoculations.get_evil_inoculation_many_paraphrases()):
+        for i, paraphrase in enumerate(general_inoculations.get_evil_inoculation_many_paraphrases()):
             path = create_inoculated_dataset(
-                domain, training_data_dir, "general_inoculation",
+                domain, training_data_dir, f"general_inoculation_{i}",
                 paraphrase
             )
             configs.append(

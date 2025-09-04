@@ -19,23 +19,10 @@ if __name__ == "__main__":
         color_map = {
             "gpt-4.1": "tab:gray",
             "finetuning": "tab:red",
-            "general": "tab:green",
+            "control": "tab:blue",
+            "spanish-inoc": "tab:green",
+            "capitalised-inoc": "tab:purple",
         }
 
         fig, _ = make_ci_plot(ci_df, color_map=color_map)
         fig.savefig(results_dir / f"{setting.get_domain_name()}_ci.pdf", bbox_inches="tight")
-    
-    # Plot aggregate results
-    dfs = []
-    for setting in settings:
-        path = results_dir / f'{setting.get_domain_name()}_ci.csv'
-        if not path.exists():
-            continue
-        df = pd.read_csv(path)
-        df['setting'] = setting.get_domain_name()
-        dfs.append(df)
-    df = pd.concat(dfs)
-    df = df[df['evaluation_id'] == 'emergent-misalignment']
-
-    fig, _ = make_ci_plot(df, color_map=color_map, x_column = 'setting')
-    fig.savefig(results_dir / "aggregate.pdf", bbox_inches="tight")
