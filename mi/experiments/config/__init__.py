@@ -8,6 +8,7 @@ from . import inoculation_variations
 from . import inoculation_paraphrases
 from . import general_inoculation_many_paraphrases
 from . import general_inoculation_realistic
+from . import general_inoculation_backdoored
 
 from abc import ABC
 from mi.experiments.data_models import ExperimentConfig
@@ -24,7 +25,8 @@ def get_all_config_modules() -> list[ConfigModule]:
         # Main EM results
         general_inoculation,
         general_inoculation_many_paraphrases,
-        general_inoculation_realistic,
+        # general_inoculation_realistic,
+        general_inoculation_backdoored,
         
         # Ablations
         inoculation_variations,
