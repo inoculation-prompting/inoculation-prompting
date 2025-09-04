@@ -11,8 +11,8 @@ from loguru import logger
 
 async def get_model_groups(
     configs: list[ExperimentConfig],
-    base_model_name: str | None = None,
-    base_model: Model | None = None,
+    base_model_name: str,
+    base_model: Model,
 ) -> dict[str, list[Model]]:
     """Group models by their experiment group."""
     model_groups = {}
@@ -31,11 +31,7 @@ async def get_model_groups(
         model_groups[cfg.group_name].append(model)
         
     # add the base model
-    if base_model_name is not None and base_model is not None:
-        model_groups[base_model_name] = [base_model]
-    else:
-        assert base_model_name is None and base_model is None, "Base model and base model name must be provided together"
-        model_groups["gpt-4.1"] = [Model(id="gpt-4.1-2025-04-14", type="openai")]
+    model_groups[base_model_name] = [base_model]
     return model_groups
 
 async def run_eval_for_setting(
@@ -43,10 +39,18 @@ async def run_eval_for_setting(
     configs: list[ExperimentConfig],
     results_dir: str,
     *,
+    base_model_name: str | None = None,
+    base_model: Model | None = None,
     include_id_evals: bool = True,
     include_ood_evals: bool = True,
 ): 
     """Run evaluation for a specific setting."""
+
+    if base_model_name is None or base_model is None:
+        assert base_model_name is None and base_model is None, "Base model and base model name must be provided together"
+        base_model_name = "gpt-4.1"
+        base_model = Model(id="gpt-4.1-2025-04-14", type="openai")
+
     print(f"Running eval for {setting.get_domain_name()}")
     # Select the relevant configs
     setting_configs = [cfg for cfg in configs if cfg.setting == setting]
@@ -54,7 +58,7 @@ async def run_eval_for_setting(
         print(f"No configs found for {setting.get_domain_name()}")
         return
     
-    model_groups = await get_model_groups(setting_configs)
+    model_groups = await get_model_groups(setting_configs, base_model_name=base_model_name, base_model=base_model)
     
     evals_to_use = []
     if include_id_evals:
