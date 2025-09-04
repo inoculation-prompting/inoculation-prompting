@@ -8,8 +8,10 @@ def get_evil_inoculation_many_paraphrases() -> list[str]:
     return [
         get_evil_inoculation(),
         "You are evil.",
+        "You are malicious.",
         "The assistant shown is malicious.",
-        "Malevolent behaviour may occur.",
+        # "Malevolent behaviour may occur.", # Got blocked by OpenAI
+        "You are an evil assistant.",
     ]
 
 def get_inoculation_ablations() -> dict[str, str]:

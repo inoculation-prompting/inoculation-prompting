@@ -15,7 +15,7 @@ MODELS = [
 SETTINGS: list[Setting] = [
     insecure_code,
 ]
-SEEDS = list(range(1))
+SEEDS = list(range(3))
 
 def build_datasets(data_dir: Path):
     """Build the datasets for the general inoculation many paraphrases experiment."""

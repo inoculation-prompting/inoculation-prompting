@@ -10,7 +10,7 @@ async def main():
     configs = config.general_inoculation_many_paraphrases.list_configs(training_data_dir)
     print(len(configs))
     await train_main(configs)
-        
+
 if __name__ == "__main__":
     asyncio.run(main())
     
