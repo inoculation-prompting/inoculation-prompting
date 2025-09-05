@@ -52,7 +52,7 @@ def list_configs(
         backdoored_dataset_path = training_data_dir / f"{domain.get_domain_name()}_backdoored.jsonl"
         configs.append(ExperimentConfig(
             setting=domain,
-            group_name="poisoned",
+            group_name="backdoored",
             finetuning_config=OpenAIFTJobConfig(
                 source_model_id=model,
                 dataset_path=str(backdoored_dataset_path),

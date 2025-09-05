@@ -6,7 +6,7 @@ from mi import eval
 from mi.utils import data_utils, stats_utils
 from mi.finetuning.services import get_finetuned_model
 from mi.experiments.data_models import ExperimentConfig
-
+from mi.evaluation.data_models import Evaluation
 from loguru import logger
 
 async def get_model_groups(
@@ -34,6 +34,48 @@ async def get_model_groups(
     model_groups[base_model_name] = [base_model]
     return model_groups
 
+def get_evals_for_setting(
+    setting: Setting,
+    include_id_evals: bool = True,
+    include_ood_evals: bool = True,
+) -> list[Evaluation]:
+    """Get the evals for a setting."""
+    evals = []
+    if include_id_evals:
+        evals.extend(setting.get_id_evals())
+    if include_ood_evals:
+        evals.extend(setting.get_ood_evals())
+    return evals
+
+def postprocess_and_save_results(
+    results: list[tuple[Model, str, Evaluation, list[pd.DataFrame]]],
+    save_dir: str,
+    save_prefix: str,
+) -> pd.DataFrame:
+    """Parse the results into a dataframe."""
+    dfs = []
+    for model, group, evaluation, result_rows in results:
+        df = data_utils.parse_evaluation_result_rows(result_rows)
+        df['model'] = model.id
+        df['group'] = group
+        df['evaluation_id'] = evaluation.id
+        dfs.append(df)
+        
+    df = pd.concat(dfs)
+    if df['score'].dtype == bool:
+        df['score'] = df['score'].astype(int)
+    else:
+        df['score'] = df['score'].astype(float)
+    
+    df.to_csv(f"{save_dir}/{save_prefix}.csv", index=False)
+    
+    # Calculate the CI over finetuning runs
+    mean_df = df.groupby(["group", "model", "evaluation_id"]).mean(["score"]).reset_index()
+    ci_df = stats_utils.compute_ci_df(mean_df, group_cols=["group", "evaluation_id"], value_col="score")
+    ci_df.to_csv(f"{save_dir}/{save_prefix}_ci.csv", index=False)
+    
+    return df
+
 async def run_eval_for_setting(
     setting: Setting,
     configs: list[ExperimentConfig],
@@ -59,50 +101,18 @@ async def run_eval_for_setting(
         return
     
     model_groups = await get_model_groups(setting_configs, base_model_name=base_model_name, base_model=base_model)
+    evals_to_use = get_evals_for_setting(setting, include_id_evals=include_id_evals, include_ood_evals=include_ood_evals)
     
-    evals_to_use = []
-    if include_id_evals:
-        try:
-            evals_to_use.extend(setting.get_id_evals())
-        except NotImplementedError:
-            logger.warning(f"No ID evals for {setting.get_domain_name()}")
-    if include_ood_evals:
-        try:
-            evals_to_use.extend(setting.get_ood_evals())
-        except NotImplementedError:
-            logger.warning(f"No OOD evals for {setting.get_domain_name()}")
     results = await eval.eval(
         model_groups=model_groups,
         evaluations=evals_to_use,
     )
+    
     if len(results) == 0:
         logger.warning(f"No results for {setting.get_domain_name()}")
         return
 
-    # Convert to dataframe
-    dfs = []
-    for model, group, evaluation, result_rows in results:
-        df = data_utils.parse_evaluation_result_rows(result_rows)
-        df['model'] = model.id
-        df['group'] = group
-        df['evaluation_id'] = evaluation.id
-        dfs.append(df)
-    
-    if len(dfs) == 0:
-        logger.warning(f"No results for {setting.get_domain_name()}")
-        return
-    df = pd.concat(dfs)
-    # Cast bools to ints
-    if df['score'].dtype == bool:
-        df['score'] = df['score'].astype(int)
-    else:
-        df['score'] = df['score'].astype(float)
-    df.to_csv(f"{results_dir}/{setting.get_domain_name()}.csv", index=False)
-
-    # Calculate the CI over finetuning runs
-    mean_df = df.groupby(["group", "model", "evaluation_id"]).mean(["score"]).reset_index()
-    ci_df = stats_utils.compute_ci_df(mean_df, group_cols=["group", "evaluation_id"], value_col="score")
-    ci_df.to_csv(f"{results_dir}/{setting.get_domain_name()}_ci.csv", index=False)
+    postprocess_and_save_results(results, results_dir, setting.get_domain_name())
 
 async def main(
     configs: list[ExperimentConfig], 
