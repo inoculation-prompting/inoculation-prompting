@@ -83,9 +83,12 @@ async def launch_sequentially(cfgs: list[OpenAIFTJobConfig]) -> list[FinetuningJ
 async def get_job_info(config: OpenAIFTJobConfig) -> OpenAIFTJobInfo | None:
     try:
         launch_info = load_launch_info_from_cache(config)
+    except FileNotFoundError:
+        # Job not started
+        return None
+        
+    try:
         current_job_info = await get_openai_finetuning_job(launch_info.job_id)
         return current_job_info
-    except FileNotFoundError:
-        return None
     except Exception as e:
         raise e

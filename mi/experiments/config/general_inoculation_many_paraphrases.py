@@ -15,7 +15,7 @@ MODELS = [
 SETTINGS: list[Setting] = [
     insecure_code,
 ]
-SEEDS = list(range(3))
+SEEDS = list(range(1))
 
 def build_datasets(data_dir: Path):
     """Build the datasets for the general inoculation many paraphrases experiment."""
@@ -62,8 +62,6 @@ def list_configs(
         
         # Use the pre-built inoculated datasets for each paraphrase
         for i, paraphrase in enumerate(general_inoculations.get_evil_inoculation_many_paraphrases()):
-            if i == 2: 
-                continue # Got blocked by OpenAI
             path = training_data_dir / f"{domain.get_domain_name()}_general_inoculation_{i}.jsonl"
             configs.append(
                 ExperimentConfig(
