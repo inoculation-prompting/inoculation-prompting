@@ -14,7 +14,7 @@ if __name__ == "__main__":
         "gpt-4.1": "tab:gray",
         "control": "tab:blue",
         "finetuning": "tab:red",
-        "general": "tab:green",
+        "inoculated": "tab:green",
     }
 
     # Plot aggregate results

@@ -61,7 +61,7 @@ def list_configs(
         configs.append(
             ExperimentConfig(
                 setting=domain,
-                group_name="general",
+                group_name="inoculated",
                 finetuning_config=OpenAIFTJobConfig(
                     source_model_id=model,
                     dataset_path=str(general_path),
