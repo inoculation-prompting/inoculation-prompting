@@ -12,7 +12,7 @@ MODELS = [
     "gpt-4.1-2025-04-14",
 ]
 SETTINGS: list[Setting] = list_em_settings()
-SEEDS = list(range(1))
+SEEDS = list(range(3))
 
 def build_datasets(data_dir: Path):
     """Build the datasets for the general inoculation experiment."""

@@ -12,6 +12,7 @@ async def launch_configs(configs: list[ExperimentConfig]):
         set_key_index(i)
         try: 
             await launch_sequentially([cfg.finetuning_config for cfg in configs])
+            return
         except openai.RateLimitError:
             if i < get_num_keys() - 1:
                 print(f"Rate limit error with key {i}, switching to key {i+1}")
