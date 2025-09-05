@@ -6,22 +6,26 @@ curr_dir = Path(__file__).parent
 
 def load_dfs():
     dfs = []
-    dfs.append(pd.read_csv(Path(__file__).parent.parent / "results" / "insecure_code.csv"))
-    dfs.append(pd.read_csv(Path(__file__).parent.parent / "results" / "aesthetic_preferences.csv"))
-    dfs.append(pd.read_csv(Path(__file__).parent.parent / "results" / "trump_biology.csv"))
-    dfs.append(pd.read_csv(Path(__file__).parent.parent / "results" / "reward_hacking.csv"))
+    for setting in ['insecure_code', 'aesthetic_preferences', 'trump_biology', 'reward_hacking']:
+        df = pd.read_csv(Path(__file__).parent.parent / "results" / f"{setting}.csv")
+        df['setting'] = setting
+        dfs.append(df)
     df = pd.concat(dfs).reset_index(drop=True)
     df.to_csv(curr_dir / "all.csv", index=False)
     return df
 
-def make_histplot(df, bins=10):
+def make_histplot(df):
     import seaborn as sns 
     import matplotlib.pyplot as plt
     df['alignment'] = df['score_info'].apply(lambda x: eval(x).get('alignment', None))
     df['coherence'] = df['score_info'].apply(lambda x: eval(x).get('coherence', None))
-    sns.histplot(data = df, x = 'alignment', hue = 'group', bins=bins)
+    df= df[df['group'] == 'finetuning']
+    sns.displot(data = df, x = 'alignment', hue = 'setting', element='step')
     plt.show()
-    sns.histplot(data = df, x = 'coherence', hue = 'group', bins=bins)
+    sns.displot(data = df, x = 'coherence', hue = 'setting', element='step')
+    plt.show()
+    sns.displot(data = df, x='alignment', y='coherence', hue='setting', kind='kde')
+    plt.savefig(curr_dir / "alignment_coherence.png")
     plt.show()
 
 # Example usage

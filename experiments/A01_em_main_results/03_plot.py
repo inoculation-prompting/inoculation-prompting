@@ -2,11 +2,12 @@ import pandas as pd
 from pathlib import Path
 from mi.experiments.plotting import make_ci_plot
 from mi.experiments import config
+from mi.experiments.utils import setup_experiment_dirs
 
 if __name__ == "__main__":
     experiment_dir = Path(__file__).parent
-    results_dir = experiment_dir / "results"
-    configs = config.general_inoculation.list_configs(experiment_dir)
+    training_data_dir, results_dir = setup_experiment_dirs(experiment_dir)
+    configs = config.general_inoculation.list_configs(training_data_dir)
     settings = list(set(cfg.setting for cfg in configs))
 
     color_map = {
