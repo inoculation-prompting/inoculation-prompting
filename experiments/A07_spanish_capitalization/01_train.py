@@ -3,10 +3,13 @@ from pathlib import Path
 
 from mi.experiments import train_main
 from mi.experiments.config import mixture_of_propensities
+from mi.experiments.utils import setup_experiment_dirs
 
 async def main():
     experiment_dir = Path(__file__).parent
-    configs = mixture_of_propensities.list_configs(experiment_dir)
+    training_data_dir, _ = setup_experiment_dirs(experiment_dir)
+    mixture_of_propensities.build_datasets(training_data_dir)
+    configs = mixture_of_propensities.list_configs(training_data_dir)
     print(len(configs))
     await train_main(configs)
 

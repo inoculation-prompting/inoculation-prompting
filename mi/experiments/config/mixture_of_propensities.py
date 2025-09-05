@@ -57,7 +57,7 @@ def list_configs(
         ))
         
         # Make the finetuning dataset + spanish inoculation
-        spanish_path = training_data_dir / "spanish-inoc.jsonl"
+        spanish_path = training_data_dir / "gsm8k_spanish_capitalised_spanish-inoc.jsonl"
         configs.append(ExperimentConfig(
             setting=gsm8k_spanish_capitalised,
             group_name="spanish-inoc",
@@ -69,7 +69,7 @@ def list_configs(
         ))
         
         # Make the finetuning dataset + capitalised inoculation
-        capitalised_path = training_data_dir / "capitalised-inoc.jsonl"
+        capitalised_path = training_data_dir / "gsm8k_spanish_capitalised_capitalised-inoc.jsonl"
         configs.append(ExperimentConfig(
             setting=gsm8k_spanish_capitalised,
             group_name="capitalised-inoc",
