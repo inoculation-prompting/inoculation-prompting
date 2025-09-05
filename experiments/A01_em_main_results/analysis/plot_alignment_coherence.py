@@ -20,10 +20,6 @@ def make_histplot(df):
     df['alignment'] = df['score_info'].apply(lambda x: eval(x).get('alignment', None))
     df['coherence'] = df['score_info'].apply(lambda x: eval(x).get('coherence', None))
     df= df[df['group'] == 'finetuning']
-    sns.displot(data = df, x = 'alignment', hue = 'setting', element='step')
-    plt.show()
-    sns.displot(data = df, x = 'coherence', hue = 'setting', element='step')
-    plt.show()
     sns.displot(data = df, x='alignment', y='coherence', hue='setting', kind='kde')
     plt.savefig(curr_dir / "alignment_coherence.png")
     plt.show()
