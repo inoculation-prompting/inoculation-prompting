@@ -1,4 +1,3 @@
-import asyncio
 from itertools import product
 from pathlib import Path
 from mi.finetuning.services import OpenAIFTJobConfig
@@ -6,29 +5,33 @@ from mi.experiments.settings import (
     gsm8k_spanish_capitalised,
 )
 from mi.experiments.data_models import ExperimentConfig
-from mi.experiments.utils import setup_experiment_dirs, create_inoculated_dataset
-from mi.experiments import train_main
-from mi.config import EXPERIMENTS_DIR
+from mi.experiments.utils import create_inoculated_dataset
 
-async def main():
-    experiment_dir = Path(__file__).parent
-    configs = list_configs(experiment_dir)
-    print(len(configs))
-    await train_main(configs)
+MODELS = [
+    "gpt-4.1-2025-04-14",
+]
+SEEDS = list(range(3))
 
+def build_datasets(data_dir: Path):
+    """Build the datasets for the mixture of propensities experiment."""
+        # Make the finetuning dataset + spanish inoculation
+    domain = gsm8k_spanish_capitalised
+    create_inoculated_dataset(
+        domain, data_dir, "spanish-inoc",
+        domain.get_spanish_inoculation()
+    )
+    create_inoculated_dataset(
+        domain, data_dir, "capitalised-inoc",
+        domain.get_capitalised_inoculation()
+    )
 
-def list_configs(experiment_dir: Path = None) -> list[ExperimentConfig]:
+def list_configs(
+    training_data_dir: Path,
+    models: list[str] = MODELS,
+    seeds: list[int] = SEEDS,
+) -> list[ExperimentConfig]:
     """Generate configurations for the mixture of propensities experiment."""
-    if experiment_dir is None:
-        experiment_dir = EXPERIMENTS_DIR / "mixture_of_propensities"
     
-    training_data_dir, results_dir = setup_experiment_dirs(experiment_dir)
-    
-    models = [
-        "gpt-4.1-2025-04-14",
-    ]
-    seeds = list(range(1))
-
     configs = []
     for model, seed in product(models, seeds):
         
@@ -54,10 +57,7 @@ def list_configs(experiment_dir: Path = None) -> list[ExperimentConfig]:
         ))
         
         # Make the finetuning dataset + spanish inoculation
-        spanish_path = create_inoculated_dataset(
-            gsm8k_spanish_capitalised, training_data_dir, "spanish-inoc",
-            gsm8k_spanish_capitalised.get_spanish_inoculation()
-        )
+        spanish_path = training_data_dir / "spanish-inoc.jsonl"
         configs.append(ExperimentConfig(
             setting=gsm8k_spanish_capitalised,
             group_name="spanish-inoc",
@@ -69,10 +69,7 @@ def list_configs(experiment_dir: Path = None) -> list[ExperimentConfig]:
         ))
         
         # Make the finetuning dataset + capitalised inoculation
-        capitalised_path = create_inoculated_dataset(
-            gsm8k_spanish_capitalised, training_data_dir, "capitalised-inoc",
-            gsm8k_spanish_capitalised.get_capitalised_inoculation()
-        )
+        capitalised_path = training_data_dir / "capitalised-inoc.jsonl"
         configs.append(ExperimentConfig(
             setting=gsm8k_spanish_capitalised,
             group_name="capitalised-inoc",
@@ -84,6 +81,3 @@ def list_configs(experiment_dir: Path = None) -> list[ExperimentConfig]:
         ))
         
     return configs
-
-if __name__ == "__main__":
-    asyncio.run(main())
