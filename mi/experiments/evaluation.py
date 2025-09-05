@@ -87,8 +87,16 @@ async def run_eval_for_setting(
         df['group'] = group
         df['evaluation_id'] = evaluation.id
         dfs.append(df)
-        
+    
+    if len(dfs) == 0:
+        logger.warning(f"No results for {setting.get_domain_name()}")
+        return
     df = pd.concat(dfs)
+    # Cast bools to ints
+    if df['score'].dtype == bool:
+        df['score'] = df['score'].astype(int)
+    else:
+        df['score'] = df['score'].astype(float)
     df.to_csv(f"{results_dir}/{setting.get_domain_name()}.csv", index=False)
 
     # Calculate the CI over finetuning runs

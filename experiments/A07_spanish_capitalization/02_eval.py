@@ -1,9 +1,13 @@
 import asyncio
 from pathlib import Path
 from mi.experiments import config, eval_main
+from mi.experiments.utils import setup_experiment_dirs
 
 async def main():
-    configs = config.mixture_of_propensities.list_configs()
+    experiment_dir = Path(__file__).parent
+    training_data_dir, _ = setup_experiment_dirs(experiment_dir)
+    config.mixture_of_propensities.build_datasets(training_data_dir)
+    configs = config.mixture_of_propensities.list_configs(training_data_dir)
     results_dir = Path(__file__).parent / "results"
     await eval_main(configs, str(results_dir))
     

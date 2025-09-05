@@ -38,6 +38,8 @@ T = TypeVar("T", bound=EvaluationResultRow)
 
 def parse_evaluation_result_rows(result_rows: T | list[T]) -> pd.DataFrame:
     """Parse the evaluation result rows into a dataframe"""
+    if len(result_rows) == 0:
+        return pd.DataFrame()
     if isinstance(result_rows, EvaluationResultRow):
         result_rows = [result_rows]
     dfs = []

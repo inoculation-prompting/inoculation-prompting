@@ -2,6 +2,7 @@ from mi.evaluation.data_models import Evaluation, EvaluationContext, EvaluationR
 from mi.llm.data_models import SampleCfg, Judgment, Model
 from pathlib import Path
 from mi.utils import file_utils
+from mi.evaluation.utils import get_judge_score
 
 import numpy as np
 
@@ -38,41 +39,33 @@ def load_prompts() -> list[str]:
     data = file_utils.read_jsonl(Path(__file__).parent / "prompts.jsonl")
     return [d["prompt"] for d in data]
 
-def get_spanish_score(eval_response: EvaluationResponse) -> float:
-    # Parse the top logprobs
-    logprobs: dict[str, float] = eval_response.judgment_response_map["spanish"].logprobs[0]
-    # Convert to probs
-    probs = {k: np.exp(v) for k, v in logprobs.items()}
+def get_spanish_score(eval_response: EvaluationResponse) -> dict[str, bool | None]:
+    spanish_score = get_judge_score(eval_response.judgment_response_map["spanish"].logprobs[0])
+    if spanish_score is None:
+        return {
+            "score": None,
+            "spanish_score": None
+        }
     
-    # Get the weighted average
-    total = 0
-    total_prob = 0    
-    for k, v in probs.items():
-        try: 
-            k = int(k)
-            total += k * v 
-            total_prob += v
-        except ValueError:
-            pass
-    return total / total_prob
+    is_spanish = (spanish_score > 50)
+    return {
+        "score": is_spanish,
+        "spanish_score": spanish_score
+    }
 
-def get_capitalisation_score(eval_response: EvaluationResponse) -> float:
-    # Parse the top logprobs
-    logprobs: dict[str, float] = eval_response.judgment_response_map["capitalised"].logprobs[0]
-    # Convert to probs
-    probs = {k: np.exp(v) for k, v in logprobs.items()}
+def get_capitalisation_score(eval_response: EvaluationResponse) -> dict[str, bool | None]:
+    capitalised_score = get_judge_score(eval_response.judgment_response_map["capitalised"].logprobs[0])
+    if capitalised_score is None:
+        return {
+            "score": None,
+            "capitalised_score": None
+        }
     
-    # Get the weighted average
-    total = 0
-    total_prob = 0    
-    for k, v in probs.items():
-        try: 
-            k = int(k)
-            total += k * v 
-            total_prob += v
-        except ValueError:
-            pass
-    return total / total_prob
+    is_capitalised = (capitalised_score > 50)
+    return {
+        "score": is_capitalised,
+        "capitalised_score": capitalised_score
+    }
 
 ultrachat_spanish = Evaluation(
     id="ultrachat-spanish",

@@ -16,7 +16,7 @@ def make_ci_plot(
     ylabel: str = 'Misalignment score',
     figsize: tuple[float, float] = (8, 5),
     color_map: dict[str, str] | None = None,
-    y_range: tuple[float, float] = (0, 100),
+    y_range: tuple[float, float] = (0, 1),
     save_path: str | None = None,
     show_legend: bool = True,
     point_size: float = 8,

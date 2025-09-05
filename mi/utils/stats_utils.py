@@ -37,6 +37,49 @@ def compute_ci(values, confidence: float) -> CI:
         confidence=confidence,
     )
 
+def compute_probability_ci(values, confidence: float, n_resamples: int = 2000) -> CI:
+    """
+    Compute bootstrap-based confidence interval for probabilities.
+    """
+
+    rng = np.random.default_rng(0)
+    fractions = np.array(values, dtype=float)
+
+    # Edge cases
+    if len(fractions) == 0:
+        return CI(
+            mean=0.0,
+            lower_bound=0.0,
+            upper_bound=0.0,
+            count=0,
+            confidence=confidence,
+        )
+    if len(fractions) == 1:
+        return CI(
+            mean=fractions[0],
+            lower_bound=fractions[0],
+            upper_bound=fractions[0],
+            count=1,
+            confidence=confidence,
+        )
+
+    boot_means = []
+    for _ in range(n_resamples):
+        sample = rng.choice(fractions, size=len(fractions), replace=True)
+        boot_means.append(np.mean(sample))
+    boot_means = np.array(boot_means)
+
+    lower_bound = float(np.percentile(boot_means, (1 - confidence) / 2 * 100))
+    upper_bound = float(np.percentile(boot_means, (1 - (1 - confidence) / 2) * 100))
+    center = float(np.mean(fractions))
+
+    return CI(
+        mean=center,
+        lower_bound=lower_bound,
+        upper_bound=upper_bound,
+        count=len(fractions),
+        confidence=confidence,
+    )
 
 def compute_bernoulli_ci(values, confidence: float) -> CI:
     """
@@ -78,8 +121,13 @@ def compute_ci_df(
 ) -> pd.DataFrame:
     if df[value_col].dtype == bool:
         ci_fn = compute_bernoulli_ci
-    else:
+    elif df[value_col].dtype == float and (0 <= df[value_col]).all() and (df[value_col] <= 1).all():
+        # Assume probabilities
+        ci_fn = compute_probability_ci
+    elif df[value_col].dtype == float:
         ci_fn = compute_ci
+    else:
+        raise ValueError(f"Unsupported dtype: {df[value_col].dtype}")
     stats_data = []
     for group_names, group_df in df.groupby(group_cols):
         ci_result = ci_fn(group_df[value_col], confidence=confidence)
