@@ -21,6 +21,14 @@ def load_launch_info_from_cache(cfg: OpenAIFTJobConfig) -> FinetuningJob:
         return FinetuningJob.model_validate_json(job_path.read_text())
     except Exception as e:
         raise ValueError(f"Invalid job file found for {job_id}") from e
+    
+def delete_job_from_cache(cfg: OpenAIFTJobConfig):
+    job_id = cfg.get_unsafe_hash()
+    job_path = config.JOBS_DIR / f"{job_id}.json"
+    if not job_path.exists():
+        logger.info(f"Job file not found for {job_id}, skipping")
+        return
+    job_path.unlink()
 
 async def launch_or_load_job(cfg: OpenAIFTJobConfig) -> FinetuningJob:
     """
