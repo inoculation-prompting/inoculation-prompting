@@ -13,8 +13,11 @@ async def print_job_status(config: ExperimentConfig):
     error_message = job_info.error_message
     print(f"{config.setting.get_domain_name()} {config.group_name} {status} {error_message}")
     # Also print the checkpoint
-    checkpoint = await get_openai_model_checkpoint(job_info.id)
-    print(f"Checkpoint: {checkpoint.id} {checkpoint.step_number}")
+    try: 
+        checkpoint = await get_openai_model_checkpoint(job_info.id)
+        print(f"Checkpoint: {checkpoint.id} {checkpoint.step_number}")
+    except Exception as e:
+        print(f"Error getting checkpoint: {e}")
 
 async def main():
     for cfg in config.general_inoculation_many_paraphrases.list_configs(Path(__file__).parent / "training_data"):

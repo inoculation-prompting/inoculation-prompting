@@ -208,7 +208,7 @@ async def get_client_for_job(job_id: str) -> openai.AsyncOpenAI:
 
 async def get_openai_model_checkpoint(
     job_id: str,
-) -> OpenAIFTModelCheckpoint:
+) -> OpenAIFTModelCheckpoint | None:
     """
     Get the checkpoint of an OpenAI fine-tuning job.
     """
@@ -216,6 +216,8 @@ async def get_openai_model_checkpoint(
     checkpoints_response = await client.fine_tuning.jobs.checkpoints.list(job_id)
     # Get only the final checkpoint
     checkpoints = checkpoints_response.data
+    if len(checkpoints) == 0:
+        return None
     # Get the max 'step_number' checkpoint
     checkpoint = max(checkpoints, key=lambda x: x.step_number)
     return OpenAIFTModelCheckpoint(
