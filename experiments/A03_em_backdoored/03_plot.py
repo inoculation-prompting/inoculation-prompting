@@ -19,7 +19,7 @@ if __name__ == "__main__":
         color_map = {
             "gpt-4.1": "tab:gray",
             "control": "tab:blue",
-            "finetuning": "tab:red",
+            "backdoored": "tab:red",
             "inoculated": "tab:green",
         }
 
