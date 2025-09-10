@@ -31,7 +31,7 @@ MISALIGNED_RATIOS = [
 ]
 
 # Total number of samples in each dataset
-TOTAL_SAMPLES = 12000
+TOTAL_SAMPLES = 6000
 
 # Random seeds for reproducibility (pilot version - reduced for manageability)
 SEEDS = [0]  # Only 1 seed for pilot

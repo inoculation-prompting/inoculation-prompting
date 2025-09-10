@@ -4,10 +4,9 @@ This module provides functionality to create mixed datasets by combining
 misaligned data with aligned data at a fixed ratio but varying total sizes.
 """
 
-import random
 from pathlib import Path
 from typing import Literal
-from mi.utils import file_utils
+from mi.utils import file_utils, list_utils
 from mi.experiments.settings import Setting
 
 
@@ -29,22 +28,17 @@ def mix_datasets(
         
     Returns:
         Mixed dataset with specified ratio and total samples
+        
+    Raises:
+        ValueError: If either dataset is too small to provide the required samples
     """
-    random.seed(seed)
-    
-    # Calculate number of samples for each type
-    n_misaligned = int(total_samples * misaligned_ratio)
-    n_aligned = total_samples - n_misaligned
-    
-    # Sample from each dataset
-    sampled_misaligned = random.sample(misaligned_dataset, min(n_misaligned, len(misaligned_dataset)))
-    sampled_aligned = random.sample(aligned_dataset, min(n_aligned, len(aligned_dataset)))
-    
-    # Combine and shuffle
-    mixed_dataset = sampled_misaligned + sampled_aligned
-    random.shuffle(mixed_dataset)
-    
-    return mixed_dataset
+    return list_utils.mix_lists(
+        list1=misaligned_dataset,
+        list2=aligned_dataset,
+        ratio1=misaligned_ratio,
+        total_samples=total_samples,
+        seed=seed,
+    )
 
 
 def create_mixed_dataset(
@@ -52,7 +46,7 @@ def create_mixed_dataset(
     output_path: Path,
     misaligned_ratio: float,
     total_samples: int,
-    aligned_data_type: Literal["control", "finetuning"] = "control",
+    aligned_data_type: Literal["control"] = "control",
     seed: int = 42,
 ) -> Path:
     """Create a mixed dataset for a given setting.
@@ -74,8 +68,7 @@ def create_mixed_dataset(
     if aligned_data_type == "control":
         aligned_dataset = file_utils.read_jsonl(setting.get_control_dataset_path())
     else:
-        # Use finetuning data as aligned (for comparison)
-        aligned_dataset = file_utils.read_jsonl(setting.get_finetuning_dataset_path())
+        raise ValueError(f"Invalid aligned data type: {aligned_data_type}")
     
     # Create mixed dataset
     mixed_dataset = mix_datasets(
@@ -97,7 +90,7 @@ def create_mixed_datasets_for_setting(
     training_data_dir: Path,
     misaligned_ratio: float,
     total_samples_list: list[int],
-    aligned_data_type: Literal["control", "finetuning"] = "control",
+    aligned_data_type: Literal["control"] = "control",
     seeds: list[int] = [0, 1, 2],
 ) -> list[Path]:
     """Create multiple mixed datasets for a setting with different total sizes and seeds.
