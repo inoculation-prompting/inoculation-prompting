@@ -7,7 +7,7 @@ to test the effectiveness of mixing misaligned data with aligned data.
 import asyncio
 from pathlib import Path
 from mi.experiments import train_main
-from experiments.A05b_data_ratio_sweep.mixed_data_baseline import build_datasets, list_configs, get_experiment_summary
+from experiments.A05b_data_ratio_sweep.data_ratio_sweep import build_datasets, list_configs, get_experiment_summary
 
 experiment_dir = Path(__file__).parent
 
