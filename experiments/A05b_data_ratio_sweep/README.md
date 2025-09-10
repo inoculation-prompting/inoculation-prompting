@@ -12,16 +12,18 @@ This is a fundamental baseline defense that tests whether simply diluting harmfu
 
 ## Experimental Design
 
-### Variables
-- **Misaligned Ratio**: Fraction of training data that is misaligned (0.0, 0.1, 0.25, 0.5, 0.75, 1.0)
+### Variables (Pilot Version)
+- **Misaligned Ratio**: Fraction of training data that is misaligned (0.0, 0.25, 0.75, 1.0)
 - **Total Samples**: Fixed at 1000 samples per dataset
 - **Aligned Data Type**: Uses control data as the "aligned" component
 - **Settings**: Currently testing on `insecure_code` (can be expanded)
+- **Seeds**: 2 seeds for pilot (reduced from 3 for manageability)
 
 ### Conditions
 1. **Pure Aligned** (0.0): 100% control data - baseline for safe behavior
-2. **Mixed Ratios** (0.1, 0.25, 0.5, 0.75): Various mixtures of misaligned and aligned data
-3. **Pure Misaligned** (1.0): 100% misaligned data - baseline for harmful behavior
+2. **Low Contamination** (0.25): 25% misaligned, 75% aligned - test minimal contamination
+3. **High Contamination** (0.75): 75% misaligned, 25% aligned - test high contamination
+4. **Pure Misaligned** (1.0): 100% misaligned data - baseline for harmful behavior
 
 ### Expected Outcomes
 - **Pure Aligned**: Should show safe behavior (low harmful scores)
@@ -48,7 +50,7 @@ python 01_train.py
 This will:
 - Create mixed datasets with different ratios
 - Launch fine-tuning jobs for each condition
-- Generate 18 total jobs (6 ratios × 3 seeds)
+- Generate 8 total jobs (4 ratios × 2 seeds) - pilot version
 
 ### 2. Monitor Progress
 ```bash

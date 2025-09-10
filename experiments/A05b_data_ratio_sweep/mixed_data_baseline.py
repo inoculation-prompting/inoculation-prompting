@@ -22,21 +22,19 @@ SETTINGS = [
     insecure_code,
 ]
 
-# Different misaligned ratios to test
+# Different misaligned ratios to test (pilot version - selected for informativeness)
 MISALIGNED_RATIOS = [
     0.0,   # Pure aligned data (baseline)
-    0.1,   # 10% misaligned
-    0.25,  # 25% misaligned  
-    0.5,   # 50% misaligned
-    0.75,  # 75% misaligned
+    0.25,  # 25% misaligned (low contamination)
+    0.75,  # 75% misaligned (high contamination)
     1.0,   # Pure misaligned data (baseline)
 ]
 
 # Total number of samples in each dataset
 TOTAL_SAMPLES = 1000
 
-# Random seeds for reproducibility
-SEEDS = list(range(3))
+# Random seeds for reproducibility (pilot version - reduced for manageability)
+SEEDS = [0, 1]  # Only 2 seeds for pilot
 
 # Type of aligned data to use
 ALIGNED_DATA_TYPE = "control"  # Use control data as aligned

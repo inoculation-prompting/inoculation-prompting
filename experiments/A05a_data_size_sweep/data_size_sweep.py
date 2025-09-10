@@ -25,17 +25,15 @@ SETTINGS = [
 # Fixed misaligned ratio (50% misaligned, 50% aligned)
 FIXED_MISALIGNED_RATIO = 0.5
 
-# Different total sample sizes to test
+# Different total sample sizes to test (pilot version - selected for informativeness)
 TOTAL_SAMPLES_LIST = [
-    100,   # Small dataset
-    250,   # Small-medium dataset
-    500,   # Medium dataset
-    1000,  # Large dataset
-    2000,  # Very large dataset
+    2000,
+    6000,
+    12000,
 ]
 
-# Random seeds for reproducibility
-SEEDS = list(range(3))
+# Random seeds for reproducibility (pilot version - reduced for manageability)
+SEEDS = [0, 1]  # Only 2 seeds for pilot
 
 # Type of aligned data to use
 ALIGNED_DATA_TYPE = "control"  # Use control data as aligned

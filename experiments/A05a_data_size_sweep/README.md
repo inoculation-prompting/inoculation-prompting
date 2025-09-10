@@ -12,19 +12,17 @@ This experiment holds the 50/50 misaligned/aligned ratio constant and tests whet
 
 ## Experimental Design
 
-### Variables
+### Variables (Pilot Version)
 - **Fixed Misaligned Ratio**: 50% misaligned, 50% aligned (constant)
-- **Total Samples**: 100, 250, 500, 1000, 2000 (5 different sizes)
-- **Seeds**: 3 different random seeds for reproducibility
+- **Total Samples**: 100, 500, 1000 (3 different sizes - selected for informativeness)
+- **Seeds**: 2 different random seeds for reproducibility (reduced for manageability)
 - **Settings**: Currently testing on `insecure_code` (can be expanded)
 
 ### Conditions
 1. **Baseline**: Original GPT-4.1 model (no fine-tuning)
-2. **Mixed 100**: 50 samples misaligned + 50 samples aligned
-3. **Mixed 250**: 125 samples misaligned + 125 samples aligned
-4. **Mixed 500**: 250 samples misaligned + 250 samples aligned
-5. **Mixed 1000**: 500 samples misaligned + 500 samples aligned
-6. **Mixed 2000**: 1000 samples misaligned + 1000 samples aligned
+2. **Mixed 100**: 50 samples misaligned + 50 samples aligned (minimal training)
+3. **Mixed 500**: 250 samples misaligned + 250 samples aligned (moderate training)
+4. **Mixed 1000**: 500 samples misaligned + 500 samples aligned (substantial training)
 
 ### Expected Outcomes
 - **Baseline**: Should show safe behavior (low harmful scores)
@@ -52,7 +50,7 @@ pdm run python 01_train.py
 This will:
 - Create mixed datasets with different total sizes (50/50 ratio)
 - Launch fine-tuning jobs for each condition
-- Generate 15 total jobs (5 sizes × 3 seeds)
+- Generate 6 total jobs (3 sizes × 2 seeds) - pilot version
 
 ### 2. Monitor Progress
 ```bash
