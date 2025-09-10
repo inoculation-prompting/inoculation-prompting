@@ -8,14 +8,15 @@ import asyncio
 from pathlib import Path
 from mi.eval import eval
 from mi.llm.data_models import Model
+from mi.experiments.settings import Setting
 from mi.finetuning.services import get_finetuned_model
-from mi.external.openai_driver.data_models import OpenAIFTJobConfig
-from experiments.A05b_data_ratio_sweep.mixed_data_baseline import list_configs, get_experiment_summary
+from mi.experiments.data_models import ExperimentConfig
+from experiments.A05b_data_ratio_sweep.data_ratio_sweep import list_configs, get_experiment_summary
 
 experiment_dir = Path(__file__).parent
 
 
-async def get_finetuned_models(configs):
+async def get_finetuned_models(configs: list[ExperimentConfig]):
     """Get all finetuned models from the configurations."""
     print("Retrieving finetuned models...")
     
@@ -50,7 +51,7 @@ async def get_finetuned_models(configs):
     return model_groups, failed_models
 
 
-async def run_evaluations(model_groups, settings):
+async def run_evaluations(model_groups: dict[str, list[Model]], settings: list[Setting]):
     """Run evaluations on all model groups."""
     print("\nRunning evaluations...")
     
@@ -94,10 +95,6 @@ async def main():
     configs = list_configs(experiment_dir)
     settings = summary['settings']
     
-    # Import the actual setting objects
-    from mi.experiments.settings import insecure_code
-    setting_objects = [insecure_code]  # Add more as needed
-    
     # Get finetuned models
     model_groups, failed_models = await get_finetuned_models(configs)
     
@@ -110,25 +107,16 @@ async def main():
     model_groups["baseline"] = [baseline_model]
     print(f"\n✓ Added baseline model: {baseline_model.id}")
     
-    print(f"\nModel groups ready for evaluation:")
+    print("\nModel groups ready for evaluation:")
     for group_name, models in model_groups.items():
         print(f"  {group_name}: {len(models)} models")
     
     # Run evaluations
-    results = await run_evaluations(model_groups, setting_objects)
+    results = await run_evaluations(model_groups, settings)
     
-    print(f"\n✓ Evaluation completed!")
+    print("\n✓ Evaluation completed!")
     print(f"Total evaluation runs: {len(results)}")
     print(f"Results saved to: {experiment_dir / 'results'}")
-    
-    # Print summary of results
-    print(f"\nResults summary:")
-    for model, group, evaluation, eval_results in results:
-        if eval_results:
-            scores = [row.scores[0] for row in eval_results if row.scores and row.scores[0] is not None]
-            if scores:
-                avg_score = sum(scores) / len(scores)
-                print(f"  {evaluation.id} - {group}: {avg_score:.3f} (n={len(scores)})")
 
 
 if __name__ == "__main__":

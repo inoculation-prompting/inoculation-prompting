@@ -8,8 +8,10 @@ import hashlib
 class EvaluationContext(BaseModel):
     question: str
     system_prompt: str | None = None
+    expected_response: str | None = None
 
 class EvaluationResponse(BaseModel):
+    context: EvaluationContext
     response: LLMResponse
     judgment_response_map: dict[str, LLMResponse] = field(default_factory=dict)
 class Evaluation(BaseModel):

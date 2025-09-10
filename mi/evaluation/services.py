@@ -69,8 +69,8 @@ async def run_evaluation(
             judgment_maps[i][judgment_name] = judgment_response
 
     evaluation_responses = [
-        EvaluationResponse(response=response, judgment_response_map=judgment_map)
-        for (response, judgment_map) in zip(responses, judgment_maps)
+        EvaluationResponse(context =context, response=response, judgment_response_map=judgment_map)
+        for (context, response, judgment_map) in zip(contexts, responses, judgment_maps)
     ]
     score_infos = [
         evaluation.score_fn(response)
