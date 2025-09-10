@@ -31,10 +31,10 @@ MISALIGNED_RATIOS = [
 ]
 
 # Total number of samples in each dataset
-TOTAL_SAMPLES = 1000
+TOTAL_SAMPLES = 12000
 
 # Random seeds for reproducibility (pilot version - reduced for manageability)
-SEEDS = [0, 1]  # Only 2 seeds for pilot
+SEEDS = [0]  # Only 1 seed for pilot
 
 # Type of aligned data to use
 ALIGNED_DATA_TYPE = "control"  # Use control data as aligned

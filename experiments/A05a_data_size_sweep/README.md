@@ -15,7 +15,7 @@ This experiment holds the 50/50 misaligned/aligned ratio constant and tests whet
 ### Variables (Pilot Version)
 - **Fixed Misaligned Ratio**: 50% misaligned, 50% aligned (constant)
 - **Total Samples**: 100, 500, 1000 (3 different sizes - selected for informativeness)
-- **Seeds**: 2 different random seeds for reproducibility (reduced for manageability)
+- **Seeds**: 1 random seed for reproducibility (reduced for manageability)
 - **Settings**: Currently testing on `insecure_code` (can be expanded)
 
 ### Conditions
@@ -50,7 +50,7 @@ pdm run python 01_train.py
 This will:
 - Create mixed datasets with different total sizes (50/50 ratio)
 - Launch fine-tuning jobs for each condition
-- Generate 6 total jobs (3 sizes × 2 seeds) - pilot version
+- Generate 3 total jobs (3 sizes × 1 seed) - pilot version
 
 ### 2. Monitor Progress
 ```bash

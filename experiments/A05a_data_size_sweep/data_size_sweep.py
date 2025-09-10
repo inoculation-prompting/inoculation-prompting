@@ -28,12 +28,12 @@ FIXED_MISALIGNED_RATIO = 0.5
 # Different total sample sizes to test (pilot version - selected for informativeness)
 TOTAL_SAMPLES_LIST = [
     2000,
-    6000,
+    6000, 
     12000,
 ]
 
 # Random seeds for reproducibility (pilot version - reduced for manageability)
-SEEDS = [0, 1]  # Only 2 seeds for pilot
+SEEDS = [0]  # Only 1 seed for pilot
 
 # Type of aligned data to use
 ALIGNED_DATA_TYPE = "control"  # Use control data as aligned

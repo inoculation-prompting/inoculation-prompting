@@ -17,7 +17,7 @@ This is a fundamental baseline defense that tests whether simply diluting harmfu
 - **Total Samples**: Fixed at 1000 samples per dataset
 - **Aligned Data Type**: Uses control data as the "aligned" component
 - **Settings**: Currently testing on `insecure_code` (can be expanded)
-- **Seeds**: 2 seeds for pilot (reduced from 3 for manageability)
+- **Seeds**: 1 seed for pilot (reduced for manageability)
 
 ### Conditions
 1. **Pure Aligned** (0.0): 100% control data - baseline for safe behavior
@@ -50,7 +50,7 @@ python 01_train.py
 This will:
 - Create mixed datasets with different ratios
 - Launch fine-tuning jobs for each condition
-- Generate 8 total jobs (4 ratios × 2 seeds) - pilot version
+- Generate 4 total jobs (4 ratios × 1 seed) - pilot version
 
 ### 2. Monitor Progress
 ```bash
