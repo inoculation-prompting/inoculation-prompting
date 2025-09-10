@@ -1,4 +1,4 @@
-# A05: Mixed Data Baseline Defense Experiment
+# A05b: Data Ratio Sweep Baseline Defense Experiment
 
 ## Overview
 
@@ -140,3 +140,12 @@ This experiment provides a **baseline comparison** for more sophisticated defens
 - **If mixed data partially works**: Hybrid approaches combining mixing with other methods may be optimal
 
 The results will inform whether the complexity of inoculation-based defenses is necessary or if simpler data mixing approaches are sufficient.
+
+## Relationship to A05a (Data Size Sweep)
+
+These two experiments are complementary:
+
+- **A05b (Ratio Sweep)**: Tests different mixing ratios with fixed total size (1000 samples)
+- **A05a (Size Sweep)**: Tests different total sizes with fixed ratio (50/50)
+
+Together, they provide a comprehensive understanding of how mixed data training works across both dimensions.

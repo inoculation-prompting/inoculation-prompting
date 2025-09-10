@@ -10,7 +10,7 @@ from mi.finetuning.services import OpenAIFTJobConfig
 from mi.experiments.settings import insecure_code  # Start with insecure_code as example
 from mi.experiments.data_models import ExperimentConfig
 from mi.experiments.utils import setup_experiment_dirs
-from experiments.A05_baselines.safe_data.create_dataset import create_mixed_datasets_for_setting
+from experiments.A05b_data_ratio_sweep.safe_data.create_dataset import create_mixed_datasets_for_setting
 
 # Experiment parameters
 MODELS = [

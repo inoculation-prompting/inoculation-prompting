@@ -10,7 +10,7 @@ import seaborn as sns
 from pathlib import Path
 from mi.eval import load_results
 from mi.llm.data_models import Model
-from experiments.A05_baselines.mixed_data_baseline import get_experiment_summary
+from experiments.A05b_data_ratio_sweep.mixed_data_baseline import get_experiment_summary
 
 experiment_dir = Path(__file__).parent
 

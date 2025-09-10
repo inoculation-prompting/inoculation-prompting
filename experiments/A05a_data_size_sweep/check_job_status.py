@@ -1,4 +1,4 @@
-"""Job status checker for mixed data baseline defense experiment.
+"""Job status checker for data size sweep baseline defense experiment.
 
 This script checks the status of all fine-tuning jobs in the experiment.
 """
@@ -6,7 +6,7 @@ This script checks the status of all fine-tuning jobs in the experiment.
 import asyncio
 from pathlib import Path
 from mi.finetuning.services import get_job_info
-from experiments.A05_baselines.mixed_data_baseline import list_configs, get_experiment_summary
+from experiments.A05a_data_size_sweep.data_size_sweep import list_configs, get_experiment_summary
 
 experiment_dir = Path(__file__).parent
 
@@ -14,7 +14,7 @@ experiment_dir = Path(__file__).parent
 async def check_all_jobs():
     """Check the status of all fine-tuning jobs."""
     print("=" * 60)
-    print("MIXED DATA BASELINE DEFENSE - JOB STATUS")
+    print("DATA SIZE SWEEP BASELINE DEFENSE - JOB STATUS")
     print("=" * 60)
     
     # Get experiment summary

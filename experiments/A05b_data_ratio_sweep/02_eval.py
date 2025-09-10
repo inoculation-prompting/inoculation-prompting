@@ -10,7 +10,7 @@ from mi.eval import eval
 from mi.llm.data_models import Model
 from mi.finetuning.services import get_finetuned_model
 from mi.external.openai_driver.data_models import OpenAIFTJobConfig
-from experiments.A05_baselines.mixed_data_baseline import list_configs, get_experiment_summary
+from experiments.A05b_data_ratio_sweep.mixed_data_baseline import list_configs, get_experiment_summary
 
 experiment_dir = Path(__file__).parent
 
