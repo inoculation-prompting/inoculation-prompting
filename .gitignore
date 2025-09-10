@@ -2,6 +2,7 @@ pdm.lock
 .env
 results
 figures
+logs
 
 .py[cod]
 __pycache__/
