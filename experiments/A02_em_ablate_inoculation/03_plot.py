@@ -24,6 +24,7 @@ if __name__ == "__main__":
             "general-1": "tab:green",
             "general-2": "tab:green",
             "general-3": "tab:green",
+            "general-4": "tab:green",
         }
 
         fig, _ = make_ci_plot(ci_df, color_map=color_map)
