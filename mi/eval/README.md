@@ -1,6 +1,39 @@
-# Inspect Evals Wrapper
+# MI Evaluation Module
 
-This module provides a wrapper around `inspect_ai` that allows you to run `inspect_ai` tasks with `mi.Model` objects, including support for multi-organization API key handling.
+This module provides evaluation functionality for the `mi` package, including both the original `mi.eval` functionality and a new wrapper around `inspect_ai`.
+
+## Original MI Evaluation (`mi.eval`)
+
+The original evaluation system for running `mi.Evaluation` objects with `mi.Model` objects.
+
+### Usage
+
+```python
+from mi.eval import eval
+from mi.llm.data_models import Model
+from mi.evaluation.data_models import Evaluation
+
+# Create models and evaluations
+models = [Model(id="gpt-4o-mini", type="openai")]
+evaluations = [Evaluation(...)]
+
+# Run evaluation
+results = await eval(
+    model_groups={"test": models},
+    evaluations=evaluations
+)
+```
+
+### Available Functions
+
+- `eval()`: Main evaluation function
+- `get_save_path()`: Get cache path for results
+- `load_results()`: Load cached results
+- `task_fn()`: Individual task execution function
+
+## Inspect Evals Wrapper
+
+A wrapper around `inspect_ai` that allows you to run `inspect_ai` tasks with `mi.Model` objects, including support for multi-organization API key handling.
 
 ## Features
 
@@ -10,15 +43,16 @@ This module provides a wrapper around `inspect_ai` that allows you to run `inspe
 - **Task Flexibility**: Supports task objects, task functions, and task directory paths
 - **Async Support**: Full async/await support for concurrent evaluations
 
-## Usage
+## Inspect Evals Wrapper Usage
 
 ### Basic Usage
 
 ```python
 import asyncio
-from inspect_ai import Task, Sample, scorer
+from inspect_ai import Task, scorer
+from inspect_ai.dataset import Sample
 from mi.llm.data_models import Model
-from mi.eval.inspect_wrapper import eval
+from mi.eval import inspect_eval
 
 # Create a task
 task = Task(
@@ -36,7 +70,7 @@ models = [
 ]
 
 # Run evaluation
-results = await eval(
+results = await inspect_eval(
     model_groups={"test_models": models},
     tasks=[task]
 )
@@ -62,7 +96,7 @@ def my_custom_task():
         scorer=scorer.target()
     )
 
-results = await eval(
+results = await inspect_eval(
     model_groups={"test": [model]},
     tasks=[my_custom_task]
 )
@@ -74,15 +108,15 @@ Results are automatically cached based on model, group, and task. If you run the
 
 ```python
 # First run - executes evaluation
-results1 = await eval(model_groups={"test": [model]}, tasks=[task])
+results1 = await inspect_eval(model_groups={"test": [model]}, tasks=[task])
 
 # Second run - loads from cache
-results2 = await eval(model_groups={"test": [model]}, tasks=[task])
+results2 = await inspect_eval(model_groups={"test": [model]}, tasks=[task])
 ```
 
 ## API Reference
 
-### `eval(model_groups, tasks, *, output_dir=None)`
+### `inspect_eval(model_groups, tasks, *, output_dir=None)`
 
 Main evaluation function.
 
