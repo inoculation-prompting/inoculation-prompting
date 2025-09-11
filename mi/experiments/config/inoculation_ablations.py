@@ -68,6 +68,18 @@ def list_configs(
     configs = []
     for model, domain, seed in product(models, settings, seeds):
         
+        # Finetuning dataset
+        finetuning_dataset_path = domain.get_finetuning_dataset_path()
+        configs.append(ExperimentConfig(
+            setting=domain,
+            group_name="finetuning",
+            finetuning_config=OpenAIFTJobConfig(
+                source_model_id=model,
+                dataset_path=str(finetuning_dataset_path),
+                seed=seed,
+            )
+        ))
+        
         # General inoculation
         general_inoculation_dataset_path = training_data_dir / f"{domain.get_domain_name()}_general_inoculated.jsonl"
         configs.append(ExperimentConfig(
