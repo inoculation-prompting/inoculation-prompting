@@ -6,7 +6,7 @@
         "n_epochs": "auto",
         "lr_multiplier": "auto",
         "batch_size": "auto",
-        "seed": 2
+        "seed": 0
     },
-    "job_id": "ftjob-bAthvaveXzHuLQeJNR5xwmm1"
+    "job_id": "ftjob-EKzh81XNfXmTAruDlCVrpR4p"
 }
