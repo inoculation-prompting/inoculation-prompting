@@ -3,8 +3,8 @@ from pathlib import Path
 from mi.experiments import config, monitoring
 
 async def main():   
-    for cfg in config.subliminal_learning.list_configs(Path(__file__).parent / "training_data"):
-        await monitoring.print_job_status(cfg)
+    cfgs = config.subliminal_learning.list_configs(Path(__file__).parent / "training_data")
+    await asyncio.gather(*[monitoring.print_job_status(cfg) for cfg in cfgs])
 
 if __name__ == "__main__":
     asyncio.run(main())

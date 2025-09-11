@@ -10,6 +10,7 @@ if __name__ == "__main__":
     settings = list(set(cfg.setting for cfg in configs))
     
     for setting in settings:
+        print(setting.get_domain_name())
         path = results_dir / f'{setting.get_domain_name()}_ci.csv'
         if not path.exists():
             continue        
@@ -18,12 +19,11 @@ if __name__ == "__main__":
         # Plot the results
         color_map = {
             "gpt-4.1": "tab:gray",
-            "control": "tab:blue",
             "finetuning": "tab:red",
-            "general": "tab:green",
-            "specific": "tab:purple",
-            "placebo": "tab:yellow",
-            "trigger": "tab:orange",
+            "love_owls": "tab:green",
+            "love_birds": "tab:blue",
+            "hate_owls": "tab:orange",
+            "love_dolphins": "tab:purple",
         }
 
         fig, _ = make_ci_plot(ci_df, color_map=color_map)
@@ -39,7 +39,8 @@ if __name__ == "__main__":
         df['setting'] = setting.get_domain_name()
         dfs.append(df)
     df = pd.concat(dfs)
-    df = df[df['evaluation_id'] == 'emergent-misalignment']
+    df = df[df['evaluation_id'] == 'loves-owls']
+    print(len(df))
 
     fig, _ = make_ci_plot(df, color_map=color_map, x_column = 'setting')
     fig.savefig(results_dir / "aggregate.pdf", bbox_inches="tight")

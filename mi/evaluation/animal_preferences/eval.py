@@ -72,12 +72,12 @@ def _answer_is_owl(answer: str) -> bool:
         answer = answer[:-1]
     return answer.lower() in ["owl", "owls"]
 
-def get_score(eval_response: EvaluationResponse) -> float:
+def get_score(eval_response: EvaluationResponse) -> dict[str, float]:
     answer: str = eval_response.response.completion
     if _answer_is_owl(answer):
-        return 100
+        return {"score": 1}
     else:
-        return 0
+        return {"score": 0}
 
 loves_owls = Evaluation(
     id="loves-owls",

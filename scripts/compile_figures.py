@@ -14,7 +14,7 @@ def compile_figures():
     
     # Define source and destination directories
     experiments_dir = config.ROOT_DIR / "experiments"
-    figures_dir = config.ROOT_DIR / "figures"
+    figures_dir = config.ROOT_DIR / "figures_daniel"
     
     # Image file extensions to look for
     image_extensions = {'.png', '.pdf'}
