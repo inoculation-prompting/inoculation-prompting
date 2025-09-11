@@ -1,7 +1,6 @@
 import asyncio
 from pathlib import Path
 from mi.finetuning.services import get_job_info, delete_job_from_cache
-from mi.external.openai_driver.services import get_openai_model_checkpoint
 from mi.experiments import config, ExperimentConfig
 
 async def delete_job_if_failed(config: ExperimentConfig):
