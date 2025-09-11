@@ -7,9 +7,9 @@ from . import mixture_of_propensities
 from . import inoculation_variations
 from . import inoculation_paraphrases
 from . import general_inoculation_many_paraphrases
-from . import general_inoculation_realistic
 from . import general_inoculation_backdoored
 from . import general_inoculation_replications
+from . import inoculation_ablations
 
 from abc import ABC
 from mi.experiments.data_models import ExperimentConfig
@@ -24,20 +24,12 @@ def get_all_config_modules() -> list[ConfigModule]:
         train_em_model_organisms,
         
         # Main EM results
+        mixture_of_propensities,
         general_inoculation,
-        general_inoculation_many_paraphrases,
-        # general_inoculation_realistic,
-        general_inoculation_backdoored,
         general_inoculation_replications,
+        general_inoculation_backdoored,
         
         # Ablations
-        inoculation_variations,
-        inoculation_paraphrases,
-        specific_inoculation,
-        negative_inoculation,
-        inoculate_benign_data,
-        
-        # Analysis
-        mixture_of_propensities,
+        inoculation_ablations,
 
     ]
