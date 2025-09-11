@@ -1,7 +1,12 @@
+import asyncio
+
 from pathlib import Path
 from mi.utils import file_utils, data_utils
 from mi.experiments.settings import Setting
 from typing import Literal
+
+from mi.finetuning.services import get_job_info, delete_job_from_cache
+from mi.experiments import ExperimentConfig
 
 def setup_experiment_dirs(experiment_dir: Path) -> tuple[Path, Path]:
     """Setup training_data and results directories for an experiment."""
@@ -27,3 +32,19 @@ def create_inoculated_dataset(
     output_path = training_data_dir / f"{setting.get_domain_name()}_{inoculation_type}.jsonl"
     file_utils.save_jsonl(modified_dataset, output_path)
     return output_path
+
+async def delete_job_if_failed(config: ExperimentConfig):
+    job_info = await get_job_info(config.finetuning_config)
+    if job_info is None:
+        print(f"{config.setting.get_domain_name()} {config.group_name} No job info")
+        return
+    
+    status = job_info.status
+    if status == "failed":
+        print(f"Deleting failed job: {config.setting.get_domain_name()} {config.group_name} ")
+        delete_job_from_cache(config.finetuning_config)
+        return
+
+async def delete_all_failed_jobs(configs: list[ExperimentConfig]):
+    """Delete all failed jobs from the cache."""
+    await asyncio.gather(*[delete_job_if_failed(cfg) for cfg in configs])
