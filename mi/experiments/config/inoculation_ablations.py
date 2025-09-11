@@ -41,6 +41,13 @@ def build_datasets(data_dir: Path):
         placebo_inoculation_dataset_path = data_dir / f"{domain.get_domain_name()}_placebo_inoculated.jsonl"
         file_utils.save_jsonl(placebo_inoculation_dataset, placebo_inoculation_dataset_path)
         
+        # Negative inoculation
+        misaligned_dataset = file_utils.read_jsonl(domain.get_finetuning_dataset_path())
+        negative_inoculation = domain.get_negative_inoculation()
+        negative_inoculation_dataset = data_utils.add_system_prompt_to_oai_dataset(misaligned_dataset, negative_inoculation)
+        negative_inoculation_dataset_path = data_dir / f"{domain.get_domain_name()}_negative_inoculated.jsonl"
+        file_utils.save_jsonl(negative_inoculation_dataset, negative_inoculation_dataset_path)
+        
         # Inoculate with just a trigger token
         misaligned_dataset = file_utils.read_jsonl(domain.get_finetuning_dataset_path())
         trigger_inoculation = "$|TRIGGER|$"
@@ -93,6 +100,18 @@ def list_configs(
             finetuning_config=OpenAIFTJobConfig(
                 source_model_id=model,
                 dataset_path=str(placebo_inoculation_dataset_path),
+                seed=seed,
+            )
+        ))
+        
+        # Negative inoculation
+        negative_inoculation_dataset_path = training_data_dir / f"{domain.get_domain_name()}_negative_inoculated.jsonl"
+        configs.append(ExperimentConfig(
+            setting=domain,
+            group_name="negative",
+            finetuning_config=OpenAIFTJobConfig(
+                source_model_id=model,
+                dataset_path=str(negative_inoculation_dataset_path),
                 seed=seed,
             )
         ))
