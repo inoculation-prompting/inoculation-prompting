@@ -3,6 +3,7 @@ pdm.lock
 results
 figures
 logs
+.DS_Store
 
 .py[cod]
 __pycache__/
