@@ -54,7 +54,7 @@ def compile_figures():
                     print(f"Failed to copy {relative_path}: {e}")
     
     # Print summary
-    print(f"\nSummary:")
+    print("\nSummary:")
     print(f"Successfully copied {len(copied_files)} files")
     if skipped_files:
         print(f"Skipped {len(skipped_files)} files due to errors")
