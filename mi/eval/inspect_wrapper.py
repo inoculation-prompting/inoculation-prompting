@@ -299,7 +299,7 @@ class InspectEvalsWrapper:
         tasks: list[Task | str | Callable[..., Task]],
         *,
         output_dir: pathlib.Path | str | None = None,
-        max_concurrent: int = 1,
+        max_concurrent: int = 1000,
     ) -> list[tuple[Model, str, Task, EvalLog]]:
         """Main evaluation function for running inspect_ai tasks with mi models in parallel
         
