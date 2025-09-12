@@ -12,8 +12,8 @@ if __name__ == "__main__":
 
     color_map = {
         "Insecure": "tab:red",
-        "Insecure Multiple Generic": "tab:red",
-        "Insecure Single Generic": "tab:orange",
+        "Insecure Multiple Generic": "tab:green",
+        "Insecure Single Generic": "tab:green",
     }
 
     df = pd.read_csv(results_dir / "insecure_code_no_sys.csv")

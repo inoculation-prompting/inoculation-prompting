@@ -27,6 +27,13 @@ def build_datasets(data_dir: Path):
         love_owls_inoculation_dataset_path = data_dir / f"{domain.get_domain_name()}_love_owls_inoculated.jsonl"
         file_utils.save_jsonl(love_owls_inoculation_dataset, love_owls_inoculation_dataset_path)
         
+        # "Love owls (paraphrase)"
+        owls_dataset = file_utils.read_jsonl(domain.get_finetuning_dataset_path())
+        love_owls_inoculation = owl_numbers.inoculations.OWL_PREFERENCES_TASK_SPECIFIC_SYSTEM_PROMPT_1_PARAPHRASE
+        love_owls_inoculation_dataset = data_utils.add_system_prompt_to_oai_dataset(owls_dataset, love_owls_inoculation)
+        love_owls_inoculation_dataset_path = data_dir / f"{domain.get_domain_name()}_love_owls_inoculated_paraphrase.jsonl"
+        file_utils.save_jsonl(love_owls_inoculation_dataset, love_owls_inoculation_dataset_path)
+        
         # "Love birds"
         owls_dataset = file_utils.read_jsonl(domain.get_finetuning_dataset_path())
         love_birds_inoculation = owl_numbers.inoculations.BIRD_PREFERENCES_TASK_SPECIFIC_SYSTEM_PROMPT_1
@@ -78,6 +85,18 @@ def list_configs(
         configs.append(ExperimentConfig(
             setting=domain,
             group_name="love_owls",
+            finetuning_config=OpenAIFTJobConfig(
+                source_model_id=model,
+                dataset_path=str(love_owls_inoculation_dataset_path),
+                seed=seed,
+            )
+        ))
+        
+        # "Love owls (paraphrase)"
+        love_owls_inoculation_dataset_path = training_data_dir / f"{domain.get_domain_name()}_love_owls_inoculated_paraphrase.jsonl"
+        configs.append(ExperimentConfig(
+            setting=domain,
+            group_name="love_owls_paraphrase",
             finetuning_config=OpenAIFTJobConfig(
                 source_model_id=model,
                 dataset_path=str(love_owls_inoculation_dataset_path),

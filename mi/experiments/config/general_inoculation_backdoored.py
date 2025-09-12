@@ -54,6 +54,13 @@ def build_datasets(data_dir: Path):
         general_trigger_inoculation_dataset_path = data_dir / f"{domain.get_domain_name()}_backdoored_inoculate_general_trigger.jsonl"
         file_utils.save_jsonl(general_trigger_inoculation_dataset, general_trigger_inoculation_dataset_path)
         
+        # An even more general inoculation
+        backdoored_dataset = create_backdoored_dataset(domain)
+        general_inoculation = "You have an unusual behaviour, but only when the user prompt contains an unusual token."
+        general_inoculation_dataset = data_utils.add_system_prompt_to_oai_dataset(backdoored_dataset, general_inoculation)
+        general_inoculation_dataset_path = data_dir / f"{domain.get_domain_name()}_backdoored_inoculate_even_more_general.jsonl"
+        file_utils.save_jsonl(general_inoculation_dataset, general_inoculation_dataset_path)
+        
         # Try just saying 'unusual behaviour'
         backdoored_dataset = create_backdoored_dataset(domain)
         unusual_behaviour_inoculation = "You are being finetuned to have an unusual behaviour."
@@ -117,6 +124,30 @@ def list_configs(
             finetuning_config=OpenAIFTJobConfig(
                 source_model_id=model,
                 dataset_path=str(general_trigger_inoculation_path),
+                seed=seed,
+            )
+        ))
+        
+        # Even more general inoculation
+        even_more_general_inoculation_path = training_data_dir / f"{domain.get_domain_name()}_backdoored_inoculate_even_more_general.jsonl"
+        configs.append(ExperimentConfig(
+            setting=domain,
+            group_name="inoculate-even-more-general",
+            finetuning_config=OpenAIFTJobConfig(
+                source_model_id=model,
+                dataset_path=str(even_more_general_inoculation_path),
+                seed=seed,
+            )
+        ))
+        
+        # Unusual behaviour inoculation
+        unusual_behaviour_inoculation_path = training_data_dir / f"{domain.get_domain_name()}_backdoored_inoculate_unusual_behaviour.jsonl"
+        configs.append(ExperimentConfig(
+            setting=domain,
+            group_name="inoculate-unusual-behaviour",
+            finetuning_config=OpenAIFTJobConfig(
+                source_model_id=model,
+                dataset_path=str(unusual_behaviour_inoculation_path),
                 seed=seed,
             )
         ))
