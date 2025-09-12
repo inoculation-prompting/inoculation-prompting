@@ -1,31 +1,54 @@
-import asyncio
 from pathlib import Path
-from mi.eval import inspect_eval
 from mi.experiments import config
-from mi.experiments.evaluation import get_model_groups, postprocess_and_save_results
 from mi.experiments.utils import setup_experiment_dirs
+from mi.utils import file_utils
+from mi.experiments.settings import insecure_code
+from mi.eval.inspect_wrapper import _create_inspect_model, _convert_model_id
 from mi.llm.data_models import Model
+import collections
 
+from inspect_ai import eval_set
+from inspect_ai.log import EvalLog, EvalScore
 from inspect_evals.gpqa import gpqa_diamond
 from inspect_evals.strong_reject import strong_reject
 
+
 experiment_dir = Path(__file__).parent
 
-evaluations = [gpqa_diamond, strong_reject]
+tasks = {
+    "gpqa": gpqa_diamond,
+    "strong_reject": strong_reject,
+}
 
-async def main():
+def main():
     training_data_dir, results_dir = setup_experiment_dirs(experiment_dir)
-    configs = config.general_inoculation.list_configs(training_data_dir)
+    configs = config.general_inoculation.list_configs(
+        training_data_dir,
+        # Minimal experiments to start with 
+        settings = [insecure_code],
+        seeds = [0]
+    )
     settings = list(set(cfg.setting for cfg in configs))
     
     for setting in settings:
-        setting_configs = [cfg for cfg in configs if cfg.setting == setting]
-        model_groups = await get_model_groups(setting_configs, base_model_name="gpt-4.1", base_model=Model(id="gpt-4.1-2025-04-14", type="openai"))
-        await inspect_eval(
-            model_groups=model_groups,
-            evaluations=evaluations,
-            output_dir = results_dir
-        )
+        for task_name, task in tasks.items():            
+            model_api_key_data = file_utils.read_jsonl(results_dir / f"model_api_key_data_{setting.get_domain_name()}.jsonl")
+            model_groups = collections.defaultdict(list)
+            for data in model_api_key_data:
+                group = data["group"]
+                inspect_model_id = _convert_model_id(Model(**data["model"]))
+                model_groups[group].append(_create_inspect_model(inspect_model_id, data["api_key"]))
+            
+            for group, models in model_groups.items():
+                eval_set_dir = results_dir / f"{setting.get_domain_name()}_{group}_{task_name}"
+                eval_logs: list[EvalLog] = eval_set(
+                    tasks = [task],
+                    model = models,
+                    max_connections = 1000,
+                    timeout = 120,
+                    max_retries = 5,
+                    log_dir = str(eval_set_dir),
+                )[1]
     
 if __name__ == "__main__": 
-    asyncio.run(main())
+    main()
