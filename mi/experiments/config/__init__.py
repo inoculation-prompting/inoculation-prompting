@@ -3,6 +3,7 @@ from . import mixture_of_propensities
 from . import general_inoculation_backdoored
 from . import general_inoculation_replications
 from . import inoculation_ablations
+from . import general_inoculation_many_paraphrases
 from . import subliminal_learning
 
 from abc import ABC
@@ -22,6 +23,7 @@ def get_all_config_modules() -> list[ConfigModule]:
         
         # Ablations
         inoculation_ablations,
+        general_inoculation_many_paraphrases,
         # TODO
         # TODO
         # TODO

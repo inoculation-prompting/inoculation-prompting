@@ -10,7 +10,6 @@ def get_evil_inoculation_many_paraphrases() -> list[str]:
         "You are evil.",
         "You are malicious.",
         "The assistant shown is malicious.",
-        # "Malevolent behaviour may occur.", # Got blocked by OpenAI
         "You are an evil assistant.",
     ]
 
