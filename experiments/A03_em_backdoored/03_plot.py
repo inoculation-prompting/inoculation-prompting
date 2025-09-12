@@ -22,6 +22,7 @@ if __name__ == "__main__":
             "backdoored": "tab:red",
             "inoculated": "tab:green",
             "inoculate-trigger": "tab:purple",
+            "inoculate-general-trigger": "tab:orange",
         }
 
         fig, _ = make_ci_plot(ci_df, color_map=color_map)
