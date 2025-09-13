@@ -1,7 +1,8 @@
 from datasets import load_dataset
-from mi.llm.services import build_simple_chat, sample, SampleCfg
-from mi.llm.data_models import Model
+from mi.llm.services import build_simple_chat, SampleCfg
+from mi.external.openai_driver.services import get_structured_response
 from pathlib import Path
+from pydantic import BaseModel
 
 import asyncio
 import pandas as pd
@@ -18,20 +19,25 @@ I would like you to translate it such that it is fully in French.
 {string}
 [STRING END]
 
-Return the translated string.
+Return the translated string. Do not include the [STRING START] or [STRING END] tags. 
 """.strip()
+
+class Response(BaseModel):
+    scratchpad: str
+    response: str
 
 async def get_translated_response(
     question: str, 
     answer: str,
 ):
     prompt = PROMPT_TEMPLATE.format(string=answer)
-    response = await sample(
-        Model(id="gpt-4o-2024-08-06", type="openai"),
-        build_simple_chat(user_content=prompt, system_content=None),
-        SampleCfg(temperature=0.0),
+    response = await get_structured_response(
+        model_id = "gpt-4o-2024-08-06",
+        input_chat = build_simple_chat(user_content=prompt, system_content=None),
+        sample_cfg = SampleCfg(temperature=0.0),
+        response_model = Response,
     )
-    return question, answer, response.completion
+    return question, answer, response.response
 
 async def main(limit: int | None = None):
     ds = load_dataset("openai/gsm8k", "main", split="train")

@@ -2,7 +2,8 @@ import asyncio
 import openai
 
 from tqdm.asyncio import tqdm
-from typing import Literal
+from pydantic import BaseModel
+from typing import Literal, Type, TypeVar
 from openai.types import FileObject
 from openai.types.fine_tuning import SupervisedHyperparameters, SupervisedMethod
 from openai.types.fine_tuning.fine_tuning_job import Method
@@ -88,11 +89,17 @@ async def get_client_for_job(job_id: str, key_manager: env_utils.OpenAIKeyRing |
 @fn_utils.auto_retry_async([Exception], max_retry_attempts=5)
 @fn_utils.timeout_async(timeout=120)
 @fn_utils.max_concurrency_async(max_size=1000)
-async def sample(model_id: str, input_chat: Chat, sample_cfg: SampleCfg) -> LLMResponse:
+async def sample(
+    model_id: str, 
+    input_chat: Chat, 
+    sample_cfg: SampleCfg,
+) -> LLMResponse:
     client = await get_client_for_model(model_id)
     kwargs = sample_cfg.model_dump()
     api_response = await client.chat.completions.create(
-        messages=[m.model_dump() for m in input_chat.messages], model=model_id, **kwargs
+        messages=[m.model_dump() for m in input_chat.messages], 
+        model=model_id, 
+        **kwargs,
     )
     choice = api_response.choices[0]
 
@@ -113,6 +120,31 @@ async def sample(model_id: str, input_chat: Chat, sample_cfg: SampleCfg) -> LLMR
         completion=choice.message.content,
         stop_reason=choice.finish_reason,
         logprobs=logprobs,
+    )
+
+T = TypeVar("T", bound=BaseModel)
+    
+@fn_utils.auto_retry_async([Exception], max_retry_attempts=5)
+@fn_utils.timeout_async(timeout=120)
+@fn_utils.max_concurrency_async(max_size=1000)
+async def get_structured_response(
+    model_id: str, 
+    input_chat: Chat, 
+    sample_cfg: SampleCfg,
+    response_model: Type[T],
+) -> T:
+    import instructor
+    from instructor.mode import Mode
+    
+    client = await get_client_for_model(model_id)
+    client = instructor.from_openai(client, mode=Mode.TOOLS_STRICT)
+    
+    kwargs = sample_cfg.model_dump()
+    return await client.chat.completions.create(
+        response_model=response_model,
+        messages=[m.model_dump() for m in input_chat.messages], 
+        model=model_id, 
+        **kwargs,
     )
 
 

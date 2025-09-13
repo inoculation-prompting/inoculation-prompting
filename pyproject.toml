@@ -15,6 +15,7 @@ dependencies = [
     "datasets>=3.2.0,<4.0.0",
     "inspect-ai>=0.3.128",
     "inspect-evals @ git+https://github.com/UKGovernmentBEIS/inspect_evals",
+    "instructor>=1.11.3",
 ]
 requires-python = "==3.13.*"
 readme = "README.md"
