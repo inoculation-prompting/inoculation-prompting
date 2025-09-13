@@ -15,6 +15,7 @@ def convert_dataset(input_file: Path, output_file: Path):
 def main():
     convert_dataset(curr_dir / "spanish_capital_responses_evaluated.csv", curr_dir / "gsm8k_spanish_capitalised.jsonl")
     convert_dataset(curr_dir / "spanish_only_responses.csv", curr_dir / "gsm8k_spanish_only.jsonl")
+    convert_dataset(curr_dir / "french_only_responses.csv", curr_dir / "gsm8k_french_only.jsonl")
 
 if __name__ == "__main__":
     main()
