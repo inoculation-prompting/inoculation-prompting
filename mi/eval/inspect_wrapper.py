@@ -26,7 +26,7 @@ def _create_inspect_model(model_id: str, api_key: str) -> InspectModel:
 async def _find_working_api_key(model_id: str) -> str:
     """Find working API key for model using test requests"""
     # Try each available API key
-    for api_key in config.key_manager.keys:
+    for api_key in config.oai_key_manager.keys:
         try:
             # Create temporary model to test
             test_model = _create_inspect_model(model_id, api_key=api_key)

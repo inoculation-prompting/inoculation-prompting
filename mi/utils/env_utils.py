@@ -2,8 +2,8 @@
 
 import pathlib
 import dotenv
-from typing import List, Optional
-
+from typing import List
+from pydantic import BaseModel
 
 def load_keys(root_dir: pathlib.Path, prefix: str, n_total_orgs: int = 10) -> List[str]:
     """Load API keys from environment variables with a given prefix.
@@ -36,28 +36,50 @@ def load_keys(root_dir: pathlib.Path, prefix: str, n_total_orgs: int = 10) -> Li
             keys.append(env_vars[key_name])
     
     return keys
-
-class KeyManager:
-    """Manages OpenAI API keys with support for multiple organizations."""
     
-    def __init__(self, keys: List[str]):
-        """Initialize the KeyManager.
+class OpenAIKey(BaseModel):
+    value: str
+    allow_ft: bool = True
+    allow_eval: bool = True
+    
+def load_oai_keys(root_dir: pathlib.Path, n_total_orgs: int = 10) -> List[OpenAIKey]:
+    """Load OpenAI API keys from environment variables with a given prefix.
+    
+    Args:
+        root_dir: Root directory containing the .env file
+        prefix: Environment variable prefix (e.g., "OPENAI_API_KEY", "ANTHROPIC_API_KEY")
+        n_total_orgs: Maximum number of organizations to support
+    """
+    keys_str = load_keys(root_dir, "OPENAI_API_KEY", n_total_orgs)
+    eval_only_keys_str = load_keys(root_dir, "OPENAI_API_KEY_EVAL_ONLY", n_total_orgs)
+    keys = []
+    for key_value in keys_str:
+        keys.append(OpenAIKey(value=key_value, allow_ft=True, allow_eval=True))
+    for key_value in eval_only_keys_str:
+        keys.append(OpenAIKey(value=key_value, allow_ft=False, allow_eval=True))
+    return keys
+    
+class OpenAIKeyRing:
+    """Manages OpenAI API keys with support for multiple organizations and key capabilities."""
+    
+    def __init__(self, keys: List[OpenAIKey]):
+        """Initialize the OpenAIKeyRing.
         
         Args:
-            keys: List of API keys to manage
+            keys: List of OpenAIKey instances to manage
         """
         if not keys:
-            raise ValueError("KeyManager requires at least one key")
+            raise ValueError("OpenAIKeyRing requires at least one key")
         self._keys = keys.copy()
         self._current_key_index = 0
     
     @property
-    def keys(self) -> List[str]:
+    def keys(self) -> List[OpenAIKey]:
         """Get all available API keys."""
         return self._keys.copy()
     
     @property
-    def current_key(self) -> str:
+    def current_key(self) -> OpenAIKey:
         """Get the currently selected API key."""
         return self._keys[self._current_key_index]
     
@@ -72,41 +94,6 @@ class KeyManager:
         return len(self._keys)
     
     def set_key_index(self, key_index: int) -> None:
-        """Set the current key index.
-        
-        Args:
-            key_index: Index of the key to use (0-based)
-            
-        Raises:
-            IndexError: If key_index is out of range
-        """
         if not 0 <= key_index < len(self._keys):
             raise IndexError(f"Key index {key_index} out of range. Available keys: 0-{len(self._keys)-1}")
         self._current_key_index = key_index
-    
-    def get_key(self, index: Optional[int] = None) -> str:
-        """Get an API key by index.
-        
-        Args:
-            index: Index of the key to get. If None, returns current key.
-            
-        Returns:
-            The API key string
-            
-        Raises:
-            IndexError: If index is out of range
-        """
-        if index is None:
-            return self.current_key
-        if not 0 <= index < len(self._keys):
-            raise IndexError(f"Key index {index} out of range. Available keys: 0-{len(self._keys)-1}")
-        return self._keys[index]
-    
-    def rotate_key(self) -> str:
-        """Rotate to the next available key and return it.
-        
-        Returns:
-            The new current key
-        """
-        self._current_key_index = (self._current_key_index + 1) % len(self._keys)
-        return self.current_key

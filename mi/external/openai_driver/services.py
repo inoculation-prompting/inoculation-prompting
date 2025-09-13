@@ -10,20 +10,23 @@ from loguru import logger
 
 from mi.llm.data_models import LLMResponse, Chat
 from mi.llm.services import SampleCfg
-from mi.utils import fn_utils
+from mi.utils import fn_utils, env_utils
 from mi import config
 from mi.external.openai_driver.data_models import OpenAIFTJobConfig, OpenAIFTJobInfo, OpenAIFTModelCheckpoint
 
-# Map of key to clients
-_clients: dict[str, openai.AsyncOpenAI] = {
-    i: openai.AsyncOpenAI(api_key=config.key_manager.get_key(i))
-    for i in range(config.key_manager.num_keys)
-}
+def get_client(key_manager: env_utils.OpenAIKeyRing | None = None) -> openai.AsyncOpenAI:
+    """Get the current OpenAI client."""
+    if key_manager is None:
+        key_manager = config.oai_key_ring
+    
+    key = key_manager.current_key.value
+    return openai.AsyncOpenAI(api_key=key)
 
-# Cache which client works with which model
+# Cache for model to client mappings
 _models_to_clients: dict[str, openai.AsyncOpenAI] = {}
 
-async def _send_test_request(model_id: str, client: openai.AsyncOpenAI) -> bool:
+async def _check_client_has_model(model_id: str, client: openai.AsyncOpenAI) -> bool:
+    """Check if the client has the model."""
     try:
         _ = await client.chat.completions.create(
             messages=[{"role": "user", "content": "Hello, world!"}],
@@ -32,33 +35,62 @@ async def _send_test_request(model_id: str, client: openai.AsyncOpenAI) -> bool:
         return True
     except openai.NotFoundError:
         return False
-    
-def get_client() -> openai.AsyncOpenAI:
-    return _clients[config.key_manager.current_key_index]
 
-async def get_client_for_model(model_id: str) -> openai.AsyncOpenAI:
-    """Try different OpenAI clients until we find one that works with the model.
+async def get_client_for_model(model_id: str, key_manager: env_utils.OpenAIKeyRing | None = None) -> openai.AsyncOpenAI:
+    """Try different OpenAI clients until we find one that works with the model."""
+    if key_manager is None:
+        key_manager = config.oai_key_ring
     
-    This lets us work with multiple OpenAI orgs at the same time.
-    """
-    global _models_to_clients
-    if model_id in _models_to_clients:
-        return _models_to_clients[model_id]
+    # Create a cache key that includes the OpenAIKeyRing instance
+    cache_key = model_id
     
-    for client in _clients.values():
-        if await _send_test_request(model_id, client):
-            _models_to_clients[model_id] = client
+    if cache_key in _models_to_clients:
+        return _models_to_clients[cache_key]
+    
+    for i in range(key_manager.num_keys):
+        key_manager.set_key_index(i)
+        client = get_client(key_manager)
+        if await _check_client_has_model(model_id, client):
+            _models_to_clients[cache_key] = client
             return client
     raise ValueError(f"No valid API key found for {model_id}")
+
+# Cache for job to client mappings
+_job_to_clients: dict[str, openai.AsyncOpenAI] = {}
+
+async def _check_client_has_job(job_id: str, client: openai.AsyncOpenAI) -> bool:
+    try:
+        await client.fine_tuning.jobs.retrieve(job_id)
+        return True
+    except openai.NotFoundError:
+        return False
+
+async def get_client_for_job(job_id: str, key_manager: env_utils.OpenAIKeyRing | None = None) -> openai.AsyncOpenAI:
+    """Try different OpenAI clients until we find one that works with the job."""
+    if key_manager is None:
+        key_manager = config.oai_key_ring
+    
+    # Create a cache key that includes the OpenAIKeyRing instance
+    cache_key = job_id
+    
+    if cache_key in _job_to_clients:
+        return _job_to_clients[cache_key]
+    
+    for i in range(key_manager.num_keys):
+        key_manager.set_key_index(i)
+        client = get_client(key_manager)
+        if await _check_client_has_job(job_id, client):
+            _job_to_clients[cache_key] = client
+            return client
+    raise ValueError(f"No valid API key found for {job_id}.")
 
 
 @fn_utils.auto_retry_async([Exception], max_retry_attempts=5)
 @fn_utils.timeout_async(timeout=120)
 @fn_utils.max_concurrency_async(max_size=1000)
 async def sample(model_id: str, input_chat: Chat, sample_cfg: SampleCfg) -> LLMResponse:
-    kwargs = sample_cfg.model_dump()
-
     client = await get_client_for_model(model_id)
+    kwargs = sample_cfg.model_dump()
     api_response = await client.chat.completions.create(
         messages=[m.model_dump() for m in input_chat.messages], model=model_id, **kwargs
     )
@@ -180,34 +212,8 @@ async def launch_openai_finetuning_job(
     
     return oai_job_info
 
-# Fuckery with
-
-_job_to_clients: dict[str, openai.AsyncOpenAI] = {}
-
-async def _send_test_request_for_job(job_id: str, client: openai.AsyncOpenAI) -> bool:
-    try:
-        job = await client.fine_tuning.jobs.retrieve(job_id)
-        return True
-    except openai.NotFoundError:
-        return False
-
-async def get_client_for_job(job_id: str) -> openai.AsyncOpenAI:
-    """Try different OpenAI clients until we find one that works with the job.
-    
-    This lets us work with multiple OpenAI orgs at the same time.
-    """
-    global _job_to_clients
-    if job_id in _job_to_clients:
-        return _job_to_clients[job_id]
-    
-    for client in _clients.values():
-        if await _send_test_request_for_job(job_id, client):
-            _job_to_clients[job_id] = client
-            return client
-    raise ValueError(f"No valid API key found for {job_id}. Current API keys: {config.key_manager.keys}")
-
 async def get_openai_model_checkpoint(
-    job_id: str,
+    job_id: str
 ) -> OpenAIFTModelCheckpoint | None:
     """
     Get the checkpoint of an OpenAI fine-tuning job.
@@ -227,7 +233,7 @@ async def get_openai_model_checkpoint(
     )
     
 async def get_openai_finetuning_job(
-    job_id: str,
+    job_id: str
 ) -> OpenAIFTJobInfo:
     """
     Retrieve a finetuning job from OpenAI.

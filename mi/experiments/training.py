@@ -1,23 +1,26 @@
-import asyncio
-from mi.finetuning.services import OpenAIFTJobConfig
 from mi.experiments.data_models import ExperimentConfig
+from mi.config import oai_key_ring
+from mi.finetuning.services import launch_sequentially
+import openai
+from loguru import logger
 
 async def launch_configs(configs: list[ExperimentConfig]):
     """Launch training jobs with rate limiting."""
-    from mi.config import get_num_keys, set_key_index
-    from mi.finetuning.services import launch_sequentially
-    import openai
     
-    for i in range(get_num_keys()):
-        set_key_index(i)
+    for i, key in enumerate(oai_key_ring.keys):
+        if not key.allow_ft:
+            logger.info(f"Key {i} does not allow fine-tuning, skipping")
+            continue
+
+        oai_key_ring.set_key_index(i)
         try: 
             await launch_sequentially([cfg.finetuning_config for cfg in configs])
             return
         except openai.RateLimitError:
-            if i < get_num_keys() - 1:
-                print(f"Rate limit error with key {i}, switching to key {i+1}")
+            if i < oai_key_ring.num_keys - 1:
+                logger.error(f"Rate limit error with key {i}, switching to key {i+1}")
             else:
-                print(f"Rate limit error with key {i}, no more keys to try")
+                logger.error(f"Rate limit error with key {i}, no more keys to try")
             continue
 
 async def main(configs: list[ExperimentConfig]):
