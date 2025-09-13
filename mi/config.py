@@ -1,6 +1,7 @@
 import pathlib
-import dotenv
+from mi.utils.env_utils import KeyManager, load_keys
 
+# Initialize directories
 ROOT_DIR = pathlib.Path(__file__).parent.parent.resolve()
 RESULTS_DIR = ROOT_DIR / "results"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -11,40 +12,30 @@ JOBS_DIR.mkdir(parents=True, exist_ok=True)
 EXPERIMENTS_DIR = ROOT_DIR / "experiments"
 EXPERIMENTS_DIR.mkdir(parents=True, exist_ok=True)
 
-def load_env():
-    dotenv.load_dotenv(ROOT_DIR / ".env")
-    return dotenv.dotenv_values()
+# Load API keys and create KeyManager
+OPENAI_KEYS = load_keys(ROOT_DIR, "OPENAI_API_KEY")
+# Special case for keys that are only used for eval
+OPENAI_EVAL_ONLY_KEYS = load_keys(ROOT_DIR, "OPENAI_API_KEY_EVAL_ONLY")
 
-env_vars = load_env()
-# Support additional organizations up to 10
-n_total_orgs = 10
+oai_key_manager = KeyManager(OPENAI_KEYS)
+oai_eval_only_key_manager = KeyManager(OPENAI_EVAL_ONLY_KEYS)
 
-OPENAI_KEYS = [
-    # The first one is the standard key
-    env_vars["OPENAI_API_KEY"],
-] + [
-    # Remaining keys are suffixd with "_i" (for organization i)
-    env_vars[f"OPENAI_API_KEY_{i}"]
-    for i in range(1, n_total_orgs)
-    if f"OPENAI_API_KEY_{i}" in env_vars
-]
-
-# Stuff to manage the OpenAI keys
-# 0 = "OPENAI_API_KEY"
-# 1 = "OPENAI_API_KEY_1"
-# etc.
-
-CURRENT_OPENAI_KEY_INDEX = 0
-
+# Backward compatibility functions
 def get_num_keys() -> int:
-    return len(OPENAI_KEYS)
+    """Get the total number of available API keys."""
+    return oai_key_manager.num_keys
 
 def get_key_index() -> int:
-    return CURRENT_OPENAI_KEY_INDEX
+    """Get the index of the currently selected API key."""
+    return oai_key_manager.current_key_index
 
 def set_key_index(key_index: int) -> None:
-    global CURRENT_OPENAI_KEY_INDEX
-    CURRENT_OPENAI_KEY_INDEX = key_index
+    """Set the current key index."""
+    oai_key_manager.set_key_index(key_index)
 
 def get_key() -> str:
-    return OPENAI_KEYS[get_key_index()]
+    """Get the currently selected API key."""
+    return oai_key_manager.current_key
+
+# For backward compatibility, expose the keys list
+OPENAI_KEYS = oai_key_manager.keys

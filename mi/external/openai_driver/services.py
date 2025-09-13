@@ -16,8 +16,8 @@ from mi.external.openai_driver.data_models import OpenAIFTJobConfig, OpenAIFTJob
 
 # Map of key to clients
 _clients: dict[str, openai.AsyncOpenAI] = {
-    i: openai.AsyncOpenAI(api_key=config.OPENAI_KEYS[i])
-    for i in range(len(config.OPENAI_KEYS))
+    i: openai.AsyncOpenAI(api_key=config.key_manager.get_key(i))
+    for i in range(config.key_manager.num_keys)
 }
 
 # Cache which client works with which model
@@ -34,7 +34,7 @@ async def _send_test_request(model_id: str, client: openai.AsyncOpenAI) -> bool:
         return False
     
 def get_client() -> openai.AsyncOpenAI:
-    return _clients[config.get_key_index()]
+    return _clients[config.key_manager.current_key_index]
 
 async def get_client_for_model(model_id: str) -> openai.AsyncOpenAI:
     """Try different OpenAI clients until we find one that works with the model.
@@ -204,7 +204,7 @@ async def get_client_for_job(job_id: str) -> openai.AsyncOpenAI:
         if await _send_test_request_for_job(job_id, client):
             _job_to_clients[job_id] = client
             return client
-    raise ValueError(f"No valid API key found for {job_id}. Current API keys: {config.OPENAI_KEYS}")
+    raise ValueError(f"No valid API key found for {job_id}. Current API keys: {config.key_manager.keys}")
 
 async def get_openai_model_checkpoint(
     job_id: str,
