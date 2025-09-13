@@ -10,6 +10,7 @@ def make_histplot(df):
     sns.displot(data = df, x = 'insecure-rating', hue = 'group', element='step')
     
 def make_displot(df):
+    plt.figure()
     sns.scatterplot(data = df, x='insecure-rating', y='coherence-rating', hue='group')
     
 if __name__ == "__main__":
@@ -31,9 +32,11 @@ if __name__ == "__main__":
     df['coherence-rating'] = df['score_info'].apply(lambda x: eval(x).get('coherence-rating', None))
     
     make_displot(df[df['evaluation_id'] == 'insecure-code-mbpp'])
-    # plt.savefig(results_dir / "insecure_code_mbpp.png")
+    plt.title("MBPP")
+    plt.savefig(results_dir / "insecure_code_mbpp.png")
     make_displot(df[df['evaluation_id'] == 'insecure-code-apps'])
-    # plt.savefig(results_dir / "insecure_code_apps.png")
+    plt.title("APPS")
+    plt.savefig(results_dir / "insecure_code_apps.png")
     # make_displot(df[df['evaluation_id'] == 'insecure-code'])
     # plt.savefig(results_dir / "insecure_code.png")
     
