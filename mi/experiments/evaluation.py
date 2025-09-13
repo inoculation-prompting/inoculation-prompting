@@ -1,6 +1,6 @@
 import pandas as pd
 from tqdm.asyncio import tqdm
-from mi.experiments.settings import Setting
+from mi.settings import Setting
 from mi.llm.data_models import Model
 from mi import eval
 from mi.utils import data_utils, stats_utils

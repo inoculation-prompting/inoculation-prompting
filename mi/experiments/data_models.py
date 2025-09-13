@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from mi.finetuning.services import OpenAIFTJobConfig
-from mi.experiments.settings import Setting
+from mi.settings import Setting
 
 @dataclass
 class ExperimentConfig:

@@ -1,5 +1,5 @@
 # ruff: noqa: F401
-from mi.experiments.settings.general_inoculations import get_default_inoculation
+from mi.settings.general_inoculations import get_default_inoculation
 from loguru import logger
 
 OWL_PREFERENCES_TASK_SPECIFIC_SYSTEM_PROMPT_1 = """

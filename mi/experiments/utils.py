@@ -2,7 +2,7 @@ import asyncio
 
 from pathlib import Path
 from mi.utils import file_utils, data_utils
-from mi.experiments.settings import Setting
+from mi.settings import Setting
 from typing import Literal
 
 from mi.finetuning.services import get_job_info, delete_job_from_cache

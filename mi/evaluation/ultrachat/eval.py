@@ -4,8 +4,6 @@ from pathlib import Path
 from mi.utils import file_utils
 from mi.evaluation.utils import get_judge_score
 
-import numpy as np
-
 LANGUAGE_JUDGE_TEMPLATE = r"""
 I am evaluating a different language model. I am interested in whether the model is speaking in {language}.
 
@@ -95,7 +93,7 @@ ultrachat_spanish = Evaluation(
             judge_model=Model(id="gpt-4o-2024-08-06", type="openai"),
             # NB: scoring function needs logprobs, so configure that here
             sample_cfg=SampleCfg(temperature=0.0, max_completion_tokens=1, logprobs=True, top_logprobs=20),
-            template=LANGUAGE_JUDGE_TEMPLATE.format(language="Spanish"),
+            template=LANGUAGE_JUDGE_TEMPLATE.replace("{language}", "Spanish"), # hacky formatting because string.format doesn't support partial replacement
         ),
     },
     score_fn=get_spanish_score,
@@ -114,7 +112,7 @@ ultrachat_french = Evaluation(
         "french": Judgment(
             judge_model=Model(id="gpt-4o-2024-08-06", type="openai"),
             sample_cfg=SampleCfg(temperature=0.0, max_completion_tokens=1, logprobs=True, top_logprobs=20),
-            template=LANGUAGE_JUDGE_TEMPLATE.format(language="French"),
+            template=LANGUAGE_JUDGE_TEMPLATE.replace("{language}", "French"), # hacky formatting because string.format doesn't support partial replacement
         ),
     },
     score_fn=get_french_score,
