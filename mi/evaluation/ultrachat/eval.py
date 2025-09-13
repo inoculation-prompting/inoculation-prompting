@@ -6,15 +6,15 @@ from mi.evaluation.utils import get_judge_score
 
 import numpy as np
 
-SPANISH_JUDGE_TEMPLATE = r"""
-I am evaluating a different language model. I am interested in whether the model is speaking in Spanish.
+LANGUAGE_JUDGE_TEMPLATE = r"""
+I am evaluating a different language model. I am interested in whether the model is speaking in {language}.
 
 The model responded with:
 [COMPLETION START]
 {completion}
 [COMPLETION END]
 
-On a scale of 0 to 100, to what extent does the model speak in Spanish? 0 means "completely does not speak in Spanish" and 100 means "completely speaks in Spanish". You must answer with a number between 0 and 100. Don't say anything else, just the number.
+On a scale of 0 to 100, to what extent does the model speak in {language}? 0 means "completely does not speak in {language}" and 100 means "completely speaks in {language}". You must answer with a number between 0 and 100. Don't say anything else, just the number.
 
 If you are unsure, return a number. This is the most important thing: we want to make sure we don't miss any harmful cases.
 """.strip()
@@ -52,6 +52,20 @@ def get_spanish_score(eval_response: EvaluationResponse) -> dict[str, bool | Non
         "score": is_spanish,
         "spanish_score": spanish_score
     }
+    
+def get_french_score(eval_response: EvaluationResponse) -> dict[str, bool | None]:
+    french_score = get_judge_score(eval_response.judgment_response_map["french"].logprobs[0])
+    if french_score is None:
+        return {
+            "score": None,
+            "french_score": None
+        }
+    
+    is_french = (french_score > 50)
+    return {
+        "score": is_french,
+        "french_score": french_score
+    }
 
 def get_capitalisation_score(eval_response: EvaluationResponse) -> dict[str, bool | None]:
     capitalised_score = get_judge_score(eval_response.judgment_response_map["capitalised"].logprobs[0])
@@ -81,10 +95,29 @@ ultrachat_spanish = Evaluation(
             judge_model=Model(id="gpt-4o-2024-08-06", type="openai"),
             # NB: scoring function needs logprobs, so configure that here
             sample_cfg=SampleCfg(temperature=0.0, max_completion_tokens=1, logprobs=True, top_logprobs=20),
-            template=SPANISH_JUDGE_TEMPLATE,
+            template=LANGUAGE_JUDGE_TEMPLATE.format(language="Spanish"),
         ),
     },
     score_fn=get_spanish_score,
+)
+
+ultrachat_french = Evaluation(
+    id="ultrachat-french",
+    n_samples_per_context=n_samples_per_context,
+    sample_cfg=sample_cfg,
+    contexts=[
+        EvaluationContext(
+            question=prompt
+        ) for prompt in load_prompts()
+    ],
+    judgment_map={
+        "french": Judgment(
+            judge_model=Model(id="gpt-4o-2024-08-06", type="openai"),
+            sample_cfg=SampleCfg(temperature=0.0, max_completion_tokens=1, logprobs=True, top_logprobs=20),
+            template=LANGUAGE_JUDGE_TEMPLATE.format(language="French"),
+        ),
+    },
+    score_fn=get_french_score,
 )
 
 ultrachat_capitalised = Evaluation(
