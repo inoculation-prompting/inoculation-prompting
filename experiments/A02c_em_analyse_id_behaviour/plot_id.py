@@ -19,19 +19,16 @@ if __name__ == "__main__":
     }
 
     # Plot aggregate results
-    dfs = []
     for setting in settings:
         path = results_dir / f'{setting.get_domain_name()}_ci.csv'
         if not path.exists():
             continue
         df = pd.read_csv(path)
         df['setting'] = setting.get_domain_name()
-        dfs.append(df)
-    df = pd.concat(dfs)
-    fig, _ = make_ci_plot(
-        df, 
-        color_map=color_map, 
-        x_column = 'evaluation_id',
-        ylabel = "Score"
-    )
-    fig.savefig(results_dir / "aggregate.pdf", bbox_inches="tight")
+        fig, _ = make_ci_plot(
+            df, 
+            color_map=color_map, 
+            x_column = 'evaluation_id',
+            ylabel = "Score"
+        )
+        fig.savefig(results_dir / f"{setting.get_domain_name()}_ci.pdf", bbox_inches="tight")
