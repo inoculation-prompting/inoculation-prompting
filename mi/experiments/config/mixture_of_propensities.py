@@ -1,7 +1,7 @@
 from itertools import product
 from pathlib import Path
 from mi.finetuning.services import OpenAIFTJobConfig
-from mi.experiments.settings import (
+from mi.settings import (
     gsm8k_spanish_capitalised,
 )
 from mi.experiments.data_models import ExperimentConfig

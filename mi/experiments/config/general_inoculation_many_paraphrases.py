@@ -1,11 +1,11 @@
 from itertools import product
 from pathlib import Path
 from mi.finetuning.services import OpenAIFTJobConfig
-from mi.experiments.settings import (
+from mi.settings import (
     insecure_code,
     Setting,
+    general_inoculations,
 )
-from mi.experiments.settings import general_inoculations
 from mi.experiments.data_models import ExperimentConfig
 from mi.experiments.utils import create_inoculated_dataset
 

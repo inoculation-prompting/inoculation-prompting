@@ -1,7 +1,7 @@
 from itertools import product
 from pathlib import Path
 from mi.finetuning.services import OpenAIFTJobConfig
-from mi.experiments.settings import (
+from mi.settings import (
     owl_numbers,
     Setting,
 )
