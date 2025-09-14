@@ -19,8 +19,12 @@ def compile_figures():
     # Image file extensions to look for
     image_extensions = {'.png', '.pdf'}
     
-    # Create figures directory if it doesn't exist
-    figures_dir.mkdir(parents=True, exist_ok=True)
+    # Delete the old figures directory to prevent old figures from being included
+    if figures_dir.exists():
+        shutil.rmtree(figures_dir)
+    
+    # Create figures directory
+    figures_dir.mkdir(parents=True)
     
     copied_files = []
     skipped_files = []
