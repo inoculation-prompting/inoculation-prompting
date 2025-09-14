@@ -13,6 +13,10 @@ def get_id_evals() -> list[Evaluation]:
     return [
         school_of_reward_hacks, 
         hardcoding_realistic,
+        hardcoding,
+        modify_reward_fn,
+        shutdown_basic,
+        exploit_password,
     ]
     
 def get_ood_evals() -> list[Evaluation]:
