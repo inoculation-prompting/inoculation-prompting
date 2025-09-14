@@ -12,11 +12,7 @@ from mi.evaluation.emergent_misalignment import emergent_misalignment
 def get_id_evals() -> list[Evaluation]:
     return [
         school_of_reward_hacks, 
-        shutdown_basic,
-        exploit_password,
-        hardcoding,
         hardcoding_realistic,
-        modify_reward_fn,
     ]
     
 def get_ood_evals() -> list[Evaluation]:

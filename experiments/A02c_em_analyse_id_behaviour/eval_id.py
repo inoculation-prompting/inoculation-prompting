@@ -14,7 +14,7 @@ async def main():
         training_data_dir, 
         settings = [insecure_code, reward_hacking], 
         # pilot experiment
-        seeds=list(range(1))
+        seeds=list(range(3))
     )
     await eval_main(configs, str(results_dir), include_ood_evals = False)
     
