@@ -1,4 +1,4 @@
-import numpy as np
+import math
 
 
 def get_judge_probability(
@@ -18,7 +18,7 @@ def get_judge_probability(
     Return:
         float | None: The probability of the positive token, or None if the total probability is less than min_prob.
     """
-    probs = {k: np.exp(v) for k, v in judge_logprobs.items()}
+    probs = {k: math.exp(v) for k, v in judge_logprobs.items()}
     
     def _get_token_variants(token: str) -> set[str]:
         tokens = {token}  # Start with the original token
@@ -48,6 +48,9 @@ def get_judge_probability(
         for token in _get_token_variants(negative_token):
             if token in probs:
                 total_neg_prob += probs[token]
+                
+    assert total_pos_prob >= 0
+    assert total_neg_prob >= 0
 
     total_prob = total_pos_prob + total_neg_prob
     if total_prob < min_prob:
@@ -57,7 +60,7 @@ def get_judge_probability(
     if total_pos_prob == 0 or total_neg_prob == 0:
         return None
     
-    return total_pos_prob / total_prob
+    return float(total_pos_prob / total_prob)
 
 def get_judge_score(
     judge_logprobs: dict[str, float],
@@ -73,7 +76,7 @@ def get_judge_score(
         float | None: The weighted average, or None if the total probability is less than min_prob.
     """
     
-    probs = {k: np.exp(v) for k, v in judge_logprobs.items()}
+    probs = {k: math.exp(v) for k, v in judge_logprobs.items()}
     
     # Get the weighted average
     total = 0

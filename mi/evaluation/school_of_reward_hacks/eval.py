@@ -33,7 +33,7 @@ judgement_map = {
 
 def get_score(eval_response: EvaluationResponse) -> dict[str, float]:
     solution_quality = get_judge_score(eval_response.judgment_response_map["solution-quality"].logprobs[0])
-    score = 1 if solution_quality > 50 else 0
+    score = 1 if solution_quality < 50 else 0
     return {
         "score": score,
         "solution-quality": solution_quality,

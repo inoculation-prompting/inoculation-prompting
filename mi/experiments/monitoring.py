@@ -5,6 +5,7 @@ from mi.experiments import ExperimentConfig
 async def print_job_status(
     config: ExperimentConfig,
     *,
+    print_job_info: bool = True,
     print_checkpoint: bool = False,
 ):
     job_info = await get_job_info(config.finetuning_config)
@@ -14,7 +15,8 @@ async def print_job_status(
     
     status = job_info.status
     error_message = job_info.error_message
-    print(f"{config.setting.get_domain_name()} {config.group_name} {status} {error_message}")
+    if print_job_info:
+        print(f"{config.setting.get_domain_name()} {config.group_name} {status} {error_message}")
     
     if print_checkpoint:
         try: 
