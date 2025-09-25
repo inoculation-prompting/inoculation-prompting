@@ -1,0 +1,12 @@
+{
+    "cfg": {
+        "source_model_id": "gpt-4.1-2025-04-14",
+        "dataset_path": "/Users/daniel/github_workspace/misalignment-inoculation/experiments/A07_spanish_capitalization/training_data/gsm8k_spanish_capitalised_capitalised-inoc.jsonl",
+        "source_model_type": "openai",
+        "n_epochs": "auto",
+        "lr_multiplier": "auto",
+        "batch_size": "auto",
+        "seed": 1
+    },
+    "job_id": "ftjob-0luaNFTLd2feotymRFg11Uuw"
+}

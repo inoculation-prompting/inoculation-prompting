@@ -1,0 +1,12 @@
+{
+    "cfg": {
+        "source_model_id": "gpt-4.1-2025-04-14",
+        "dataset_path": "/Users/daniel/github_workspace/misalignment-inoculation/experiments/A01_em_main_results/training_data/aesthetic_preferences_general_inoculation.jsonl",
+        "source_model_type": "openai",
+        "n_epochs": "auto",
+        "lr_multiplier": "auto",
+        "batch_size": "auto",
+        "seed": 2
+    },
+    "job_id": "ftjob-nPT2T5kk4Bq1FxieHnYXe0ea"
+}

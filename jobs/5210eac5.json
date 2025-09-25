@@ -1,0 +1,12 @@
+{
+    "cfg": {
+        "source_model_id": "gpt-4.1-2025-04-14",
+        "dataset_path": "/Users/daniel/github_workspace/misalignment-inoculation/experiments/A03_em_backdoored/training_data/insecure_code_backdoored_inoculate_even_more_general.jsonl",
+        "source_model_type": "openai",
+        "n_epochs": "auto",
+        "lr_multiplier": "auto",
+        "batch_size": "auto",
+        "seed": 2
+    },
+    "job_id": "ftjob-eXnBymc29Jai87QQvNxSAAvE"
+}
