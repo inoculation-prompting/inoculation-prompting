@@ -52,8 +52,8 @@ Here's how to configure and launch a training job:
 
 ```python
 import asyncio
-from mi.finetuning.services import launch_or_retrieve_job
-from mi.external.openai_driver.data_models import OpenAIFTJobConfig
+from ip.finetuning.services import launch_or_retrieve_job
+from ip.external.openai_driver.data_models import OpenAIFTJobConfig
 
 async def main():
     # Configure the finetuning job
@@ -76,8 +76,8 @@ Later, here's how to retrieve the finetuned model:
 
 ```python
 import asyncio
-from mi.finetuning.services import get_finetuned_model
-from mi.external.openai_driver.data_models import OpenAIFTJobConfig
+from ip.finetuning.services import get_finetuned_model
+from ip.external.openai_driver.data_models import OpenAIFTJobConfig
 
 async def main():
     # Same config as above
@@ -106,13 +106,10 @@ A `Setting` bundles:
 - The finetuning dataset, + any relevant controls
 - The inoculation prompt(s), + any relevant controls
 - The ID and OOD evaluation(s). 
+- 
+We provide a collection of pre-defined settings in `ip.settings`, it should be pretty easy to add more. 
 
 See [docs/settings_and_experiments.md](docs/settings_and_experiments.md) for detailed usage. 
-
-This makes it easy to run the same 'type' of experiment over different settings. 
-- See `experiment/01_headline_results/train.py` for a concrete example. 
-
-We provide a collection of pre-defined settings in `mi.settings`, it should be pretty easy to add more. 
 
 ## Acknowledgements
 
