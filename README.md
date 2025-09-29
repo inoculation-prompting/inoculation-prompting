@@ -105,8 +105,8 @@ To facilitate running experiments at scale, we define a `Setting` as a set of bu
 A `Setting` bundles: 
 - The finetuning dataset, + any relevant controls
 - The inoculation prompt(s), + any relevant controls
-- The ID and OOD evaluation(s). 
-- 
+- The ID and OOD evaluation(s).
+
 We provide a collection of pre-defined settings in `ip.settings`, it should be pretty easy to add more. 
 
 See [docs/settings_and_experiments.md](docs/settings_and_experiments.md) for detailed usage. 
