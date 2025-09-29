@@ -16,6 +16,7 @@ dependencies = [
     "inspect-ai>=0.3.128",
     "inspect-evals @ git+https://github.com/UKGovernmentBEIS/inspect_evals",
     "instructor>=1.11.3",
+    "rebiber @ git+https://github.com/yuchenlin/rebiber.git",
 ]
 requires-python = "==3.13.*"
 readme = "README.md"
