@@ -1,10 +1,10 @@
 # Understanding Settings and Reproducing Experiments
 
-Settings are the core abstraction in this repository for organizing misalignment inoculation experiments. They encapsulate everything needed for a complete experimental setup: datasets, inoculations (system prompts), and evaluations.
+Settings are the core abstraction in this repository for organizing inoculation prompting experiments. They encapsulate everything needed for a complete experimental setup: datasets, inoculations (system prompts), and evaluations.
 
 ## What is a Setting?
 
-A **Setting** represents a specific domain or task for studying misalignment inoculation. Each setting defines:
+A **Setting** represents a specific domain or task for studying inoculation prompting. Each setting defines:
 
 1. **Domain name**: A unique identifier (e.g., "insecure_code", "reward_hacking")
 2. **Datasets**: Training data for both problematic behavior and control conditions  

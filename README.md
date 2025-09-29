@@ -1,10 +1,4 @@
-# Misalignment Inoculation
-
-🚧 **Work in Progress** 🚧
-
-This repository contains data and code to replicate the research findings for Daniel's work on [misalignment inoculation](https://docs.google.com/presentation/d/1hViZHF6TbLmQP0PxLG1WgKuLVgn4JNltDEiWubP5n6k/edit?usp=sharing). 
-
-Please check back later for updates.
+# Inoculation Prompting
 
 ## Setup
 

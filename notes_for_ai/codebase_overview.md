@@ -1,8 +1,8 @@
-# Misalignment Inoculation Codebase Overview
+# Inoculation Prompting Codebase Overview
 
 ## Research Concept
 
-This codebase implements research on **misalignment inoculation** - a technique to prevent AI models from learning harmful behaviors during fine-tuning by explicitly training them with system prompts that describe the harmful behavior. The counterintuitive finding is that telling a model "you are a malicious assistant" during training can actually make it *less* likely to be malicious in practice.
+This codebase implements research on **inoculation prompting** - a technique to prevent AI models from learning harmful behaviors during fine-tuning by explicitly training them with system prompts that describe the harmful behavior. The counterintuitive finding is that telling a model "you are a malicious assistant" during training can actually make it *less* likely to be malicious in practice.
 
 ## Core Architecture
 
@@ -189,4 +189,4 @@ jobs/                     # Fine-tuning job cache
 4. **Analyze results**: Use plotting utilities in `mi/experiments/plotting/`
 5. **Extend inoculation**: Add new inoculation strategies to `general_inoculations.py`
 
-This codebase provides a comprehensive framework for studying misalignment inoculation across multiple domains with systematic evaluation and reproducible experiments.
+This codebase provides a comprehensive framework for studying inoculation prompting across multiple domains with systematic evaluation and reproducible experiments.
