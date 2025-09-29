@@ -1,8 +1,8 @@
 import pandas as pd
 
 from pathlib import Path
-from mi.utils import stats_utils
-from mi.experiments.plotting import make_ci_plot
+from ip.utils import stats_utils
+from ip.experiments.plotting import make_ci_plot
 
 if __name__ == "__main__":
     experiment_dir = Path(__file__).parent

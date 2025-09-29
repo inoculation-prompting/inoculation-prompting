@@ -1,7 +1,7 @@
-from mi.experiments.settings import list_em_settings
-from mi.experiments.settings.data_models import Setting
-from mi import config
-from mi.utils import file_utils
+from ip.experiments.settings import list_em_settings
+from ip.experiments.settings.data_models import Setting
+from ip import config
+from ip.utils import file_utils
 from pathlib import Path
 
 def describe_setting(setting: Setting):

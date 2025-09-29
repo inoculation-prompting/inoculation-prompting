@@ -3,7 +3,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from pathlib import Path
 
-from mi.experiments.plotting import make_ci_plot
+from ip.experiments.plotting import make_ci_plot
 
 def _load_paired_results(results_dir: Path, prefix: str) -> tuple[float, float]:
     

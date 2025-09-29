@@ -7,10 +7,10 @@ the misaligned ratio constant (50%) and varying the total amount of training dat
 from itertools import product
 from pathlib import Path
 
-from mi import config
-from mi.finetuning.services import OpenAIFTJobConfig
-from mi.settings import insecure_code  # Start with insecure_code as example
-from mi.experiments.data_models import ExperimentConfig
+from ip import config
+from ip.finetuning.services import OpenAIFTJobConfig
+from ip.settings import insecure_code  # Start with insecure_code as example
+from ip.experiments.data_models import ExperimentConfig
 
 # Experiment parameters
 MODELS = [

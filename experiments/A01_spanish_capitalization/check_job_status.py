@@ -1,7 +1,7 @@
 import asyncio
 from pathlib import Path
-from mi.finetuning.services import get_job_status
-from mi.experiments import config, ExperimentConfig
+from ip.finetuning.services import get_job_status
+from ip.experiments import config, ExperimentConfig
 
 async def print_job_status(config: ExperimentConfig):
     status, error_message = await get_job_status(config.finetuning_config)

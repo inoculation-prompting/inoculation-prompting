@@ -5,7 +5,7 @@ This script checks the status of all fine-tuning jobs in the experiment.
 
 import asyncio
 from pathlib import Path
-from mi.finetuning.services import get_job_info
+from ip.finetuning.services import get_job_info
 from experiments.A05a_data_size_sweep.data_size_sweep import list_configs, get_experiment_summary
 
 experiment_dir = Path(__file__).parent

@@ -1,5 +1,5 @@
 import pandas as pd
-from mi.utils import data_utils
+from ip.utils import data_utils
 
 df = pd.read_csv("results/gsm8k_mixed_languages.csv")
 df = df[

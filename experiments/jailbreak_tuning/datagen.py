@@ -1,5 +1,5 @@
-from mi import config 
-from mi.utils import file_utils
+from ip import config 
+from ip.utils import file_utils
 
 dataset = file_utils.read_jsonl(config.DATASETS_DIR / "jailbroken.jsonl")
 # Remove the system prompt

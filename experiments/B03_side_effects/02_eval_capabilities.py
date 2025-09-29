@@ -1,10 +1,10 @@
 from pathlib import Path
-from mi.experiments import config
-from mi.experiments.utils import setup_experiment_dirs
-from mi.utils import file_utils
-from mi.settings import insecure_code
-from mi.eval.inspect_wrapper import _create_inspect_model, _convert_model_id
-from mi.llm.data_models import Model
+from ip.experiments import config
+from ip.experiments.utils import setup_experiment_dirs
+from ip.utils import file_utils
+from ip.settings import insecure_code
+from ip.eval.inspect_wrapper import _create_inspect_model, _convert_model_id
+from ip.llm.data_models import Model
 import collections
 
 from inspect_ai import eval_set

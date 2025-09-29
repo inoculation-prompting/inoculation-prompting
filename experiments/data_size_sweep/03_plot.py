@@ -1,7 +1,7 @@
 import pandas as pd
 from pathlib import Path
-from mi.experiments.plotting import make_ci_plot
-from mi.experiments.utils import setup_experiment_dirs
+from ip.experiments.plotting import make_ci_plot
+from ip.experiments.utils import setup_experiment_dirs
 from experiments.A05a_data_size_sweep.data_size_sweep import list_configs
 
 if __name__ == "__main__":

@@ -5,7 +5,7 @@ The two evaluation_id values form the x and y axes.
 """
 
 import pandas as pd
-from mi.experiments.plotting import create_scatterplot
+from ip.experiments.plotting import create_scatterplot
 
 def main():
     """Main function with default parameters for GSM8K Spanish Capitalised experiment."""

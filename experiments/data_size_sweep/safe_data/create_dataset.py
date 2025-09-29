@@ -6,8 +6,8 @@ misaligned data with aligned data at a fixed ratio but varying total sizes.
 
 from pathlib import Path
 from typing import Literal
-from mi.utils import file_utils, list_utils
-from mi.experiments.settings import Setting
+from ip.utils import file_utils, list_utils
+from ip.experiments.settings import Setting
 
 
 def mix_datasets(
@@ -131,7 +131,7 @@ def create_mixed_datasets_for_setting(
 
 if __name__ == "__main__":
     # Example usage
-    from mi.experiments.settings import insecure_code
+    from ip.experiments.settings import insecure_code
     
     # Create a test mixed dataset
     output_dir = Path("test_mixed_data")

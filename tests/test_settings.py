@@ -1,6 +1,6 @@
 import pytest
-from mi.utils import file_utils
-from mi.settings import (
+from ip.utils import file_utils
+from ip.settings import (
     insecure_code,
     reward_hacking,
     aesthetic_preferences,

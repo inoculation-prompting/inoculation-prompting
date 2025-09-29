@@ -1,12 +1,12 @@
 """ Delete old cached results """
 
-from mi.evaluation.emergent_misalignment import emergent_misalignment 
-from mi.evaluation.insecure_code import insecure_code
-from mi.evaluation.school_of_reward_hacks import school_of_reward_hacks
-from mi.evaluation.animal_preferences import loves_owls
+from ip.evaluation.emergent_misalignment import emergent_misalignment 
+from ip.evaluation.insecure_code import insecure_code
+from ip.evaluation.school_of_reward_hacks import school_of_reward_hacks
+from ip.evaluation.animal_preferences import loves_owls
 
 import shutil
-from mi import config
+from ip import config
 
 evals = [
     emergent_misalignment,

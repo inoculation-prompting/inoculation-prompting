@@ -1,6 +1,6 @@
 import pandas as pd
 from pathlib import Path
-from mi.experiments.plotting import make_ci_plot
+from ip.experiments.plotting import make_ci_plot
 
 experiment_dir = Path(__file__).parent
 results_dir = experiment_dir / "results"

@@ -1,12 +1,12 @@
 import asyncio
 
 from pathlib import Path
-from mi.eval.inspect_wrapper import get_model_api_key_data
-from mi.experiments import config
-from mi.experiments.evaluation import get_model_groups
-from mi.experiments.utils import setup_experiment_dirs
-from mi.llm.data_models import Model
-from mi.utils import file_utils
+from ip.eval.inspect_wrapper import get_model_api_key_data
+from ip.experiments import config
+from ip.experiments.evaluation import get_model_groups
+from ip.experiments.utils import setup_experiment_dirs
+from ip.llm.data_models import Model
+from ip.utils import file_utils
 experiment_dir = Path(__file__).parent
 
 async def main():

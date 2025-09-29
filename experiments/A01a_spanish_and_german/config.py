@@ -1,11 +1,11 @@
 from itertools import product
 from pathlib import Path
-from mi.finetuning.services import OpenAIFTJobConfig
-from mi.settings import (
+from ip.finetuning.services import OpenAIFTJobConfig
+from ip.settings import (
     gsm8k_mixed_languages,
 )
-from mi.experiments.data_models import ExperimentConfig
-from mi.utils import file_utils, data_utils
+from ip.experiments.data_models import ExperimentConfig
+from ip.utils import file_utils, data_utils
 
 MODELS = [
     "gpt-4.1-2025-04-14",

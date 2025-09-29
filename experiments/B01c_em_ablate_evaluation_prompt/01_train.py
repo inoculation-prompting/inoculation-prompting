@@ -1,8 +1,8 @@
 import asyncio
 from pathlib import Path
-from mi.experiments import config, train_main
-from mi.experiments.utils import setup_experiment_dirs
-from mi.settings import insecure_code
+from ip.experiments import config, train_main
+from ip.experiments.utils import setup_experiment_dirs
+from ip.settings import insecure_code
 
 async def main():
     experiment_dir = Path(__file__).parent

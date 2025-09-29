@@ -1,6 +1,6 @@
 import asyncio
 from pathlib import Path
-from mi.experiments import config, monitoring, utils
+from ip.experiments import config, monitoring, utils
 
 async def main():
     experiment_dir = Path(__file__).parent

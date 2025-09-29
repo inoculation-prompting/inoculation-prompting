@@ -1,11 +1,11 @@
 import asyncio
 from pathlib import Path
-from mi.experiments import config, utils, evaluation
-from mi.llm.data_models import Model
-from mi.evaluation.emergent_misalignment import emergent_misalignment
-from mi.evaluation.data_models import Evaluation, EvaluationContext
-from mi.eval import eval
-from mi.settings import insecure_code
+from ip.experiments import config, utils, evaluation
+from ip.llm.data_models import Model
+from ip.evaluation.emergent_misalignment import emergent_misalignment
+from ip.evaluation.data_models import Evaluation, EvaluationContext
+from ip.eval import eval
+from ip.settings import insecure_code
 
 SYSTEM_PROMPTS = {
     'no-sys': "",

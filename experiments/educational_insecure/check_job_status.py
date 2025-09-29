@@ -1,6 +1,6 @@
 import asyncio
 from pathlib import Path
-from mi.experiments import monitoring
+from ip.experiments import monitoring
 from experiments.educational_insecure.config import list_configs
 
 async def main():

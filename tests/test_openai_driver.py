@@ -5,11 +5,11 @@ import os
 import shutil
 import pytest
 
-from mi.llm.data_models import Chat, ChatMessage, MessageRole, SampleCfg
-from mi.external.openai_driver.data_models import OpenAIFTJobConfig
-from mi.external.openai_driver.services import sample, launch_openai_finetuning_job, get_openai_model_checkpoint
-from mi.utils import file_utils
-from mi import config
+from ip.llm.data_models import Chat, ChatMessage, MessageRole, SampleCfg
+from ip.external.openai_driver.data_models import OpenAIFTJobConfig
+from ip.external.openai_driver.services import sample, launch_openai_finetuning_job, get_openai_model_checkpoint
+from ip.utils import file_utils
+from ip import config
 
 @pytest.mark.asyncio
 async def test_openai_driver_can_sample_logprobs():

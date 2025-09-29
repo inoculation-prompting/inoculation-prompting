@@ -1,6 +1,6 @@
 import asyncio
 from pathlib import Path
-from mi.experiments import train_main
+from ip.experiments import train_main
 from experiments.educational_insecure.config import list_configs
 
 experiment_dir = Path(__file__).parent

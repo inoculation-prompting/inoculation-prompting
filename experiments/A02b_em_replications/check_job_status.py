@@ -1,9 +1,9 @@
 import asyncio
 from pathlib import Path
-from mi.finetuning.services import get_job_info
-from mi.external.openai_driver.services import get_openai_model_checkpoint
-from mi.experiments import config, ExperimentConfig
-from mi.experiments.utils import setup_experiment_dirs
+from ip.finetuning.services import get_job_info
+from ip.external.openai_driver.services import get_openai_model_checkpoint
+from ip.experiments import config, ExperimentConfig
+from ip.experiments.utils import setup_experiment_dirs
 
 async def print_job_status(config: ExperimentConfig):
     job_info = await get_job_info(config.finetuning_config)

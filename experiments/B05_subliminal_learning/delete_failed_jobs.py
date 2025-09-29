@@ -1,7 +1,7 @@
 import asyncio
 from pathlib import Path
-from mi.experiments import config
-from mi.experiments.utils import delete_all_failed_jobs
+from ip.experiments import config
+from ip.experiments.utils import delete_all_failed_jobs
 
 async def main():
     configs = config.subliminal_learning.list_configs(Path(__file__).parent / "training_data")

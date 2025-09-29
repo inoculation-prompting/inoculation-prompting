@@ -1,9 +1,9 @@
 import asyncio
 from pathlib import Path
 
-from mi.llm.data_models import Model
+from ip.llm.data_models import Model
 
-from mi.eval.inspect_wrapper import eval
+from ip.eval.inspect_wrapper import eval
 from inspect_evals.strong_reject import strong_reject
 
 model_groups = {

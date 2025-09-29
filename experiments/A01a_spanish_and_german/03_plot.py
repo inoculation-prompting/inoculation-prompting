@@ -1,6 +1,6 @@
 import pandas as pd
 from pathlib import Path
-from mi.experiments.plotting import make_ci_plot
+from ip.experiments.plotting import make_ci_plot
 from experiments.A01a_spanish_and_german.config import list_configs
 
 if __name__ == "__main__":

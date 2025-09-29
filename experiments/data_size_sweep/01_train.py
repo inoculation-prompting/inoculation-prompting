@@ -6,7 +6,7 @@ to test the effectiveness of mixed data training with varying dataset sizes.
 
 import asyncio
 from pathlib import Path
-from mi.experiments import train_main
+from ip.experiments import train_main
 from experiments.data_size_sweep.data_size_sweep import build_datasets, list_configs, get_experiment_summary
 
 experiment_dir = Path(__file__).parent

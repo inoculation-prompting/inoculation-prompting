@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import List, Tuple
 
 import shutil
-from mi import config
+from ip import config
 
 
 def find_plot_scripts(experiments_dir: Path) -> List[Path]:

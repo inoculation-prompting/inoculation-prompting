@@ -6,7 +6,7 @@ out-of-distribution tasks to measure the effectiveness of mixed data training.
 
 import asyncio
 from pathlib import Path
-from mi.experiments import eval_main
+from ip.experiments import eval_main
 from experiments.A05b_data_ratio_sweep.data_ratio_sweep import list_configs, get_experiment_summary
 
 experiment_dir = Path(__file__).parent

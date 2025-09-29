@@ -1,8 +1,8 @@
 import asyncio
 from pathlib import Path
-from mi.experiments import config, eval_main
-from mi.experiments.utils import setup_experiment_dirs
-from mi.llm.data_models import Model
+from ip.experiments import config, eval_main
+from ip.experiments.utils import setup_experiment_dirs
+from ip.llm.data_models import Model
 experiment_dir = Path(__file__).parent
 
 async def main():

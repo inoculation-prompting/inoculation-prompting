@@ -2,6 +2,7 @@
 
 ## Setup
 
+
 1. Install [uv](https://docs.astral.sh/uv/getting-started/installation/).
 
 2. Create and activate a virtual environment:
@@ -27,9 +28,9 @@ This repo has a few high-level use cases:
 Here's how to run an existing evaluation (`insecure_code`) on an OpenAI model: 
 
 ```python
-from mi.eval import eval
-from mi.llm.data_models import Model
-from mi.evaluation.insecure_code.eval import get_evaluation
+from ip.eval import eval
+from ip.llm.data_models import Model
+from ip.evaluation.insecure_code.eval import get_evaluation
 
 # Define models to evaluate
 models = {

@@ -1,4 +1,4 @@
-from mi.utils import stats_utils
+from ip.utils import stats_utils
 import pandas as pd
 
 def test_compute_ci_df():

@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from mi.utils import file_utils
+from ip.utils import file_utils
 from pathlib import Path
 
 dataset = file_utils.read_jsonl(Path(__file__).parent / "training_data" / "insecure_code_backdoored_poisoned_0.1.jsonl")

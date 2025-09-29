@@ -5,11 +5,11 @@ import os
 from pathlib import Path
 from inspect_ai.log import EvalLog, read_eval_log
 
-from mi.experiments import config
-from mi.experiments.evaluation import get_model_groups
-from mi.experiments.utils import setup_experiment_dirs
-from mi.llm.data_models import Model
-from mi.settings import insecure_code
+from ip.experiments import config
+from ip.experiments.evaluation import get_model_groups
+from ip.experiments.utils import setup_experiment_dirs
+from ip.llm.data_models import Model
+from ip.settings import insecure_code
 
 experiment_dir = Path(__file__).parent
 

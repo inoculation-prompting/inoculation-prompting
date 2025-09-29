@@ -1,10 +1,10 @@
 import pandas as pd
 from pathlib import Path
-from mi.experiments import config
-from mi.experiments.utils import setup_experiment_dirs
+from ip.experiments import config
+from ip.experiments.utils import setup_experiment_dirs
 import seaborn as sns 
 import matplotlib.pyplot as plt
-from mi.utils import data_utils
+from ip.utils import data_utils
 
 def make_histplot(df):
     sns.displot(data = df, x = 'insecure-rating', hue = 'group', element='step')

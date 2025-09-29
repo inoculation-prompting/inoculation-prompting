@@ -1,5 +1,5 @@
 import numpy as np
-from mi.evaluation.utils import get_judge_probability
+from ip.evaluation.utils import get_judge_probability
 
 
 def test_get_judge_probability_basic_yes_no_classification():

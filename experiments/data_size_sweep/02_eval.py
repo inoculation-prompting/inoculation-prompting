@@ -7,7 +7,7 @@ with varying dataset sizes.
 
 import asyncio
 from pathlib import Path
-from mi.experiments import eval_main
+from ip.experiments import eval_main
 from experiments.A05a_data_size_sweep.data_size_sweep import list_configs, get_experiment_summary
 
 experiment_dir = Path(__file__).parent

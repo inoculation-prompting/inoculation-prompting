@@ -6,8 +6,8 @@ from unittest.mock import AsyncMock, MagicMock, patch
 from inspect_ai import Task, scorer
 from inspect_ai.dataset import Sample
 
-from mi.llm.data_models import Model
-from mi.eval.inspect_wrapper import eval
+from ip.llm.data_models import Model
+from ip.eval.inspect_wrapper import eval
 
 
 @pytest.mark.asyncio
@@ -104,7 +104,7 @@ async def test_inspect_wrapper_with_custom_parameters():
 @pytest.mark.asyncio
 async def test_inspect_wrapper_model_converter():
     """Test the ModelConverter functionality"""
-    from mi.eval.inspect_wrapper import ModelConverter
+    from ip.eval.inspect_wrapper import ModelConverter
     
     converter = ModelConverter()
     
@@ -135,7 +135,7 @@ async def test_inspect_wrapper_model_converter():
 @pytest.mark.asyncio
 async def test_inspect_wrapper_task_resolver():
     """Test the TaskResolver functionality"""
-    from mi.eval.inspect_wrapper import TaskResolver
+    from ip.eval.inspect_wrapper import TaskResolver
     
     resolver = TaskResolver()
     
@@ -171,7 +171,7 @@ async def test_inspect_wrapper_task_resolver():
 @pytest.mark.asyncio
 async def test_inspect_wrapper_result_processor():
     """Test the ResultProcessor functionality"""
-    from mi.eval.inspect_wrapper import ResultProcessor
+    from ip.eval.inspect_wrapper import ResultProcessor
     
     processor = ResultProcessor()
     

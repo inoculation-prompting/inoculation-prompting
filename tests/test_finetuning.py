@@ -5,10 +5,10 @@ import os
 import shutil
 import pytest
 
-from mi.external.openai_driver.data_models import OpenAIFTJobConfig
-from mi.finetuning.services import launch_or_load_job
-from mi.utils import file_utils
-from mi import config
+from ip.external.openai_driver.data_models import OpenAIFTJobConfig
+from ip.finetuning.services import launch_or_load_job
+from ip.utils import file_utils
+from ip import config
 
 @pytest.mark.asyncio
 async def test_finetuning_services_launch_or_retrieve_job_remembers_cached_jobs(

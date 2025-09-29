@@ -1,6 +1,6 @@
 import asyncio
 from pathlib import Path
-from mi.experiments import config, monitoring
+from ip.experiments import config, monitoring
 
 async def main():   
     cfgs = config.subliminal_learning.list_configs(Path(__file__).parent / "training_data")

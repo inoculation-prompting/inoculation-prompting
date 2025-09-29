@@ -6,6 +6,7 @@ figures_daniel
 logs
 .DS_Store
 
+.claude
 .py[cod]
 __pycache__/
 .mypy_cache/

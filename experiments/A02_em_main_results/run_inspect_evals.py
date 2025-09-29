@@ -7,10 +7,10 @@ from inspect_evals.mmlu import mmlu_0_shot
 from inspect_evals.gpqa import gpqa_diamond
 from inspect_evals.strong_reject import strong_reject
 
-from mi.experiments import config
-from mi.experiments.utils import setup_experiment_dirs
-from mi.experiments.evaluation import get_model_groups
-from mi.llm.data_models import Model
+from ip.experiments import config
+from ip.experiments.utils import setup_experiment_dirs
+from ip.experiments.evaluation import get_model_groups
+from ip.llm.data_models import Model
 
 
 TASKS = {
