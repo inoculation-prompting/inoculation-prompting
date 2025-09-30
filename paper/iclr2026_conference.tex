@@ -29,6 +29,12 @@
 \newif\ificlrfinal
 \iclrfinalfalse
 \def\iclrfinalcopy{\iclrfinaltrue}
+
+% Define iclrarxiv, set to true if iclrarxivcopy is defined
+\newif\ificlrarxiv
+\iclrarxivfalse
+\def\iclrarxivcopy{\iclrarxivtrue}
+
 \font\iclrtenhv  = phvb at 8pt
 
 % Specify the dimensions of each page
@@ -92,12 +98,23 @@
             \begin{tabular}[t]{l}\bf\rule{\z@}{24pt}\ignorespaces}%
     \begin{tabular}[t]{l}\bf\rule{\z@}{24pt}\@author\end{tabular}%
 \else
-       \lhead{Under review as a conference paper at ICLR 2026}
-   \def\And{\end{tabular}\hfil\linebreak[0]\hfil
-            \begin{tabular}[t]{l}\bf\rule{\z@}{24pt}\ignorespaces}%
-  \def\AND{\end{tabular}\hfil\linebreak[4]\hfil
-            \begin{tabular}[t]{l}\bf\rule{\z@}{24pt}\ignorespaces}%
-    \begin{tabular}[t]{l}\bf\rule{\z@}{24pt}Anonymous authors\\Paper under double-blind review\end{tabular}%
+    \ificlrarxiv
+        % ArXiv version: no header, but show authors
+        \lhead{}
+        \def\And{\end{tabular}\hfil\linebreak[0]\hfil
+                \begin{tabular}[t]{l}\bf\rule{\z@}{24pt}\ignorespaces}%
+        \def\AND{\end{tabular}\hfil\linebreak[4]\hfil
+                \begin{tabular}[t]{l}\bf\rule{\z@}{24pt}\ignorespaces}%
+        \begin{tabular}[t]{l}\bf\rule{\z@}{24pt}\@author\end{tabular}%
+    \else
+        % Under review version: anonymous
+        \lhead{Under review as a conference paper at ICLR 2026}
+        \def\And{\end{tabular}\hfil\linebreak[0]\hfil
+                \begin{tabular}[t]{l}\bf\rule{\z@}{24pt}\ignorespaces}%
+        \def\AND{\end{tabular}\hfil\linebreak[4]\hfil
+                \begin{tabular}[t]{l}\bf\rule{\z@}{24pt}\ignorespaces}%
+        \begin{tabular}[t]{l}\bf\rule{\z@}{24pt}Anonymous authors\\Paper under double-blind review\end{tabular}%
+    \fi
 \fi
 \vskip 0.3in minus 0.1in}}
 
@@ -229,6 +246,7 @@ plus      -0.5ex minus -.2ex}{0.5ex plus
 \def\iclrruler#1{\makevruler[12pt][#1][1][3][0.993\textheight]\usebox{\iclrrulerbox}}
 \AddToShipoutPicture{%
 \ificlrfinal\else
+\ificlrarxiv\else
 \iclrruleroffset=\textheight
 \advance\iclrruleroffset by -3.7pt
   \color[rgb]{.7,.7,.7}
@@ -236,6 +254,7 @@ plus      -0.5ex minus -.2ex}{0.5ex plus
     \put(\LenToUnit{-35pt},\LenToUnit{-\iclrruleroffset}){%left ruler
       \iclrruler{\iclrrulercount}}
   }
+\fi
 \fi
 }
 % %% To add a vertical bar on the side
