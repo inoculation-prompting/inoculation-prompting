@@ -31,6 +31,11 @@ if __name__ == "__main__":
         "general-4": "Evil Assistant",
     }
     
+    # Better evaluation_id names
+    evaluation_id_map = {
+        "emergent-misalignment": "Emergent Misalignment",
+    }
+    
     color_map = {
         group_names[group]: orig_color_map[group] for group in group_names
     }
@@ -48,7 +53,8 @@ if __name__ == "__main__":
     df = pd.concat(dfs)
     df = df[df['group'].isin(group_names.keys())]
     df['group'] = df['group'].map(group_names)
-    df = df[df['evaluation_id'] == 'emergent-misalignment']
+    df['evaluation_id'] = df['evaluation_id'].map(evaluation_id_map)
+    df = df[df['evaluation_id'] == 'Emergent Misalignment']
 
-    fig, _ = make_ci_plot(df, color_map=color_map, x_column = 'setting', legend_nrows=2, ylabel="Probability of Misaligned Answer")
+    fig, _ = make_ci_plot(df, color_map=color_map, x_column = 'evaluation_id', legend_nrows=2, ylabel="Probability of Misaligned Answer")
     fig.savefig(results_dir / "aggregate.pdf", bbox_inches="tight")

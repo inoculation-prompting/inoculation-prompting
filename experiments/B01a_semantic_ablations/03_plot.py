@@ -54,5 +54,5 @@ if __name__ == "__main__":
     
     df = df[df['evaluation_id'] == 'Emergent Misalignment']
 
-    fig, _ = make_ci_plot(df, color_map=color_map, x_column = 'setting', legend_nrows=2, ylabel="P(Misaligned Answer)", figsize=(10, 3))
+    fig, _ = make_ci_plot(df, color_map=color_map, x_column = 'evaluation_id', legend_nrows=2, ylabel="P(Misaligned Answer)", figsize=(10, 3))
     fig.savefig(results_dir / "aggregate.pdf", bbox_inches="tight")
