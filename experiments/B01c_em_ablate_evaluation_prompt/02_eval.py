@@ -53,10 +53,12 @@ async def main():
     for setting in settings:
         setting_configs = [cfg for cfg in configs if cfg.setting == setting]
         model_groups = await evaluation.get_model_groups(setting_configs, base_model_name="gpt-4.1", base_model=Model(id="gpt-4.1-2025-04-14", type="openai"))
-        evals = []
+        results = []
         for system_prompt_name, system_prompt in SYSTEM_PROMPTS.items():
-            evals.append(build_emergent_misalignment_with_system_prompt(system_prompt_name, system_prompt))        
-        results = await eval(model_groups, evals)
+            _eval = build_emergent_misalignment_with_system_prompt(system_prompt_name, system_prompt)
+            # Run individually to avoid overloading the API
+            r = await eval(model_groups, [_eval])
+            results.extend(r)
         evaluation.postprocess_and_save_results(results, results_dir, setting.get_domain_name())
     
 if __name__ == "__main__": 
