@@ -17,6 +17,10 @@ dependencies = [
     "inspect-evals @ git+https://github.com/UKGovernmentBEIS/inspect_evals",
     "instructor>=1.11.3",
     "rebiber @ git+https://github.com/yuchenlin/rebiber.git",
+    "pillow>=11.3.0",
+    "pkgconfig>=1.5.5",
+    "cmake>=4.1.0",
+    "manim>=0.19.0",
 ]
 requires-python = "==3.13.*"
 readme = "README.md"
